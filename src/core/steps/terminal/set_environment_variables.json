@@ -1,0 +1,8 @@
+{
+  "os": ["unix"],
+  "checks": {
+    "macos": ["echo $PATH | grep -q 'Visual Studio Code.app'"],
+    "unix": ["echo $PATH | grep -q \"$WS_ROOT_UNIX\""]
+  },
+  "steps": ["add_to_path", "add_aliases"]
+}

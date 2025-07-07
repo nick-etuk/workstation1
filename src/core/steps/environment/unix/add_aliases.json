@@ -1,0 +1,6 @@
+{
+  "dependencies": [],
+  "checks": {
+    "unix": ["alias | grep -iq memhogs"]
+  }
+}

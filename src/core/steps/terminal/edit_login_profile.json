@@ -1,0 +1,11 @@
+{
+  "checks": {
+    "unix": [
+      "test ! -f ~/.bashrc || grep -q 'workstation1_v1' ~/.bashrc",
+      "test ! -f ~/.zshrc || grep -q 'workstation1_v1' ~/.zshrc"
+    ],
+    "win": [
+      "(Get-Content -Path $PROFILE.CurrentUserCurrentHost -Raw) -match 'workstation1_v1'"
+    ]
+  }
+}

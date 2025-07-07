@@ -1,0 +1,6 @@
+{
+  "dependencies": [],
+  "checks": {
+    "unix": ["echo $PATH | grep -q $WS_ROOT_UNIX"]
+  }
+}
