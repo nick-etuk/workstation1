@@ -16,8 +16,8 @@ function show_help {
         filename="$step.help.$event.txt"
     fi
     
-    if [ ! -z ${CURRENT_PACKAGE+empty_string} ]; then
-        file_path=$(find "$WS_ROOT_UNIX/$CURRENT_PACKAGE/steps" -name "$filename" -type f)
+    if [ ! -z ${CURRENT_PROJECT+empty_string} ]; then
+        file_path=$(find "$WS_ROOT_UNIX/$CURRENT_PROJECT/steps" -name "$filename" -type f)
     fi
     if [ ! -f "$file_path" ]; then
         file_path=$(find "$WS_ROOT_UNIX/core/steps" -name "$filename" -type f)

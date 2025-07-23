@@ -1,0 +1,6 @@
+{
+  "steps": [
+    "clone_templates",
+    "setup_terminal"
+  ]
+}

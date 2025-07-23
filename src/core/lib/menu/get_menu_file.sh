@@ -7,7 +7,7 @@ get_menu_file() {
     
     activity_id=$1
 
-    get_package_dir "$CURRENT_PACKAGE"
+    get_package_dir "$CURRENT_PROJECT"
     menu_files=$(find "$PACKAGE_DIR" -name "*activity*.json" -type f)
     for file in $menu_files; do
         id=$(jq -r '.id' "$file")

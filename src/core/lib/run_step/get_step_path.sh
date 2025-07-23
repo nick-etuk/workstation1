@@ -8,8 +8,8 @@ function get_step_file {
     step=$1
     extension=$2
 
-    if [ ! -z ${CURRENT_PACKAGE+empty} ]; then
-        file_path=$(find "$WS_ROOT_UNIX/$CURRENT_PACKAGE/steps" -name "$step.$extension" -type f)
+    if [ ! -z ${CURRENT_PROJECT+empty} ]; then
+        file_path=$(find "$WS_ROOT_UNIX/$CURRENT_PROJECT/steps" -name "$step.$extension" -type f)
     fi
 
     [ -f "$file_path" ] || file_path=$(find "$WS_ROOT_UNIX" -path '*steps*' -name "$step.$extension" -type f)

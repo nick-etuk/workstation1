@@ -1,7 +1,0 @@
-{
-  "os": ["win"],
-  "dependencies": ["add_wsl_users"],
-  "checks": { 
-    "win": [ "wsl -u $WSL_USER ls ~/repos | Select-String -pattern 'nhsapp'" ]
-  }
-}

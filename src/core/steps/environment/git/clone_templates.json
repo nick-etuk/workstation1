@@ -1,0 +1,6 @@
+{
+  "checks": { 
+    "win": [ "Test-Path -PathType Container \"$REPO_DIR/workstation1-template-web\"" ],
+    "unix": [ "ls $REPO_DIR | grep workstation1-template-web" ]
+  }
+}

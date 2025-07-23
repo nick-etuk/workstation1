@@ -1,43 +1,52 @@
 function SortActivities {
     Remove-Item "$WORKING_DIR/activity_sort/*" -Force
-    $RegistryFile = "$WORKING_DIR/app_directories.txt"
-    if (!(Test-Path -Path $RegistryFile)) {
-        WriteError "Registry file not found: $RegistryFile"
+    $ProjectRegistry = "$WORKING_DIR/project_registry.csv"
+    if (!(Test-Path -Path $ProjectRegistry)) {
+        WriteError "Project registry not found at $ProjectRegistry"
         return
     }
 
-    $RegistryContent = Get-Content -Path $RegistryFile -ErrorAction SilentlyContinue
+    # $RegistryContent = Get-Content -Path $RegistryFile -ErrorAction SilentlyContinue
+    $RegistryContent = Import-CSV $ProjectRegistry
     if (!$RegistryContent) {
-        WriteError "Registry file is empty or could not be read: $RegistryFile"
+        WriteError "Project registry is empty or could not be read: $RegistryFile"
         return
     }
-    $AppConfigFiles = @()
-    foreach ($AppDirectory in $RegistryContent) {
-        $AppDirectory = $AppDirectory.Trim()
-        if (!(Test-Path -Path $AppDirectory)) {
-            WriteError "App directory not found: $AppDirectory"
+    $ProjectConfigFiles = @()
+    foreach ($Line in $RegistryContent) {
+        writedebug "Registry line: $Line"
+        $ProjectID = $Line.ProjectID
+        $ProjectDirectory = $Line.Path
+        writedebug "ID: <$ProjectID> path: <$ProjectDirectory>"
+        if (!$ProjectID -or !$ProjectDirectory) {
+            WriteWarning "Invalid registry line: $Line"
             continue
         }
-        $ConfigFiles = Get-Childitem -Path "$AppDirectory" -Include 'ws1.config.json' -File -Recurse -ErrorAction SilentlyContinue
-        $AppConfigFiles += $ConfigFiles
+        # $ProjectDirectory = $ProjectDirectory.Trim()
+        if (!(Test-Path -Path $ProjectDirectory)) {
+            WriteWarning "Project directory not found: $ProjectDirectory"
+            continue
+        }
+        $ConfigFiles = Get-Childitem -Path "$ProjectDirectory" -Include 'ws1_project.json' -File -Recurse -ErrorAction SilentlyContinue
+        $ProjectConfigFiles += $ConfigFiles
     }
 
     # $PackageConfigFiles = Get-Childitem -Path "$WS_ROOT_WIN" -Include 'ws1.config.json' -File -Recurse -ErrorAction SilentlyContinue
-    writedebug "AppConfigFiles: $($AppConfigFiles.Count) files found"
-    foreach ($PackageConfigFile in $AppConfigFiles) {
-        writedebug "package config file: $PackageConfigFile"
-        $content = Get-Content $PackageConfigFile -ErrorAction SilentlyContinue | Out-String
-        $PackageConfig = ConvertFrom-Json -InputObject $content -ErrorAction SilentlyContinue
-        $PackageID = $PackageConfig.id
-        if ($PackageConfig | Get-Member -Name 'sortOrder') {
-            $PackageSortOrder = $PackageConfig.sortOrder
+    writedebug "ProjectConfigFiles: $($ProjectConfigFiles.Count) files found"
+    foreach ($ProjectConfigFile in $ProjectConfigFiles) {
+        writedebug "package config file: $ProjectConfigFile"
+        $content = Get-Content $ProjectConfigFile -ErrorAction SilentlyContinue | Out-String
+        $ProjectConfig = ConvertFrom-Json -InputObject $content -ErrorAction SilentlyContinue
+        $ProjectID = $ProjectConfig.id
+        if ($ProjectConfig | Get-Member -Name 'sortOrder') {
+            $ProjectSortOrder = $ProjectConfig.sortOrder
         } else { 
-            $PackageSortOrder = 999
+            $ProjectSortOrder = 999
         }
-        Copy-Item "$PackageConfigFile" "$WORKING_DIR/activity_sort/$PackageSortOrder-$PackageID-ws1.config.json"
+        Copy-Item "$ProjectConfigFile" "$WORKING_DIR/activity_sort/$ProjectSortOrder-$ProjectID-ws1.config.json"
 
-        $PackageDir = Split-Path -Path $PackageConfigFile -Parent
-        $ActivityFiles = Get-Childitem -Path $PackageDir -Include '*activity*.json' -File -Recurse -ErrorAction SilentlyContinue
+        $ProjectDir = Split-Path -Path $ProjectConfigFile -Parent
+        $ActivityFiles = Get-Childitem -Path $ProjectDir -Include '*activity*.json' -File -Recurse -ErrorAction SilentlyContinue
 
         foreach ($ActivityFile in $ActivityFiles) {
             $content = Get-Content $ActivityFile -ErrorAction SilentlyContinue | Out-String
@@ -48,7 +57,7 @@ function SortActivities {
             } else { 
                 $ActivitySortOrder = 999
             }
-            Copy-Item "$ActivityFile" "$WORKING_DIR/activity_sort/$PackageSortOrder-$PackageID-$ActivitySortOrder-$ActivityID-activity.json"
+            Copy-Item "$ActivityFile" "$WORKING_DIR/activity_sort/$ProjectSortOrder-$ProjectID-$ActivitySortOrder-$ActivityID-activity.json"
         }
 
     }

@@ -5,6 +5,7 @@ function install_jq_ubuntu {
 }
 
 function install_jq_macos {
+    ! command -v brew >/dev/null && install_homebrew
     brew install jq
 }
 

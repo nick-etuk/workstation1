@@ -9,10 +9,9 @@ if [ -z "${INIT_UNIX+empty_string}" ]; then
     . ./init.sh || exit 1
 fi
 
-if [ "$MY_OS" = "macos" ] && ! command -v brew >/dev/null; then install_homebrew; fi
 if ! command -v jq >/dev/null ; then install_jq; fi
 
-run_step setup_terminal
+run_step core_steps
 
 if [ $# -eq 0 ]; then
     show_menu_main

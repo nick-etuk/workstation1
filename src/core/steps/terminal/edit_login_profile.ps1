@@ -7,11 +7,12 @@ function edit_login_profile {
 
     $StartBanner = '# workstation1_v1 start'
     $Line1 = "`$global:WS_ROOT_WIN = '$WS_ROOT_WIN'"
-    $Line2 = "`$env:PATH += ;`$WS_ROOT_WIN\core\cli"
-    $Line3 = "`$WorkstationStartup = Get-Childitem -Path `$WS_ROOT_WIN\core -Include 'p1.ps1' -File -Recurse -ErrorAction SilentlyContinue"
-    $Line4 = "& `$(`$WorkstationStartup.FullName)"
+    $Line2 = "`$env:PATH += ';$WS_ROOT_WIN\core\cli'"
+    $Line3 = "if (`$env:TERM_PROGRAM -and `$env:TERM_PROGRAM -ne 'Windows Terminal') { exit 0 }"
+    $Line4 = "`$WorkstationStartup = Get-Childitem -Path `$WS_ROOT_WIN\core -Include 'ws.ps1' -File -Recurse -ErrorAction SilentlyContinue"
+    $Line5 = "& `$(`$WorkstationStartup.FullName)"
     $EndBanner = '# workstation1_v1 end'
-    $AdditionalContent = "$StartBanner`n$Line1`n$Line2`n$Line3`n$Line4`n$EndBanner`n"
+    $AdditionalContent = "$StartBanner`n$Line1`n$Line2`n$Line3`n$Line4`n$Line5`n$EndBanner`n"
     WriteDebug "Modifying profile $($profile.CurrentUserCurrentHost)"
     # WriteDebug $AdditionalContent
     Add-Content -Path $profile.CurrentUserCurrentHost -Value $AdditionalContent

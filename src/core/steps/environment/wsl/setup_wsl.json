@@ -15,6 +15,6 @@
     "install_common_packages",
     "add_wsl_users",
     "sudo_no_password",
-    "get_git_repos_wsl"
+    "get_git_repos"
   ]
 }

@@ -2,7 +2,7 @@ Start-Transcript -Path "C:\provisioning\log\first-login.log" -Append -IncludeInv
 Start-Process C:\Provisioning\scripts\core\doc\troubleshooting\general.html
 
 # . $PSScriptRoot\..\..\init.ps1
-. $PSScriptRoot\..\..\cli\p1.ps1
+. $PSScriptRoot\..\..\cli\ws.ps1
 # . $PSScriptRoot\windows\user\get-git-repos-win.ps1
 # . $PSScriptRoot\windows\user\set-windows-user-env.ps1
 # . $PSScriptRoot\windows\user\install-winget.ps1

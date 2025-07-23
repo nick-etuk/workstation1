@@ -1,4 +1,4 @@
 {
-  "defaultApp": "webapp",
+  "defaultProject": "template-web",
   "defaultActivity": "web"
 }

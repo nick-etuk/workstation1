@@ -63,7 +63,7 @@ function WriteInfo ($Message) {
 function WriteDebug ($Message) {
     $CallingFunction = [string]$(Get-PSCallStack)[1].FunctionName
     if ($Callingfunction -eq "<ScriptBlock>") {
-        $CallingFunction = $CallingScript
+        $CallingFunction = $MyInvocation.PSCommandPath
     }
 
     # WriteLog -Level Debug "$Callingfunction`: $Message"

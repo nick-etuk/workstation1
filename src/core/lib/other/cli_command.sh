@@ -79,8 +79,8 @@ function cli_command {
         activity_id=$command
         # args=("$@")
         # activity_args=("${args[@]:1}")
-        CURRENT_PACKAGE=$(get_config 'activity_id_package' "$activity_id")
-        set_config 'current_package' "$CURRENT_PACKAGE"
+        CURRENT_PROJECT=$(get_config 'activity_id_package' "$activity_id")
+        set_config 'current_project' "$CURRENT_PROJECT"
         set_config 'current_activity' "$activity_id"
         run_activity "$activity_id" "${args[@]+"${args[@]}"}"
         exit 0
@@ -167,9 +167,9 @@ function cli_command {
         package_activity_id=$(get_config 'activity_id' "$option_num")
         [ -z "$package_activity_id" ] && error "Unknown menu option $option_num"
         split_string "$package_activity_id" "."
-        CURRENT_PACKAGE="${SPLIT_STRING[0]}"
-        [ "$SHELL_NAME" = 'zsh' ] && CURRENT_PACKAGE="${SPLIT_STRING[1]}"
-        set_config 'current_package' "$CURRENT_PACKAGE"
+        CURRENT_PROJECT="${SPLIT_STRING[0]}"
+        [ "$SHELL_NAME" = 'zsh' ] && CURRENT_PROJECT="${SPLIT_STRING[1]}"
+        set_config 'current_project' "$CURRENT_PROJECT"
         activity_id="${SPLIT_STRING[1]}"
         [ "$SHELL_NAME" = 'zsh' ] && activity_id="${SPLIT_STRING[2]}"
         set_config 'current_activity' "$activity_id"

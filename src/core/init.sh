@@ -17,8 +17,8 @@ CURRENT_STEP='general'
 [ -z "${NEW_TAB+empty_string}" ] && NEW_TAB='false'
 
 if [ -z "${WS_ROOT_UNIX+empty_string}" ];then
-    SCRIPT_PATH=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
-    WS_ROOT_UNIX=$( cd -- "$( dirname -- "${SCRIPT_PATH}/../.." )" &> /dev/null && pwd )
+    script_path=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+    WS_ROOT_UNIX=$( cd -- "$( dirname -- "${script_path}/../.." )" &> /dev/null && pwd )
     echo "WS_ROOT_UNIX set to $WS_ROOT_UNIX"
     cd "$WS_ROOT_UNIX" || exit 1
 fi
@@ -37,9 +37,7 @@ mkdir -p "$LOG_DIR"
 mkdir -p "$WORKING_DIR/activity_sort"
 mkdir -p "$WORKING_DIR/test_results"
 
-repo_dir=$(get_config repo_dir)
-[ -n "$repo_dir" ] && REPO_DIR_UNIX="$repo_dir"
+set_repo_dir
 
-STAGE_STEPS=()
 DONE_DEPENDENCIES=()
 show_config

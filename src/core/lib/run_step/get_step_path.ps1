@@ -17,13 +17,8 @@ function Get-Step-Directory ([parameter(Mandatory=$true)]$Step) {
 
 function Get-Step-Config ([parameter(Mandatory=$true)]$Step) {
     $FilePath = Get-Step-File -Step $Step -Extension json
+    if (!$FilePath) { return }
     $content = Get-Content $FilePath -ErrorAction SilentlyContinue | Out-String
     $Json = ConvertFrom-Json -InputObject $content -ErrorAction SilentlyContinue
-    # writedebug "json members: $($json | Get-Member | Out-String)"
-    # [string]$Json | Out-String
-    # writedebug "json list: $(Format-List -InputObject $json | Out-String)"
-
-    if (!$FilePath) { return }
-    # Get-Content $FilePath | WriteDebug
     return $Json
 }

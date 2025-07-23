@@ -46,10 +46,10 @@ if (!(Test-Path -PathType Leaf $LOG_FILE)) {
 
 # $CONFIG_FILE = "$WORKING_DIR\config.ini"
 
-$REPO_DIR = "$HOME\repos"
-if ("DESKTOP-2022".Contains($env:ComputerName)) {    
-    $REPO_DIR = "F:\repos"
-}
+# $REPO_DIR = "$HOME\repos"
+# if ("DESKTOP-2022".Contains($env:ComputerName)) {    
+#     $REPO_DIR = "F:\repos"
+# }
 
 $GCM_PATH_WIN = Find-GCM-Executable
 $GCM_PATH_WSL = Get-Unix-Path $GCM_PATH_WIN

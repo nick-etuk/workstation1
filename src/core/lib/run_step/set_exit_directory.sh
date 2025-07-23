@@ -7,7 +7,7 @@ set_exit_directory() {
         logging
         config_dynamic 
         split_string 
-        get_default_package 
+        get_default_project 
         get_first_activity 
         get_package_dir
         config_base
@@ -19,12 +19,12 @@ set_exit_directory() {
     done
     get_shell_version
     detect_os
-    CURRENT_PACKAGE=$(get_config 'current_package')
-    if [ -z "$CURRENT_PACKAGE" ]; then 
-        get_default_package
+    CURRENT_PROJECT=$(get_config 'current_project')
+    if [ -z "$CURRENT_PROJECT" ]; then 
+        get_default_project
 
-        if [ -n "$CURRENT_PACKAGE" ]; then
-            set_config 'current_package' "$CURRENT_PACKAGE"
+        if [ -n "$CURRENT_PROJECT" ]; then
+            set_config 'current_project' "$CURRENT_PROJECT"
         else
             echo "No default package found, please set a package first"
             return
@@ -34,19 +34,19 @@ set_exit_directory() {
     CURRENT_ACTIVITY=$(get_config 'current_activity')
     if [ -z "$CURRENT_ACTIVITY" ]; then
         echo "No current activity found in config, getting first activity"
-        get_first_activity "$CURRENT_PACKAGE"
+        get_first_activity "$CURRENT_PROJECT"
         if [ -n "$CURRENT_ACTIVITY" ]; then
             set_config 'current_activity' "$CURRENT_ACTIVITY"
         else
-            echo "No activities found for package $CURRENT_PACKAGE"
+            echo "No activities found for package $CURRENT_PROJECT"
             return
         fi
     fi
 
-    get_package_dir "$CURRENT_PACKAGE"
+    get_package_dir "$CURRENT_PROJECT"
     activity_files=$(find "$PACKAGE_DIR" -name "*activity*.json" -type f | sort)
     if [ -z "$activity_files" ]; then
-        echo "No activities items found for $CURRENT_PACKAGE"
+        echo "No activities items found for $CURRENT_PROJECT"
         return
     fi
 

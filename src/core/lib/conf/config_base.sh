@@ -17,7 +17,7 @@ show_config() {
     echo "WORKING_DIR: $WORKING_DIR"
     echo "WORKING_DIR_WIN: $WORKING_DIR_WIN"
     echo "LOG_DIR: $LOG_DIR"
-    echo "REPO_DIR_UNIX: $REPO_DIR_UNIX"
+    echo "REPO_DIR: $REPO_DIR"
     echo "DEBUG: $DEBUG"
     echo "FORCE: $FORCE"
 }
