@@ -17,12 +17,12 @@ run_activity() {
     activity_args=("$@")
     debug "Running activity $activity_id ${activity_args[*]+"${activity_args[*]}"}"
 
-    get_menu_file "$activity_id"
-    [ ! -f "$MENU_FILE" ] && error "Menu file not found: $MENU_FILE"
+    get_activity_file "$activity_id"
+    [ ! -f "$ACTIVITY_FILE" ] && error "Activity configuration file not found for $activity_id"
 
-    raw_steps=$(jq '.steps' "$MENU_FILE")
+    raw_steps=$(jq '.steps' "$ACTIVITY_FILE")
     if [ "$raw_steps" = "null" ]; then
-        warn "No steps found in $MENU_FILE"
+        warn "No steps found in $ACTIVITY_FILE"
         return
     fi
     steps=$(replace "$raw_steps" ' ' '~')

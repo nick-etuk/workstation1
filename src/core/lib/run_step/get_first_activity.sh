@@ -7,7 +7,7 @@ get_first_activity() {
         echo "get_first_activity: package id not specified"
         return
     fi
-    # get_package_dir "$package_id"
+    # get_project_paths "$package_id"
     # activity_files=$(find "$PACKAGE_DIR" -name "**activity*.json" -type f | sort)
     # if [ -z "$activity_files" ]; then
     #     echo "No activities items found for $package_id"

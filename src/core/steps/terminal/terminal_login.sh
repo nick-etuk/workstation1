@@ -19,7 +19,7 @@ libraries=(
     split_string 
     get_default_project 
     get_first_activity 
-    get_package_dir
+    get_project_paths
     config_base
 )
 

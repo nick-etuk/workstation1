@@ -9,7 +9,7 @@ set_exit_directory() {
         split_string 
         get_default_project 
         get_first_activity 
-        get_package_dir
+        get_project_paths
         config_base
     )
 
@@ -43,8 +43,8 @@ set_exit_directory() {
         fi
     fi
 
-    get_package_dir "$CURRENT_PROJECT"
-    activity_files=$(find "$PACKAGE_DIR" -name "*activity*.json" -type f | sort)
+    get_project_paths "$CURRENT_PROJECT"
+    activity_files=$(find "${PROJECT_PATHS[0]}" -name "*activity*.json" -type f | sort)
     if [ -z "$activity_files" ]; then
         echo "No activities items found for $CURRENT_PROJECT"
         return

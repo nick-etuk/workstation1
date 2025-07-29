@@ -13,8 +13,7 @@ function SortActivities {
         }
         Copy-Item "$ProjectConfigFile" "$WORKING_DIR/activity_sort/$ProjectSortOrder-$ProjectID-ws1.config.json"
 
-        $ProjectDir = Split-Path -Path $ProjectConfigFile -Parent
-        $ActivityFiles = Get-Childitem -Path $ProjectDir -Include '*activity*.json' -File -Recurse -ErrorAction SilentlyContinue
+        $ActivityFiles = Get-Childitem -Path $ProjectPath -Include '*activity*.json' -File -Recurse -ErrorAction SilentlyContinue
 
         foreach ($ActivityFile in $ActivityFiles) {
             $content = Get-Content $ActivityFile -ErrorAction SilentlyContinue | Out-String

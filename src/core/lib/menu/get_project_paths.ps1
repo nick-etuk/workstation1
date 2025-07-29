@@ -1,4 +1,9 @@
 function get_project_paths {
+    Param (
+        [Parameter(Mandatory=$false)]
+        [string]
+        $Filter
+    )
     $ProjectRegistry = "$WORKING_DIR/project_registry.csv"
     if (!(Test-Path -Path $ProjectRegistry)) {
         WriteError "Project registry not found at $ProjectRegistry"
@@ -23,6 +28,9 @@ function get_project_paths {
         if (!(Test-Path -Path $ProjectDirectory)) {
             WriteWarning "Project directory not found: $ProjectDirectory"
             continue
+        }
+        if ($Filter -and $ProjectID -eq $Filter) {
+            return $ProjectDirectory
         }
         $ProjectPaths += $ProjectDirectory
     }
