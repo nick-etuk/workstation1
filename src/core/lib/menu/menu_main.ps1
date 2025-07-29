@@ -1,7 +1,7 @@
 function Show-Main-Menu {
     SortActivities
-    $PackageConfigFiles = Get-Childitem -Path "$WORKING_DIR\activity_sort" -Include '*ws1.config.json' -File -Recurse -ErrorAction SilentlyContinue
-    if (-not $PackageConfigFiles) {
+    $ProjectConfigFiles = Get-Childitem -Path "$WORKING_DIR\activity_sort" -Include '*ws1.config.json' -File -Recurse -ErrorAction SilentlyContinue
+    if (-not $ProjectConfigFiles) {
         Write-Error "No ws1.config.json files found in $WORKING_DIR\activity_sort."
         return
     }
@@ -9,25 +9,27 @@ function Show-Main-Menu {
     $OptionNum = 0
     $ActivityIdList = [System.Collections.ArrayList]@()
     $ActivityIdList.Clear()
-    WriteInfo "`nworkstation1`n"
+    WriteInfo "`nWelcome to workstation1`n"
+    WriteInfo "To start an activity, enter the command 'ws' followed by an activity name`n"
 
-    foreach ($PackageConfigFile in $PackageConfigFiles) {
-        $PackageFilename = $PackageConfigFile.BaseName
-        $SplitString = $PackageFilename.Split('-')
-        $PackageID = $SplitString[1]
 
-        $Content = Get-Content $PackageConfigFile -ErrorAction SilentlyContinue | Out-String
-        $PackageConfig = ConvertFrom-Json -InputObject $Content -ErrorAction SilentlyContinue
-        if ($PackageConfig | Get-Member -Name 'title') { 
-            $PackageTitle = $PackageConfig.title
+    foreach ($ProjectConfigFile in $ProjectConfigFiles) {
+        $ProjectFilename = $ProjectConfigFile.BaseName
+        $SplitString = $ProjectFilename.Split('-')
+        $ProjectID = $SplitString[1]
+
+        $Content = Get-Content $ProjectConfigFile -ErrorAction SilentlyContinue | Out-String
+        $ProjectConfig = ConvertFrom-Json -InputObject $Content -ErrorAction SilentlyContinue
+        if ($ProjectConfig | Get-Member -Name 'title') { 
+            $ProjectTitle = $ProjectConfig.title
         } else {
-            WriteWarning "No title found in $PackageConfigFile"
+            WriteWarning "No title found in $ProjectConfigFile"
             continue
         }
-        $BorderLine = '-' * $PackageTitle.Length
+        $BorderLine = '-' * $ProjectTitle.Length
 
         WriteInfo "`n$BorderLine"
-        WriteInfo $PackageTitle
+        WriteInfo $ProjectTitle
         WriteInfo $BorderLine
 
         $ActivityConfigFiles = Get-Childitem -Path "$WORKING_DIR\activity_sort" -Include '*-activity.json' -File -Recurse -ErrorAction SilentlyContinue
@@ -39,8 +41,8 @@ function Show-Main-Menu {
         foreach ($ActivityConfigFile in $ActivityConfigFiles) {
             $ActivityFilename = $ActivityConfigFile.BaseName
             $SplitString = $ActivityFilename.Split('-')
-            $ActivityPackage = $SplitString[1]
-            if ($ActivityPackage -ne $PackageID) { continue }
+            $ActivityProject = $SplitString[1]
+            if ($ActivityProject -ne $ProjectID) { continue }
             $ActivityID = $SplitString[3]
             $ActivityIdList.Add($ActivityID) | Out-Null
 
@@ -53,13 +55,20 @@ function Show-Main-Menu {
                 continue
             }
             $OptionNum++
-            WriteInfo "$OptionNum`t $ActivityTitle"
+            # WriteInfo "$OptionNum`t $ActivityTitle"
+            WriteInfo "$ActivityID`t $ActivityTitle"
 
-            # Set-Config 'activity_repo_path' "$ActivityPackage.$ActivityID" "$repo_path"
-            Set-Config 'activity_id' $OptionNum "$ActivityPackage.$ActivityID"
+            # Set-Config 'activity_repo_path' "$ActivityProject.$ActivityID" "$repo_path"
+            Set-Config 'activity_id' $OptionNum "$ActivityProject.$ActivityID"
             Set-Config 'activity_id_list' "$($ActivityIdList -join ' ')"
-            Set-Config 'activity_id_package' $ActivityID $ActivityPackage
+            Set-Config 'activity_id_Project' $ActivityID $ActivityProject
         }
     }
-    WriteInfo "To show this menu again, enter the command 'p1'."
+    WriteInfo "`nTo show this menu again, enter the command 'ws'."
+    $StartupScript = Get-Childitem -Path "$WS_ROOT_WIN\core" -Include 'ws.ps1' -File -Recurse -ErrorAction SilentlyContinue
+    if (-not $StartupScript) {
+        WriteError "Startup script ws.ps1 not found in $WS_ROOT_WIN\core."
+        return
+    }
+    WriteInfo "The script ws.ps1 is located at $(Split-Path -Path $StartupScript.FullName -Parent)"
 }

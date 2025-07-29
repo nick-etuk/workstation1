@@ -1,10 +1,15 @@
 function Get-Step-File ([parameter(Mandatory=$true)]$Step, [parameter(Mandatory=$true)]$Extension) {
-    $FilePath = Get-Childitem -Path "$WS_ROOT_WIN" -Include "$Step.$Extension" -File -Recurse -ErrorAction SilentlyContinue
-    if ($FilePath) { return $FilePath }
-
     $Step = $Step.ToLower() -replace '-', '_'
-    $FilePath = Get-Childitem -Path "$WS_ROOT_WIN" -Include "$Step.$Extension" -File -Recurse -ErrorAction SilentlyContinue
-    if ($FilePath) { return $FilePath }
+    # todo: search for steps in this order:
+    # current project, core, other projects
+    $ProjectPaths = get_project_paths
+    foreach ($ProjectPath in $ProjectPaths) {
+        $FilePath = Get-Childitem -Path "$ProjectPath" -Include "$Step.$Extension" -File -Recurse -ErrorAction SilentlyContinue
+        if ($FilePath) { return $FilePath }
+    }
+    $FilePath = Get-Childitem -Path "$WS_ROOT_WIN/core/steps" -Include "$Step.$Extension" -File -Recurse -ErrorAction SilentlyContinue
+    if (!$FilePath) { writewarn "Step file $Step.$Extension not found" }
+    return $FilePath
 }
 
 function Get-Step-Directory ([parameter(Mandatory=$true)]$Step) {

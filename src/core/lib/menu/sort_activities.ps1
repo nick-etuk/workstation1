@@ -1,40 +1,8 @@
 function SortActivities {
     Remove-Item "$WORKING_DIR/activity_sort/*" -Force
-    $ProjectRegistry = "$WORKING_DIR/project_registry.csv"
-    if (!(Test-Path -Path $ProjectRegistry)) {
-        WriteError "Project registry not found at $ProjectRegistry"
-        return
-    }
-
-    # $RegistryContent = Get-Content -Path $RegistryFile -ErrorAction SilentlyContinue
-    $RegistryContent = Import-CSV $ProjectRegistry
-    if (!$RegistryContent) {
-        WriteError "Project registry is empty or could not be read: $RegistryFile"
-        return
-    }
-    $ProjectConfigFiles = @()
-    foreach ($Line in $RegistryContent) {
-        writedebug "Registry line: $Line"
-        $ProjectID = $Line.ProjectID
-        $ProjectDirectory = $Line.Path
-        writedebug "ID: <$ProjectID> path: <$ProjectDirectory>"
-        if (!$ProjectID -or !$ProjectDirectory) {
-            WriteWarning "Invalid registry line: $Line"
-            continue
-        }
-        # $ProjectDirectory = $ProjectDirectory.Trim()
-        if (!(Test-Path -Path $ProjectDirectory)) {
-            WriteWarning "Project directory not found: $ProjectDirectory"
-            continue
-        }
-        $ConfigFiles = Get-Childitem -Path "$ProjectDirectory" -Include 'ws1_project.json' -File -Recurse -ErrorAction SilentlyContinue
-        $ProjectConfigFiles += $ConfigFiles
-    }
-
-    # $PackageConfigFiles = Get-Childitem -Path "$WS_ROOT_WIN" -Include 'ws1.config.json' -File -Recurse -ErrorAction SilentlyContinue
-    writedebug "ProjectConfigFiles: $($ProjectConfigFiles.Count) files found"
-    foreach ($ProjectConfigFile in $ProjectConfigFiles) {
-        writedebug "package config file: $ProjectConfigFile"
+    $ProjectPaths = get_project_paths
+    foreach ($ProjectPath in $ProjectPaths) {
+        $ProjectConfigFile = Get-Childitem -Path "$ProjectPath" -Include 'ws1_project.json' -File -Recurse -ErrorAction SilentlyContinue
         $content = Get-Content $ProjectConfigFile -ErrorAction SilentlyContinue | Out-String
         $ProjectConfig = ConvertFrom-Json -InputObject $content -ErrorAction SilentlyContinue
         $ProjectID = $ProjectConfig.id
