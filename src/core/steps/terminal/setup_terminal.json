@@ -1,0 +1,21 @@
+{
+  "checks": {
+    "unix": [
+      "test ! -f ~/.bashrc || grep -q 'workstation1_v1' ~/.bashrc",
+      "test ! -f ~/.zshrc || grep -q 'workstation1_v1' ~/.zshrc",
+      "echo $PATH | grep -q \"$WS_ROOT_UNIX\""
+    ],
+    "win": [
+      "(Get-Content -Path $PROFILE.CurrentUserCurrentHost -Raw) -match 'workstation1_v1'"
+    ]
+  },
+  "steps": [
+    "set_environment_variables",
+    "edit_login_profile",
+    "install_ttab",
+    "install_zsh",
+    "install_oh_my_zsh",
+    "install_powerlevel10k",
+    "install_zoxide"
+  ]
+}

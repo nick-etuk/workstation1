@@ -1,0 +1,7 @@
+{
+  "dependencies": [],
+  "checks": {
+    "unix": [ "false" ],
+    "win": [ "$false" ]
+  }
+}
