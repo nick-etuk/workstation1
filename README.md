@@ -7,25 +7,34 @@ It works on Windows, WSL, Ubuntu and MacOS.
 The scripts are written in Powershell for Windows based applications and Shell Script for WSL, Ubuntu and MacOS.
 It shows a menu that lets you choose which development activity you want to startup:
 
-
 The menus contain activities for each of your major development projects.
 ![image info](./doc/troubleshooting/image-menu.png)
 
 # Getting started
+
 Clone this repo to wherever you keep your local repos.
 Switch to `<repo_dir>/workstation1/src/core/cli
 If you are using WSL, Ubuntu or Macos, run `./ws.sh`. On Windows, run `./ws.ps1`.
 This will add the `ws` command to your path and show you the main menu.
 
 # Adding a project to the menu
-To add a project to the menu, switch to the root directoy of the project, and then run `ws add`.
-This will prompt you for a description and then create a `workstation1` folder, where you can 
+
+To add a project to the menu, switch to the root directoy of the project (or any other directory), and then run `ws add`.
+This will prompt you for a description and then create a `workstation1` directory, where you can
 define your activities and steps.
-Only create new steps if one does not already exist. To get a full list of existing steps, run `ws list`.
+`ws add` creates a `ws1_project.json` file in the `workstation1` directory.
+This file defines the project and its attributes.
+It also adds the path of the `workstation1` directory to ~/.workstation1/project_registry.csv, so that it is included in the main menu.
+
+You can add new activities anywhere within the `workstation1` directory.
+Activities are defined in json files that contain the word `activity` in their filenames.
+For example, `web_development_activity.json`.
+Create new steps for the project inside a `workstation1/steps` directory.
+Only create new steps if one does not already exist that does what you want. To get a full list of existing steps, run `ws list`.
 
 # Projects
 
-A project is an application or system you are working on. 
+A project is an application or system you are working on.
 It usually has at least one Git repo.
 Each project has a `ws1_project.json` file that defines its attibutes. Here is an example:
 
@@ -41,8 +50,8 @@ Each project has a `ws1_project.json` file that defines its attibutes. Here is a
   "showMenu": true
 }
 ```
-The project will be shown in the main menu if the `showMenu` property is `true`.
 
+The project will be shown in the main menu if the `showMenu` property is `true`.
 
 # Activities
 
@@ -79,6 +88,7 @@ Here is an example:
 ```
 
 # Steps
+
 Steps are the Shell script or Powershell code files that actually perform the actions specified in the activities.
 Each step has a json configuration file that matches the name of the script file. This specifies the
 dependencies and checks that go with the step. It can also contain child steps.
@@ -90,15 +100,16 @@ Each step has an expression called a "check". This is used to work out if the st
 The checks look like this:
 
 {
-  "dependencies": [],
-  "checks": {
-    "macos": ["command -v keybase | grep -q keybase"],
-    "ubuntu": ["true"]
-  }
+"dependencies": [],
+"checks": {
+"macos": ["command -v keybase | grep -q keybase"],
+"ubuntu": ["true"]
+}
 }
 
 The checks can be OS specific - macos, ubuntu, win. Unix means macos or ubuntu.
 
 ## Scope
+
 The scope of a step can be public or private. By default, steps are public. Private steps are steps that do nothing useful by themseleves,
 but a libraries or sub-modules for other steps. Private steps are not shown when you run `ws list`.

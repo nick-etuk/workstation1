@@ -32,7 +32,7 @@ function update_step_registry {
     if (!(Test-Path -Path $StepRegistry)) {
         WriteInfo "Creating step registry $StepRegistry"
         New-Item -Path $StepRegistry -ItemType File -Force | Out-Null
-        Add-Content -Path $StepRegistry -Value "StepID,Description,Path,ProjectID"
+        Add-Content -Path $StepRegistry -Value "project_id,step_id,path,description"
     }
 
     $ProjectRegistry = "$WORKING_DIR/project_registry.csv"
@@ -43,8 +43,9 @@ function update_step_registry {
         return
     }
     foreach ($Line in $RegistryContent) {
-        $ProjectID = $Line.ProjectID
-        $ProjectDirectory = $Line.Path
+        $SortOrder = $Line.sort_rder
+        $ProjectID = $Line.project_id
+        $ProjectDirectory = $Line.path
         writedebug "bp1 project directory: $ProjectDirectory"
         $ProjectDirectory = $ProjectDirectory.Trim()
         if (!(Test-Path -Path $ProjectDirectory)) {

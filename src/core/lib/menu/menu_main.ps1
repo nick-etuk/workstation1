@@ -1,8 +1,8 @@
 function Show-Main-Menu {
     SortActivities
-    $ProjectConfigFiles = Get-Childitem -Path "$WORKING_DIR\activity_sort" -Include '*ws1.config.json' -File -Recurse -ErrorAction SilentlyContinue
+    $ProjectConfigFiles = Get-Childitem -Path "$WORKING_DIR\activity_sort" -Include '*ws1_project.json' -File -Recurse -ErrorAction SilentlyContinue
     if (-not $ProjectConfigFiles) {
-        Write-Error "No ws1.config.json files found in $WORKING_DIR\activity_sort."
+        Write-Error "No ws1_project.json files found in $WORKING_DIR\activity_sort."
         return
     }
 
@@ -10,7 +10,8 @@ function Show-Main-Menu {
     $ActivityIdList = [System.Collections.ArrayList]@()
     $ActivityIdList.Clear()
     WriteInfo "`nWelcome to workstation1`n"
-    WriteInfo "To start an activity, enter the command 'ws' followed by an activity name`n"
+    WriteInfo "To start an activity, enter the command 'ws' followed by an activity name,`n"
+    WriteInfo "or just 'ws' to show this menu again.`n"
 
 
     foreach ($ProjectConfigFile in $ProjectConfigFiles) {
@@ -64,7 +65,7 @@ function Show-Main-Menu {
             Set-Config 'activity_id_Project' $ActivityID $ActivityProject
         }
     }
-    WriteInfo "`nTo show this menu again, enter the command 'ws'."
+    # WriteInfo "`nTo show this menu again, enter the command 'ws'."
     $StartupScript = Get-Childitem -Path "$WS_ROOT_WIN\core" -Include 'ws.ps1' -File -Recurse -ErrorAction SilentlyContinue
     if (-not $StartupScript) {
         WriteError "Startup script ws.ps1 not found in $WS_ROOT_WIN\core."
