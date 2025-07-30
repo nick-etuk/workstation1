@@ -18,8 +18,9 @@ function get_project_paths {
     }
     $ProjectPaths = @()
     foreach ($Line in $RegistryContent) {
-        $ProjectID = $Line.ProjectID
-        $ProjectDirectory = $Line.Path
+        $SortOrder = $Line.sort_order
+        $ProjectID = $Line.project_id
+        $ProjectDirectory = $Line.path
         if (!$ProjectID -or !$ProjectDirectory) {
             WriteWarning "Invalid registry line: $Line"
             continue

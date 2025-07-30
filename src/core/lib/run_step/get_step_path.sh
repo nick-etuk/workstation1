@@ -7,7 +7,10 @@ function get_step_file {
 
     step=$1
     extension=$2
-
+    # todo:  look this up in step registry.
+    # if not found, update the registry and try again.
+    # sort step registry by priority (current project=1, core=2, other projects=3).
+    
     for project_path in "${PROJECT_PATHS[@]}"; do
         file_path=$(find "$project_path" -name "$step.$extension" -type f)
         if [ -f "$file_path" ]; then

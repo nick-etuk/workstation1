@@ -32,7 +32,7 @@ show_menu_main() {
     option=''
 
     sort_activities
-    package_config_files=$(find "$WORKING_DIR/activity_sort" -name "*-ws1.config.json" -type f | sort)
+    package_config_files=$(find "$WORKING_DIR/activity_sort" -name "*-ws1_project.json" -type f | sort)
     if [ -z "$package_config_files" ]; then
         error "No packages found in $WORKING_DIR/activity_sort"
         return
@@ -41,10 +41,11 @@ show_menu_main() {
     option_num=0
     activity_id_list=()
     printf "\nWelcome to workstation1\n"
-    printf "To start an activity, enter the command 'ws' followed by an activity name\n"
+    printf "To start an activity, enter the command 'ws' followed by an activity name, \n"
+    printf "or just 'ws' to show this menu again.\n"
 
     for package_config_file in $package_config_files; do
-        # file name format: $package_sort_order-$package_id-ws1.config.json
+        # file name format: $package_sort_order-$package_id-ws1_project.json
         package_filename=$(basename "$package_config_file")
         split_string "$package_filename" "-"
         package_id="${SPLIT_STRING[1]}"

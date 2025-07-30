@@ -25,7 +25,7 @@ sort_activities() {
         project_sort_order=$(jq -r '.sortOrder' "$project_config_file")
         [ "$project_sort_order" = 'null' ] && project_sort_order=999
 
-        cp "$project_config_file" "$WORKING_DIR/activity_sort/$project_sort_order-$project_id-ws1.config.json"
+        cp "$project_config_file" "$WORKING_DIR/activity_sort/$project_sort_order-$project_id-ws1_project.json"
 
         activity_files=$(find "$project_path" -name "*activity*.json" -type f)
         if [ -z "$activity_files" ]; then

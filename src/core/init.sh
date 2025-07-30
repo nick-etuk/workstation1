@@ -41,3 +41,5 @@ set_repo_dir
 
 DONE_DEPENDENCIES=()
 show_config
+update_registries
+get_project_paths

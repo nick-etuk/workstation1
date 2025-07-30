@@ -1,4 +1,4 @@
-Function add_project_to_registry($ID, $Path) {
+Function add_project_to_registry($ProjectID, $Path) {
     if (!(Test-Path -PathType Container $Path)) {
         writeError "Project path '$Path' does not exist"
         return
@@ -7,13 +7,13 @@ Function add_project_to_registry($ID, $Path) {
     if (!(Test-Path -Path $RegistryFile)) {
         WriteWarning "Creating project registry"
         New-Item -Path $RegistryFile -ItemType File -Force | Out-Null
-        Add-Content -Path $RegistryFile -Value 'ProjectID,Path'
+        Add-Content -Path $RegistryFile -Value 'sort_order,project_id,path'
     }
     $Path = $Path.TrimEnd('\')
     if (!(Get-Content -Path $RegistryFile | Select-String -Pattern "^$Path$")) {
-        Add-Content -Path $RegistryFile -Value "`n$ID,$Path"
-        WriteInfo "$ID added to registry"
+        Add-Content -Path $RegistryFile -Value "`n20,$ProjectID,$Path"
+        WriteInfo "$ProjectID added to registry"
     } else {
-        WriteInfo "$ID already registered"
+        WriteInfo "$ProjectID already registered"
     }
 }

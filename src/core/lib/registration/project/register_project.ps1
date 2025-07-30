@@ -13,7 +13,7 @@ function register_project {
             WriteWarning "Generating new project ID"
             $ProjectID = "project_" + (Get-Random -Minimum 1000 -Maximum 9999)
         }
-        add_project_to_registry -ProjectID $ProjectID -ProjectPath $CurrentPath
+        add_project_to_registry -ProjectID $ProjectID -Path $CurrentPath
         return
     }
 
@@ -33,6 +33,6 @@ function register_project {
     $Content | Set-Content -Path $ProjectConfigFile
     Rename-Item -Path $ProjectConfigFile -NewName "ws1_project.json"
 
-    add_project_to_registry -ProjectID $ProjectID -ProjectPath $CurrentPath
+    add_project_to_registry -ProjectID $ProjectID -Path $CurrentPath
 
 }

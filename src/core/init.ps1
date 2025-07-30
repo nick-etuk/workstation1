@@ -36,24 +36,5 @@ if (Test-Path variable:DEBUG) {
     }
 }
 
-# $MAX_RETRIES = 3
-# if($global:Debug) { $MAX_RETRIES = 1 }
-# $RetryAttempt = Get-Retry-Attempts retry-attempts.txt
-
-# WriteInfo -Level "Verbose" "Clean mode: $Clean"
-# WriteInfo "RUN_ID: $RUN_ID"
-
-# if ($RetryAttempt.gettype().Name -ne "Int32") { 
-#     WriteInfo -Level "Verbose" "Corrupt RetryAttempt: $RetryAttempt"
-#     WriteInfo -Level "Verbose" "Data type: $($RetryAttempt.gettype().Name)"
-#     WriteInfo -Level "Verbose" "Value: $RetryAttempt"
-#     WriteInfo -Level "Verbose" "Resetting to zero"
-#     $RetryAttempt = 0
-# } else {
-#     WriteInfo -Level "Verbose" "Retry Attempt: $RetryAttempt"
-# }
-
-# Set-ExecutionPolicy Bypass -Scope Process -Force
-# Set-PSRepository -Name "PSGallery" -InstallationPolicy Trusted
-
 Show-Config
+update_registries
