@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
-get_default_project() {
-    local project_config_files
+z_get_current_project() {
+    # local project_config_files
     
-    echo 'Current project not set. Getting default project...'
+    # echo 'Current project not set. Getting default project...'
     
     # If there are no projects, exit
     # If there is one project, return that
@@ -12,6 +12,12 @@ get_default_project() {
     # If set, return that
     # Otherwise, return the first project
 
+    CURRENT_PROJECT=$(get_config 'current_project')
+    if [ -n "$CURRENT_PROJECT" ]; then
+        return
+    fi
+
+    project_regist
     project_config_files=$(find "$WS_ROOT_UNIX" -name "ws1_project.json" -type f)
     if [ -z "$project_config_files" ]; then
         echo "No projects found in $WS_ROOT_UNIX"

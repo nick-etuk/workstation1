@@ -87,6 +87,8 @@ Here is an example:
 }
 ```
 
+Activity IDs must be unique across all projects.
+
 # Steps
 
 Steps are the Shell script or Powershell code files that actually perform the actions specified in the activities.
@@ -113,3 +115,18 @@ The checks can be OS specific - macos, ubuntu, win. Unix means macos or ubuntu.
 
 The scope of a step can be public or private. By default, steps are public. Private steps are steps that do nothing useful by themseleves,
 but a libraries or sub-modules for other steps. Private steps are not shown when you run `ws list`.
+
+## Step names
+
+The name of the step config file must match the name of the script file.
+For example, if the step script is `install_node.sh`, the step config file must be `install_node.json`.
+Step names must be unique across all projects.
+
+# CLI commands
+
+- `ws`: Shows the main menu. This contains a list of all projects and their activities.
+- `ws <activity>`: Runs the specified activity.
+- `ws <step>`: Runs the specified step.
+- `ws list`: Lists all steps in all projects.
+- `ws add`: Adds a new project to the menu.
+- `ws help`: Shows the help menu.

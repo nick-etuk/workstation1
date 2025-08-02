@@ -12,16 +12,27 @@ add_project_to_registry() {
     if [ ! -f "$registry_file" ]; then
         info "Creating project registry"
         touch "$registry_file"
-        echo 'sort_order,project_id,path' >> "$registry_file"
+        echo 'project_id,sort_order,path' > "$registry_file"
     fi
 
     # Remove trailing slash
     project_path="${project_path%/}"
 
-    if ! grep -q "$project_path" "$registry_file"; then
-        echo "20,$project_id,$project_path" > "$registry_file"
-        info "Project $project_id added to registry"
-    else
+    if grep -q "$project_path" "$registry_file"; then
         info "Project $project_id already registered"
+        return
     fi
+    case "$project_id" in
+        "$CURRENT_PROJECT")
+            sort_order=10
+            ;;
+        core)
+            sort_order=30
+            ;;
+        *)
+            sort_order=20
+            ;;
+    esac
+    echo "$project_id,$sort_order,$project_path" >> "$registry_file"
+    info "Project $project_id added to registry"
 }
