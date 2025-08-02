@@ -2,7 +2,7 @@
 # shellcheck disable=SC2034,SC1091
 
 
-function cli_command {
+cli_command() {
     local start=1
     local build=1
     local activity_id_list
@@ -14,7 +14,7 @@ function cli_command {
     local activity_args
     local step_args
     local args
-    local package_activity_id
+    local project_activity_id
     local step
     local change_dir=1
     local script_file
@@ -59,6 +59,17 @@ function cli_command {
             set_config "${args[@]}"
             info "${args[0]} set to ${args[*]:1}"
             exit 0
+        ;;
+        list)
+            list_steps
+            exit 0
+        ;;
+        update)
+            update_activity_registry
+            update_step_registry
+            info "Activity and step registries updated"
+            exit 0
+        ;;
     esac
 
     step_config_file=$(get_step_config "$command")
@@ -73,13 +84,14 @@ function cli_command {
     activity_id_list=$(get_config 'activity_id_list')
     # activity_id_list='web bbd dotnet android'  
     # debug "activity_id_list:$activity_id_list"
+    # shellcheck disable=SC1087
     if [[ " ${activity_id_list} " =~ [[:space:]]$command[[:space:]] ]]; then
         info "Running activity $command"
         debug "activity args: ${args[*]+"${args[*]}"}"
         activity_id=$command
         # args=("$@")
         # activity_args=("${args[@]:1}")
-        CURRENT_PROJECT=$(get_config 'activity_id_package' "$activity_id")
+        CURRENT_PROJECT=$(get_config 'activity_id_project' "$activity_id")
         set_config 'current_project' "$CURRENT_PROJECT"
         set_config 'current_activity' "$activity_id"
         run_activity "$activity_id" "${args[@]+"${args[@]}"}"
@@ -164,9 +176,9 @@ function cli_command {
 
     if [ "$start" -eq 0 ]; then
         # debug "option_num: $option_num"
-        package_activity_id=$(get_config 'activity_id' "$option_num")
-        [ -z "$package_activity_id" ] && error "Unknown menu option $option_num"
-        split_string "$package_activity_id" "."
+        project_activity_id=$(get_config 'activity_id' "$option_num")
+        [ -z "$project_activity_id" ] && error "Unknown menu option $option_num"
+        split_string "$project_activity_id" "."
         CURRENT_PROJECT="${SPLIT_STRING[0]}"
         [ "$SHELL_NAME" = 'zsh' ] && CURRENT_PROJECT="${SPLIT_STRING[1]}"
         set_config 'current_project' "$CURRENT_PROJECT"

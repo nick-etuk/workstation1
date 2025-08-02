@@ -37,4 +37,6 @@ if (Test-Path variable:DEBUG) {
 }
 
 Show-Config
-update_registries
+create_registries
+get_current_project
+update_step_registry

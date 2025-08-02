@@ -19,7 +19,7 @@ run_activity() {
 
     get_activity_file "$activity_id"
     [ ! -f "$ACTIVITY_FILE" ] && error "Activity configuration file not found for $activity_id"
-
+debug "Activity file: $ACTIVITY_FILE"
     raw_steps=$(jq '.steps' "$ACTIVITY_FILE")
     if [ "$raw_steps" = "null" ]; then
         warn "No steps found in $ACTIVITY_FILE"

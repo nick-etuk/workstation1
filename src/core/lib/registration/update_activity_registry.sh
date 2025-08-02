@@ -1,15 +1,21 @@
 #!/usr/bin/env bash
 
-sort_activities() {
+update_activity_registry() {
     local project_path
     local project_config_file
     local project_sort_order
+    local activity_registry
     local activity_sort_order
     local activity_files
     local activity_id
     local project_id
 
     [ -n "$(ls -A "$WORKING_DIR/activity_sort")" ] &&  rm -- "$WORKING_DIR"/activity_sort/*
+    
+    activity_registry="$WORKING_DIR/activity_registry.csv"
+    [ -f "$activity_registry" ] && rm -- "$activity_registry"
+    touch "$activity_registry"
+    echo 'activity_id,project_id,display_order,path' > "$activity_registry"
 
     get_project_paths
 
@@ -38,6 +44,8 @@ sort_activities() {
             activity_id=$(jq -r '.id' "$activity_file")
             [ "$activity_id" = 'null' ] && activity_id=$(basename "$(dirname "$activity_file")")
             cp "$activity_file" "$WORKING_DIR/activity_sort/$project_sort_order-$project_id-$activity_sort_order-$activity_id-activity.json"
+            echo "$activity_id,$project_id,$activity_sort_order,$activity_file" >> "$activity_registry"
         done
     done
+    sort -t, -k2,2 -k3,3n "$activity_registry" -o "$activity_registry"
 }

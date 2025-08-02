@@ -30,6 +30,12 @@ function ProcessCLIcommand([string]$Command, [string[]]$Arguments) {
             list_steps
             exit 0
         }
+        update {
+            update_activity_registry
+            update_step_registry
+            WriteInfo "Activity and step registries updated"
+            exit 0
+        }
     }
 
     if ("web bdd dotnet android ios".Contains($Command)) {

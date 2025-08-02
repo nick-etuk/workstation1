@@ -1,4 +1,4 @@
-function SortActivities {
+function update_activity_registry {
     Remove-Item "$WORKING_DIR/activity_sort/*" -Force
     $ProjectPaths = get_project_paths
     foreach ($ProjectPath in $ProjectPaths) {

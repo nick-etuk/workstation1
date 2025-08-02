@@ -1,13 +1,38 @@
 function get_activity_file($ActivityID) {
-    $ProjectPaths = get_project_paths
-    foreach ($ProjectPath in $ProjectPaths) {
-        $ActivityFiles = Get-Childitem -Path $ProjectPath -Include '*activity*.json' -File -Recurse -ErrorAction SilentlyContinue
-
-        foreach ($ActivityFile in $ActivityFiles) {
-            $content = Get-Content $ActivityFile -ErrorAction SilentlyContinue | Out-String
-            $ActivityConfig = ConvertFrom-Json -InputObject $content -ErrorAction SilentlyContinue
-            $Id = $ActivityConfig.id
-            if ($Id -eq $ActivityID) { return $ActivityFile.FullName }
-        }
+    if (-not $ActivityID) {
+        Write-Error "Activity ID is required"
+        return
     }
+
+    $ActivityRegistry = "$WORKING_DIR/activity_registry.csv"
+    if (!(Test-Path -Path $ActivityRegistry)) {
+        WriteError "Activity registry not found at $ActivityRegistry"
+        return
+    }
+
+    # $RegistryContent = Get-Content -Path $RegistryFile -ErrorAction SilentlyContinue
+    $RegistryContent = Import-CSV $ActivityRegistry
+    if (!$RegistryContent) {
+        WriteError "Activity registry is empty or could not be read: $RegistryFile"
+        return
+    }
+
+    $ActivityFile = $RegistryContent | Where-Object { $_.activity_id -eq $ActivityID } | Select-Object -ExpandProperty path
+    if ($ActivityFile) {
+        return $ActivityFile
+    } else {
+        WriteWarning "Activity file not found for ID: $ActivityID"
+        return
+    }
+    # foreach ($Line in $RegistryContent) {
+    #     $ID = $Line.activity_id
+    #     $Path = $Line.path
+    #     if (!$ID -or !$Path) {
+    #         WriteWarning "Invalid registry line: $Line"
+    #         continue
+    #     }
+    #     if ($ID -eq $ActivityID) {
+    #         return $Path
+    #     }
+    # }
 }

@@ -17,7 +17,6 @@ libraries=(
     logging
     config_dynamic 
     split_string 
-    get_default_project 
     get_first_activity 
     get_project_paths
     config_base

@@ -1,5 +1,4 @@
 function Show-Main-Menu {
-    SortActivities
     $ProjectConfigFiles = Get-Childitem -Path "$WORKING_DIR\activity_sort" -Include '*ws1_project.json' -File -Recurse -ErrorAction SilentlyContinue
     if (-not $ProjectConfigFiles) {
         Write-Error "No ws1_project.json files found in $WORKING_DIR\activity_sort."
@@ -9,7 +8,7 @@ function Show-Main-Menu {
     $OptionNum = 0
     $ActivityIdList = [System.Collections.ArrayList]@()
     $ActivityIdList.Clear()
-    WriteInfo "`nWelcome to workstation1`n"
+    WriteInfo "`nWelcome to workstation1`n`n"
     WriteInfo "To start an activity, enter the command 'ws' followed by an activity name,`n"
     WriteInfo "or just 'ws' to show this menu again.`n"
 
@@ -56,13 +55,11 @@ function Show-Main-Menu {
                 continue
             }
             $OptionNum++
-            # WriteInfo "$OptionNum`t $ActivityTitle"
             WriteInfo "$ActivityID`t $ActivityTitle"
 
-            # Set-Config 'activity_repo_path' "$ActivityProject.$ActivityID" "$repo_path"
             Set-Config 'activity_id' $OptionNum "$ActivityProject.$ActivityID"
             Set-Config 'activity_id_list' "$($ActivityIdList -join ' ')"
-            Set-Config 'activity_id_Project' $ActivityID $ActivityProject
+            Set-Config 'activity_id_project' $ActivityID $ActivityProject
         }
     }
     # WriteInfo "`nTo show this menu again, enter the command 'ws'."
