@@ -1,7 +1,7 @@
 function get_current_project {
 
-    CURRENT_PROJECT = Get-Config current_project
-    if ($CURRENT_PROJECT) return
+    $CURRENT_PROJECT = Get-Config current_project
+    if ($CURRENT_PROJECT) { return }
 
     $ProjectRegistry = "$WORKING_DIR/project_registry.csv"
     if (!(Test-Path -Path $ProjectRegistry)) {
