@@ -1,13 +1,11 @@
 #!/usr/bin/env bash
 
 get_current_project() {
-    debug "=>get_current_project"
     local second_line
     local second_column
 
     CURRENT_PROJECT=$(get_config 'current_project')
     if [ -n "$CURRENT_PROJECT" ]; then
-        debug "Current project from config: $CURRENT_PROJECT"
         return
     fi
 

@@ -66,7 +66,7 @@ cli_command() {
         ;;
         update)
             update_activity_registry
-            update_step_registry
+            # update_step_registry
             info "Activity and step registries updated"
             exit 0
         ;;
@@ -81,11 +81,8 @@ cli_command() {
         exit 0
     fi
 
-    activity_id_list=$(get_config 'activity_id_list')
-    # activity_id_list='web bbd dotnet android'  
-    # debug "activity_id_list:$activity_id_list"
-    # shellcheck disable=SC1087
-    if [[ " ${activity_id_list} " =~ [[:space:]]$command[[:space:]] ]]; then
+    activity_registry="$WORKING_DIR/activity_registry.csv"
+    if grep -q "^$command," "$activity_registry"; then
         info "Running activity $command"
         debug "activity args: ${args[*]+"${args[*]}"}"
         activity_id=$command

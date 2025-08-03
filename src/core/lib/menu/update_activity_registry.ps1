@@ -1,5 +1,5 @@
 function update_activity_registry {
-    Remove-Item "$WORKING_DIR/activity_sort/*" -Force
+    # Remove-Item "$WORKING_DIR/activity_sort/*" -Force
     $ActivityRegistry = "$WORKING_DIR/activity_registry.csv"
     if (!(Test-Path -Path $ActivityRegistry)) {
         New-Item -Path $ActivityRegistry -ItemType File -Force | Out-Null

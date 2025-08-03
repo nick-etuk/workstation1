@@ -32,6 +32,10 @@ get_project_steps() {
         return
     fi
     for step_dir in $step_dirs; do
+        if [[ "$step_dir" == *"conf/project_template"* ]]; then
+            debug "Skipping project template steps in $step_dir"
+            continue
+        fi
         steps=$(find "$step_dir" -name "*.json" -type f)
         if [ -z "$steps" ]; then
             info "No step files found in $step_dir"
@@ -62,7 +66,7 @@ update_step_registry() {
     project_registry="$WORKING_DIR/project_registry.csv"
     [ -f "$project_registry" ] || error "Project registry file $project_registry not found"
 
-    while IFS=, read -r sort_order project_id project_path; do
+    while IFS=, read -r project_id project_sort_order project_display_order project_path project_title; do
         [ "$project_id" = 'project_id' ] && continue  # Skip header line
         [ -z "$project_id" ] && continue  # Skip empty lines
 

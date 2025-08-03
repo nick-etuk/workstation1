@@ -1,4 +1,18 @@
-Function add_project_to_registry($ProjectID, $Path) {
+Function get_project_sort_order($ProjectID) {
+    switch ($ProjectID) {
+        $CURRENT_PROJECT {
+            return 10
+        }
+        'core' {
+            return 30
+        }
+        default {
+            return 20
+        }
+    }
+}
+
+Function add_project_to_registry($ProjectID, $DisplayOrder, $Path, $Title) {
     if (!(Test-Path -PathType Container $Path)) {
         writeError "Project path '$Path' does not exist"
         return
@@ -8,7 +22,7 @@ Function add_project_to_registry($ProjectID, $Path) {
     if (!(Test-Path -Path $RegistryFile)) {
         WriteWarning "Creating project registry"
         New-Item -Path $RegistryFile -ItemType File -Force | Out-Null
-        Add-Content -Path $RegistryFile -Value 'project_id,sort_order,path'
+        Add-Content -Path $RegistryFile -Value 'project_id,sort_order,display_order,path,title'
     }
 
     $Path = $Path.TrimEnd('\')
@@ -17,18 +31,8 @@ Function add_project_to_registry($ProjectID, $Path) {
         return
     }
 
-    switch ($ProjectID) {
-        $CURRENT_PROJECT {
-            $SortOrder = 10
-        }
-        'core' {
-            $SortOrder = 30
-        }
-        default {
-            $SortOrder = 20
-        }
-    }
+    $SortOrder = get_project_sort_order -ProjectID $ProjectID
 
-    Add-Content -Path $RegistryFile -Value "`n$ProjectID,$SortOrder,$Path"
+    Add-Content -Path $RegistryFile -Value "`n$ProjectID,$SortOrder,$DisplayOrder,$Path,`"$Title`""
     WriteInfo "$ProjectID added to registry"
 }

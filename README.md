@@ -1,6 +1,6 @@
 # Introduction
 
-This is a set of scripts that setup your workstation for developing complex applications.
+This is a set of scripts that setup your workstation for developing applications.
 It contains scripts that install the IDEs and package managers involved in building
 applications with frontends, backends, docker containers, node modules, dotnet packages and so on.
 It works on Windows, WSL, Ubuntu and MacOS.
@@ -124,9 +124,11 @@ Step names must be unique across all projects.
 
 # CLI commands
 
-- `ws`: Shows the main menu. This contains a list of all projects and their activities.
+- `ws`: Shows the main menu. This contains a list of all projects and activities.
 - `ws <activity>`: Runs the specified activity.
 - `ws <step>`: Runs the specified step.
 - `ws list`: Lists all steps in all projects.
 - `ws add`: Adds a new project to the menu.
+- `ws update`: Updates the step registry with the latest steps from all projects.
+  Run this command after adding new steps or activities.
 - `ws help`: Shows the help menu.
