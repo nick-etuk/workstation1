@@ -27,9 +27,12 @@ get_project_paths() {
     
     PROJECT_PATHS=()
     registry_file="$WORKING_DIR/project_registry.csv"
-    [ -f "$registry_file" ] || error "Registry file $registry_file not found"
+    if [ ! -f "$registry_file" ]; then
+        warn "Registry file $registry_file not found"
+        return
+    fi
 
-    while IFS=, read -r sort_order project_id project_path; do
+    while IFS=, read -r project_id project_sort_order project_display_order project_path project_title; do
         [ "$project_id" = 'project_id' ] && continue  # Skip header line
         [ -z "$project_id" ] && continue  # Skip empty lines
 

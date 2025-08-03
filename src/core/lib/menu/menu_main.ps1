@@ -1,65 +1,50 @@
 function Show-Main-Menu {
-    $ProjectConfigFiles = Get-Childitem -Path "$WORKING_DIR\activity_sort" -Include '*ws1_project.json' -File -Recurse -ErrorAction SilentlyContinue
-    if (-not $ProjectConfigFiles) {
-        Write-Error "No ws1_project.json files found in $WORKING_DIR\activity_sort."
+    WriteInfo "`nWelcome to workstation1`n`n"
+
+    $ProjectRegistry = "$WORKING_DIR/project_registry.csv"
+    if (!(Test-Path -Path $ProjectRegistry)) {
+        WriteWarning "Project registry not found at $ProjectRegistry"
         return
     }
 
-    $OptionNum = 0
-    $ActivityIdList = [System.Collections.ArrayList]@()
-    $ActivityIdList.Clear()
-    WriteInfo "`nWelcome to workstation1`n`n"
-    WriteInfo "To start an activity, enter the command 'ws' followed by an activity name,`n"
-    WriteInfo "or just 'ws' to show this menu again.`n"
+    $ProjectRegistryContent = Import-CSV $ProjectRegistry
+    if (!$ProjectRegistryContent) {
+        WriteWarning "Project registry is empty or could not be read: $ProjectRegistry"
+        return
+    }
+    $ProjectRegistryContent = $ProjectRegistryContent | Sort-Object -Property display_order
+
+    $ActivityRegistry = "$WORKING_DIR/activity_registry.csv"
+    if (!(Test-Path -Path $ActivityRegistry)) {
+        WriteWarning "Activity registry not found at $ActivityRegistry"
+        return
+    }
+    $ActivityRegistryContent = Import-CSV $ActivityRegistry
+    if (!$ActivityRegistryContent) {
+        WriteWarning "Activity registry is empty or could not be read: $ActivityRegistry"
+        return
+    }
+    $ActivityRegistryContent = $ActivityRegistryContent | Sort-Object -Property display_order
 
 
-    foreach ($ProjectConfigFile in $ProjectConfigFiles) {
-        $ProjectFilename = $ProjectConfigFile.BaseName
-        $SplitString = $ProjectFilename.Split('-')
-        $ProjectID = $SplitString[1]
+    foreach ($ProjectLine in $ProjectRegistryContent) {
+        $ProjectID = $ProjectLine.project_id
+        $DisplayOrder = $ProjectLine.display_order
+        $ProjectTitle = $ProjectLine.title
 
-        $Content = Get-Content $ProjectConfigFile -ErrorAction SilentlyContinue | Out-String
-        $ProjectConfig = ConvertFrom-Json -InputObject $Content -ErrorAction SilentlyContinue
-        if ($ProjectConfig | Get-Member -Name 'title') { 
-            $ProjectTitle = $ProjectConfig.title
-        } else {
-            WriteWarning "No title found in $ProjectConfigFile"
-            continue
-        }
         $BorderLine = '-' * $ProjectTitle.Length
 
         WriteInfo "`n$BorderLine"
         WriteInfo $ProjectTitle
         WriteInfo $BorderLine
 
-        $ActivityConfigFiles = Get-Childitem -Path "$WORKING_DIR\activity_sort" -Include '*-activity.json' -File -Recurse -ErrorAction SilentlyContinue
-        if (-not $ActivityConfigFiles) {
-            Write-Error "No activities found in $WORKING_DIR\activity_sort."
-            return
-        }
-
-        foreach ($ActivityConfigFile in $ActivityConfigFiles) {
-            $ActivityFilename = $ActivityConfigFile.BaseName
-            $SplitString = $ActivityFilename.Split('-')
-            $ActivityProject = $SplitString[1]
+        foreach ($ActivityLine in $ActivityRegistryContent) {
+            $ActivityProject = $ActivityLine.project_id
             if ($ActivityProject -ne $ProjectID) { continue }
-            $ActivityID = $SplitString[3]
-            $ActivityIdList.Add($ActivityID) | Out-Null
+            $ActivityID = $ActivityLine.activity_id
+            $ActivityTitle = $ActivityLine.title
 
-            $Content = Get-Content $ActivityConfigFile -ErrorAction SilentlyContinue | Out-String
-            $ActivityConfig = ConvertFrom-Json -InputObject $Content -ErrorAction SilentlyContinue
-            if ($ActivityConfig | Get-Member -Name 'title') { 
-                $ActivityTitle = $ActivityConfig.title
-            } else {
-                WriteWarning "No title found in $ActivityConfigFile"
-                continue
-            }
-            $OptionNum++
             WriteInfo "$ActivityID`t $ActivityTitle"
-
-            Set-Config 'activity_id' $OptionNum "$ActivityProject.$ActivityID"
-            Set-Config 'activity_id_list' "$($ActivityIdList -join ' ')"
-            Set-Config 'activity_id_project' $ActivityID $ActivityProject
         }
     }
     # WriteInfo "`nTo show this menu again, enter the command 'ws'."

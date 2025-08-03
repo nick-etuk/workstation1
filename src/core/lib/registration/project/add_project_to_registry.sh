@@ -2,7 +2,10 @@
 
 add_project_to_registry() {
     local project_id="$1"
-    local project_path="$2"
+    local display_order="${2:-999}"  # Default to 999 if not provided
+    local project_path="$3"
+    local title="$4"
+    local sort_order
     local registry_file="${WORKING_DIR}/project_registry.csv"
 
     if [ ! -d "$project_path" ]; then
@@ -12,7 +15,7 @@ add_project_to_registry() {
     if [ ! -f "$registry_file" ]; then
         info "Creating project registry"
         touch "$registry_file"
-        echo 'project_id,sort_order,path' > "$registry_file"
+        echo 'project_id,sort_order,display_order,path,title' > "$registry_file"
     fi
 
     # Remove trailing slash
@@ -33,6 +36,6 @@ add_project_to_registry() {
             sort_order=20
             ;;
     esac
-    echo "$project_id,$sort_order,$project_path" >> "$registry_file"
+    echo "$project_id,$sort_order,$display_order,$project_path,$title" >> "$registry_file"
     info "Project $project_id added to registry"
 }
