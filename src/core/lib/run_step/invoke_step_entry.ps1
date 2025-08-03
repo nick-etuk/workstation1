@@ -22,13 +22,6 @@ function Invoke-Step-Entry {
         WriteInfo "$Step $Arguments step already done"
         return $false
     }
-
-    # $StepConfig = Get-Step-Config -Step $Step
-    # $IsElevated = $StepConfig.isElevated
-    # if($IsElevated -eq $true -and !$(IamElevated)) {
-    #     WriteInfo "Please run step $Step as an Administrator"
-    #     return $false
-    # }
     
     return $true
 }

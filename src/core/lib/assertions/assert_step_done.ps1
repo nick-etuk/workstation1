@@ -18,7 +18,7 @@ function Assert-Step-Done {
         $CallingFunction = $CallingScript
     }
 
-    $StepConfig = Get-Step-Config -Step $Step
+    $StepConfig = get_step_config -StepID $Step
     if ($StepConfig | Get-Member -Name 'checks') { 
         $StepConfigChecks = $StepConfig.checks
         if ($StepConfigChecks | Get-Member -Name 'win') { $Checks = $StepConfig.checks.win }

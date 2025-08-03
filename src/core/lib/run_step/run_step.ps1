@@ -1,12 +1,15 @@
 function RunStep {
     param (
+        [parameter(Mandatory=$true)]
         $StepID,
         [string[]]$Arguments=@()
     )
     $ArgCount = $Arguments.Count
     $AllPassed = 0
 
-    $StepConfig = Get-Step-Config $StepID
+    $StepID = $StepID.ToLower() -replace '-', '_'
+
+    $StepConfig = get_step_config -StepID $StepID
 
     if (!$StepConfig) {
         WriteInfo "Config not found for step $StepID in $WS_ROOT_WIN"
@@ -58,13 +61,11 @@ function RunStep {
         if ($? -ne 0 ) { $AllPassed = 1 }
     }
 
-    $StepDir = $(Get-Step-Directory -Step $StepID)
-    if (!$StepDir) { return $AllPassed }
+    $StepDir = "$($StepConfig.parent)"
+    $ScriptFile = "$StepDir/$StepID.ps1"
+    if (!(Test-Path -PathType Leaf "$ScriptFile")) { return $AllPassed }
 
-    $StepFileName = $StepID.ToLower() -replace '-', '_'
-    if (Test-Path -PathType Leaf "$StepDir\$StepFileName.ps1") {
-        . "$StepDir\$StepFileName.ps1" -Arguments $Arguments
-    }
+    . "$ScriptFile" -Arguments $Arguments
 
     # if (Test-Path -PathType Leaf "$StepDir\$StepFileName.sh") {
     #     get-ScriptRootUnix

@@ -41,7 +41,7 @@ run_step() {
     fi
     [ -z "${INIT_UNIX+empty_string}" ] && source "$WS_ROOT_UNIX/core/init.sh"
 
-    step_config=$(get_step_config "$step")
+    step_config=$(get_step_path "$step")
     if [ ! -f "$step_config" ]; then
         warn "No configuration file for $step"
         return 1
@@ -146,7 +146,7 @@ run_step() {
     #     [ ! "$answer" = 'y' ] && return
     # fi
     
-    step_script=$(get_step_file "$step" "sh")
+    step_script="$(dirname -- "$step_config").sh"
     if [ -f "$step_script" ]; then 
         if [ "$parallel" = 'true' ]; then
             new_tab "$startup_script $step ${args[*]+"${args[*]}"}"

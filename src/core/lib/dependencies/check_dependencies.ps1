@@ -5,7 +5,7 @@ function CheckDependencies {
         $Arguments
     )
 
-    $StepConfig = Get-Step-Config -Step $Step
+    $StepConfig = get_step_config -StepID $Step
     if (!($StepConfig | Get-Member -Name 'dependencies')) { return $true }
 
     $StepDependencies = $StepConfig.dependencies
