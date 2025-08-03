@@ -1,50 +1,17 @@
 #!/usr/bin/env bash
 
-function get_step_file {
-    local step
-    local extension
-    local file_path=''
+get_step_path() {
+    local step_registry
+    local step_id
+    local step_path=''
 
-    step=$1
-    extension=$2
-    # todo:  look this up in step registry.
-    # if not found, update the registry and try again.
-    # sort step registry by priority (current project=1, core=2, other projects=3).
-    
-    for project_path in "${PROJECT_PATHS[@]}"; do
-        file_path=$(find "$project_path" -name "$step.$extension" -type f)
-        if [ -f "$file_path" ]; then
-            echo "$file_path"
-            return
-        fi
-    done
-    # if [ ! -z ${CURRENT_PROJECT+empty} ]; then
-    #     file_path=$(find "$WS_ROOT_UNIX/$CURRENT_PROJECT/steps" -name "$step.$extension" -type f)
-    # fi
-
-    # [ -f "$file_path" ] || file_path=$(find "$WS_ROOT_UNIX" -path '*steps*' -name "$step.$extension" -type f)
-
-    if [ ! -f "$file_path" ]; then
-        file_path=$(find "$WS_ROOT_UNIX/core/steps" -name "$step.$extension" -type f)
-        [ -f "$file_path" ] || warn "Step file $step.$extension not found"
+    step_registry="$WORKING_DIR/step_registry.csv"
+    if [ ! -f "$step_registry" ]; then
+        warn "Step registry file $step_registry not found"
+        update_step_registry
     fi
-    echo "$file_path"
-}
-
-function get_step_path {
-    local step
-    local file_path
-
-    step=$1
-    file_path=$(get_step_file "$step" "sh")
-    [ -f "$file_path" ] &&  dirname "$file_path"
-}
-
-function get_step_config {
-    local step
-    local file_path
-
-    step=$1
-    file_path=$(get_step_file "$step" "json")
-    [ -f "$file_path" ] &&  echo "$file_path"
+    
+    step_id=$1
+    step_path=$(awk -F, -v id="$step_id" '$1 == id {print $4}' "$step_registry")
+    echo "$step_path"
 }

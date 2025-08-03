@@ -6,7 +6,7 @@ is_parallel_step() {
     local is_parallel
 
     step=$1
-    config_file=$(get_step_config "$step")
+    config_file=$(get_step_path "$step")
     [ -f "$config_file" ] || return 1
 
     is_parallel=$(jq -r '.parallel' "$config_file")

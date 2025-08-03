@@ -20,7 +20,7 @@ assert_step_done() {
 
     # [[ $step == start* ]] && return 1
 
-    config_file=$(get_step_config "$step")
+    config_file=$(get_step_path "$step")
     if [ -z "$config_file" ]; then
         error "No configuration file for $step"
     fi

@@ -1,5 +1,4 @@
 function find_steps ($ProjectID, $ProjectPath) {
-    writedebug "=>find_steps: $ProjectID, $ProjectPath"
     $StepDirectories = Get-ChildItem -Path $ProjectPath -Filter 'steps' -Directory -Recurse -ErrorAction SilentlyContinue  
 
     if (!$StepDirectories) {
@@ -8,6 +7,10 @@ function find_steps ($ProjectID, $ProjectPath) {
     }
 
     foreach ($StepDir in $StepDirectories) {
+        if ($StepDir -match 'conf/project_template') {
+            WriteDebug "Skipping project template steps in $StepDir"
+            continue
+        }
         $StepFiles = Get-ChildItem -Path $StepDir -Recurse -Filter "*.json" -ErrorAction SilentlyContinue
         foreach ($StepFile in $StepFiles) {
             $StepID = (get-item $StepFile).BaseName
@@ -57,5 +60,6 @@ function update_step_registry {
         return 
     }
     $SortedStepRegistry = $StepRegistryContent | Sort-Object -Property sort_order, step_id
-    $SortedStepRegistry | Export-CSV -Path $StepRegistry -NoTypeInformation -Force
+    # $SortedStepRegistry | Export-CSV -Path $StepRegistry -NoTypeInformation -Force
+    $SortedStepRegistry | Export-CSV -Path $StepRegistry
 }

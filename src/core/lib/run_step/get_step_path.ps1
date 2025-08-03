@@ -1,29 +1,19 @@
-function Get-Step-File ([parameter(Mandatory=$true)]$Step, [parameter(Mandatory=$true)]$Extension) {
-    $Step = $Step.ToLower() -replace '-', '_'
-    # todo: search for steps in this order:
-    # current project, core, other projects
-    $ProjectPaths = get_project_paths
-    foreach ($ProjectPath in $ProjectPaths) {
-        $FilePath = Get-Childitem -Path "$ProjectPath" -Include "$Step.$Extension" -File -Recurse -ErrorAction SilentlyContinue
-        if ($FilePath) { return $FilePath }
+function get_step_path ([parameter(Mandatory=$true)]$StepID) {
+    $StepRegistry = "$WORKING_DIR/step_registry.csv"
+    if (!(Test-Path -PathType Leaf $StepRegistry)) {
+        Write-Warning "Step registry file $StepRegistry not found"
+        update_step_registry
     }
-    $FilePath = Get-Childitem -Path "$WS_ROOT_WIN/core/steps" -Include "$Step.$Extension" -File -Recurse -ErrorAction SilentlyContinue
-    if (!$FilePath) { writewarn "Step file $Step.$Extension not found" }
-    return $FilePath
+    $Step = $StepID.ToLower() -replace '-', '_'
+
+    $StepPath = Get-Content $StepRegistry | Where-Object { $_ -match "^$StepID," } | ForEach-Object { $_.Split(',')[3] }
+    return $StepPath
 }
 
-function Get-Step-Directory ([parameter(Mandatory=$true)]$Step) {
-    $FilePath = Get-Step-File -Step $Step -Extension ps1
-    if ($FilePath) { return Split-Path -Path $FilePath -Parent }
-    
-    $FilePath = Get-Step-File -Step $Step -Extension sh
-    if ($FilePath) { return Split-Path -Path $FilePath -Parent }
-}
-
-function Get-Step-Config ([parameter(Mandatory=$true)]$Step) {
-    $FilePath = Get-Step-File -Step $Step -Extension json
+function get_step_config ([parameter(Mandatory=$true)]$StepID) {
+    $FilePath = get_step_path -StepID $StepID
     if (!$FilePath) { return }
-    $content = Get-Content $FilePath -ErrorAction SilentlyContinue | Out-String
+    $Content = Get-Content $FilePath -ErrorAction SilentlyContinue | Out-String
     $Json = ConvertFrom-Json -InputObject $content -ErrorAction SilentlyContinue
     return $Json
 }

@@ -33,7 +33,6 @@ get_project_steps() {
     fi
     for step_dir in $step_dirs; do
         if [[ "$step_dir" == *"conf/project_template"* ]]; then
-            debug "Skipping project template steps in $step_dir"
             continue
         fi
         steps=$(find "$step_dir" -name "*.json" -type f)
@@ -48,7 +47,7 @@ get_project_steps() {
             step_id=$(basename "$step_file")
             step_id=${step_id%.json}  # Remove .json extension
             description=$(get_step_description "$step_id")
-            echo "$step_id,$project_id,$sort_order,$step_file,$description" >> "$WORKING_DIR/tmp.csv"
+            echo "$step_id,$project_id,$sort_order,$step_file,\"$description\"" >> "$WORKING_DIR/tmp.csv"
         done
     done
 }
@@ -82,7 +81,7 @@ update_step_registry() {
     # cat "$WORKING_DIR/step_registry.csv" | (sed -u 1q; sort)
     # (sed -u 1q; sort) < "$WORKING_DIR/step_registry.csv"
     
-    sort -t, -k1,1n -k2,2 "$WORKING_DIR/tmp.csv" -o "$WORKING_DIR/tmp.csv"
+    sort -t, -k3,3n -k1,1 "$WORKING_DIR/tmp.csv" -o "$WORKING_DIR/tmp.csv"
     step_registry="$WORKING_DIR/step_registry.csv"
     rm -f "$step_registry"
     touch "$step_registry"

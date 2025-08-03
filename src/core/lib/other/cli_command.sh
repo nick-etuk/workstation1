@@ -66,14 +66,15 @@ cli_command() {
         ;;
         update)
             update_activity_registry
-            # update_step_registry
+            update_step_registry
             info "Activity and step registries updated"
             exit 0
         ;;
     esac
 
-    step_config_file=$(get_step_config "$command")
+    step_config_file=$(get_step_path "$command")
     if [ -f "$step_config_file" ]; then
+        debug "Step path: $step_config_file"
         step=$command
         # args=("$@")
         # step_args=("${args[@]:1}")
