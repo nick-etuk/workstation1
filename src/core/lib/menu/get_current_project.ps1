@@ -1,7 +1,7 @@
 function get_current_project {
-
-    $CURRENT_PROJECT = Get-Config current_project
-    if ($CURRENT_PROJECT) { return }
+writedebug "=>get_current_project"
+    $CURRENT_PROJECT = Get-Config 'current_project'
+    if ($CURRENT_PROJECT) { writedebug "bp1: $CURRENT_PROJECT"; return }
 
     $ProjectRegistry = "$WORKING_DIR/project_registry.csv"
     if (!(Test-Path -Path $ProjectRegistry)) {
@@ -20,6 +20,13 @@ function get_current_project {
         WriteError "No projects found in registry: $ProjectRegistry"
         return
     }
-    $CURRENT_PROJECT = $FirstProject.project_id
+
+    if ($FirstProject | Get-Member -Name 'project_id') {
+        # writedebug "bp3: $FirstProject"
+        writedebug "bp4: $($FirstProject).project_id"
+        $Script:CURRENT_PROJECT = $FirstProject.project_id
+        writedebug "bp5: $CURRENT_PROJECT"
+        Set-Config 'current_project' $CURRENT_PROJECT
+    }
     return
 }

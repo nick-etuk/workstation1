@@ -13,7 +13,7 @@ function get_activity_file($ActivityID) {
     # $RegistryContent = Get-Content -Path $RegistryFile -ErrorAction SilentlyContinue
     $RegistryContent = Import-CSV $ActivityRegistry
     if (!$RegistryContent) {
-        WriteError "Activity registry is empty or could not be read: $RegistryFile"
+        WriteError "get_activity_file: Activity registry is empty or could not be read: $ActivityRegistry"
         return
     }
 

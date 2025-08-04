@@ -1,12 +1,15 @@
 Function add_step_to_registry($StepID, $ProjectID, $StepPath, $Description) {
-    writedebug "=>add_step_to_registry: $StepID, $ProjectID, $StepPath, $Description"
+    if ($StepPath -match '__test') {
+        # WriteDebug "Skipping step $StepPath"
+        return
+    }
+    # writedebug "=>add_step_to_registry: $StepID, $ProjectID, $StepPath, $Description"
     $RegistryFile = "$WORKING_DIR/step_registry.csv"
-
     switch ($ProjectID) {
-        $CURRENT_PROJECT {
+        { $CURRENT_PROJECT } {
             $SortOrder = 10
         }
-        'core' {
+        core {
             $SortOrder = 30
         }
         default {
@@ -19,6 +22,5 @@ Function add_step_to_registry($StepID, $ProjectID, $StepPath, $Description) {
         return
     }
 
-    Add-Content -Path $RegistryFile -Value "`n$StepID,$ProjectID,$SortOrder,$StepPath,`"$Description`""
-    WriteInfo "$StepID added to registry"
+    Add-Content -Path $RegistryFile -Value "$StepID,$ProjectID,$SortOrder,$StepPath,`"$Description`""
 }

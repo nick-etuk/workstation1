@@ -1,10 +1,8 @@
 function update_activity_registry {
-    Remove-Item "$WORKING_DIR/activity_sort/*" -Force
     $ActivityRegistry = "$WORKING_DIR/activity_registry.csv"
-    if (!(Test-Path -Path $ActivityRegistry)) {
-        New-Item -Path $ActivityRegistry -ItemType File -Force | Out-Null
-        Add-Content -Path $ActivityRegistry -Value 'activity_id,project_id,display_order,option_num,path,title'
-    }
+    if ((Test-Path -Path $ActivityRegistry)) { Remove-Item "$ActivityRegistry" -Force }
+    New-Item -Path $ActivityRegistry -ItemType File -Force | Out-Null
+    Add-Content -Path $ActivityRegistry -Value 'activity_id,project_id,display_order,option_num,path,title'
 
     $ProjectRegistry = "$WORKING_DIR/project_registry.csv"
     if (!(Test-Path -Path $ProjectRegistry)) {
@@ -20,8 +18,6 @@ function update_activity_registry {
     $OptionNum = 0
     foreach ($Line in $RegistryContent) {
         $ProjectID = $Line.project_id
-        $SortOrder = $Line.sort_order
-        $DisplayOrder = $Line.display_order
         $ProjectPath = $Line.path
         if (!$ProjectID -or !$ProjectPath) {
             WriteWarning "Invalid registry line: $Line"
@@ -48,7 +44,7 @@ function update_activity_registry {
                 $ActivityDisplayOrder = 999
             }
 
-            Add-Content -Path $ActivityRegistry -Value "`n$ActivityID,$ProjectID,$ActivityDisplayOrder,$OptionNum,$Path,`"$ActivityTitle`""
+            Add-Content -Path $ActivityRegistry -Value "$ActivityID,$ProjectID,$ActivityDisplayOrder,$OptionNum,$ActivityFile,`"$ActivityTitle`""
             # Copy-Item "$ActivityFile" "$WORKING_DIR/activity_sort/$ProjectSortOrder-$ProjectID-$ActivitySortOrder-$ActivityID-activity.json"
         }
 

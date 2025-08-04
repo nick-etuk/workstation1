@@ -4,8 +4,11 @@ function get_step_path ([parameter(Mandatory=$true)]$StepID) {
         Write-Warning "Step registry file $StepRegistry not found"
         update_step_registry
     }
-    $Step = $StepID.ToLower() -replace '-', '_'
+    $StepID = $StepID.ToLower() -replace '-', '_'
 
+    $StepPath = Get-Content $StepRegistry | Where-Object { $_ -match "^$StepID," } | ForEach-Object { $_.Split(',')[3] }
+    if ($StepPath) { return $StepPath }
+    $StepID = "`"$StepID`""
     $StepPath = Get-Content $StepRegistry | Where-Object { $_ -match "^$StepID," } | ForEach-Object { $_.Split(',')[3] }
     return $StepPath
 }
