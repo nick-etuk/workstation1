@@ -30,7 +30,7 @@ function find_steps ($ProjectID, $ProjectPath) {
 
 function update_step_registry {
     $StepRegistry = "$WORKING_DIR/step_registry.csv"
-    Remove-Item $StepRegistry -Force
+    if (Test-Path -PathType Leaf $StepRegistry) { Remove-Item $StepRegistry -Force}
     New-Item -Path $StepRegistry -ItemType File -Force | Out-Null
     Add-Content -Path $StepRegistry -Value 'step_id,project_id,sort_order,path,description'
 
@@ -43,7 +43,6 @@ function update_step_registry {
     }
     foreach ($Line in $RegistryContent) {
         $ProjectID = $Line.project_id
-        $SortOrder = $Line.sort_rder
         $ProjectDirectory = $Line.path
         $ProjectDirectory = $ProjectDirectory.Trim()
         if (!(Test-Path -Path $ProjectDirectory)) {
@@ -54,12 +53,12 @@ function update_step_registry {
     }
     find_steps -ProjectID 'core' -ProjectPath "$WS_ROOT_WIN\core"
 
-    $StepRegistryContent = Import-CSV $StepRegistry
-    if (!$StepRegistryContent) {
-        WriteError "Step registry is empty or could not be read: $StepRegistry"
-        return 
-    }
-    $SortedStepRegistry = $StepRegistryContent | Sort-Object -Property sort_order, step_id
-    # $SortedStepRegistry | Export-CSV -Path $StepRegistry -NoTypeInformation -Force
-    $SortedStepRegistry | Export-CSV -Path $StepRegistry
+    # $StepRegistryContent = Import-CSV $StepRegistry
+    # if (!$StepRegistryContent) {
+    #     WriteError "Step registry is empty or could not be read: $StepRegistry"
+    #     return 
+    # }
+    # $SortedStepRegistry = $StepRegistryContent | Sort-Object -Property sort_order, step_id
+    # # # $SortedStepRegistry | Export-CSV -Path $StepRegistry -NoTypeInformation -Force
+    # $SortedStepRegistry | Export-CSV -Path $StepRegistry -QuoteFields 'description'
 }

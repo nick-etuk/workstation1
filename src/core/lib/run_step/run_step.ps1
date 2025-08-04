@@ -12,7 +12,7 @@ function RunStep {
     $StepConfig = get_step_config -StepID $StepID
 
     if (!$StepConfig) {
-        WriteInfo "Config not found for step $StepID in $WS_ROOT_WIN"
+        WriteInfo "Config not found for step $StepID in $WS_ROOT_WIN\steps"
         return 1
     }
 
@@ -61,9 +61,10 @@ function RunStep {
         if ($? -ne 0 ) { $AllPassed = 1 }
     }
 
-    $StepDir = "$($StepConfig.parent)"
+    $StepConfigFile = get_step_path -StepID $StepID
+    $StepDir = Split-Path -Path $StepConfigFile -Parent
     $ScriptFile = "$StepDir/$StepID.ps1"
-    if (!(Test-Path -PathType Leaf "$ScriptFile")) { return $AllPassed }
+    if (!(Test-Path -PathType Leaf $ScriptFile)) { return $AllPassed }
 
     . "$ScriptFile" -Arguments $Arguments
 

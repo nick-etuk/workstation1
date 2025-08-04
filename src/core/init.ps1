@@ -3,11 +3,11 @@ Set-StrictMode -Version 3.0
 
 if (Test-Path variable:INIT_WIN) { return }
 
-$INIT_WIN = 1
-$CURRENT_STEP = 'general'
+$Script:INIT_WIN = 1
+$Script:CURRENT_STEP = 'general'
 
 if (!(Test-Path variable:WS_ROOT_WIN)) { 
-    $WS_ROOT_WIN = (get-item $PSScriptRoot).parent
+    $Script:WS_ROOT_WIN = (get-item $PSScriptRoot).parent
  }
 
 $Libraries = Get-Childitem -Path "$WS_ROOT_WIN\core\lib" -Include '*.ps1' -Exclude config_base.ps1, z*.ps1 -File -Recurse -ErrorAction SilentlyContinue
@@ -21,9 +21,9 @@ foreach ($Library in $Libraries) {
 . $PSScriptRoot\lib\conf\config_base.ps1 # Load config last since it is not just a function definiton.
 
 set_repo_dir
-$REPO_DIR = Get-Config repo_dir
+$Script:REPO_DIR = Get-Config repo_dir
 
-if ("CPC-NIET2-AY8UE DESKTOP-2022".Contains($env:ComputerName)) { $DEBUG = $true}
+if ("CPC-NIET2-AY8UE DESKTOP-2022".Contains($env:ComputerName)) { $Script:DEBUG = $true}
 
 if (Test-Path variable:DEBUG) {
     WriteInfo "Debug mode" 
@@ -39,3 +39,4 @@ if (Test-Path variable:DEBUG) {
 Show-Config
 create_registries
 get_current_project
+

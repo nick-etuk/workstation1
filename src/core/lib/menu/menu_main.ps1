@@ -20,8 +20,14 @@ function Show-Main-Menu {
         return
     }
     $ActivityRegistryContent = Import-CSV $ActivityRegistry
+    # $ActivityRegistryContent = Get-Content -Path $ActivityRegistry -ErrorAction Stop | ConvertFrom-Csv -Delimiter ','
+    #  -Header 'activity_id', 'project
+    # $data[0] = 'Num' + $data[0]
+    # $data | ConvertFrom-Csv
+    # $ActivityRegistryContent = Get-Content -Path $ActivityRegistry
+    # writedebug "ActivityRegistryContent: $ActivityRegistryContent"
     if (!$ActivityRegistryContent) {
-        WriteWarning "Activity registry is empty or could not be read: $ActivityRegistry"
+        WriteWarning "menu: Activity registry could not be read: $ActivityRegistry"
         return
     }
     $ActivityRegistryContent = $ActivityRegistryContent | Sort-Object -Property display_order
