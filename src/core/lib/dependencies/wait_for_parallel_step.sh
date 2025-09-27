@@ -2,19 +2,20 @@
 
 wait_for_parallel_step() {
     local step
-    local args
+    # local args
     local config_file
     local is_parallel
     local timeout_param
 
-    args=( "$@" )
+    PARALLEL_STEP_ID=$1
+    shift
+    # args=("$@")
 
     TIMEOUT=600
     TIMEOUT_MINUTES=$((TIMEOUT / 60))
     WAIT_FOR_STEP_STATUS=0
 
-    step=$1
-    config_file=$(get_step_path "$step")
+    config_file=$(get_step_path "$PARALLEL_STEP_ID")
     [ -f "$config_file" ] || return
 
     is_parallel=$(jq -r '.parallel' "$config_file")
@@ -28,9 +29,10 @@ wait_for_parallel_step() {
     fi
 
 
-    info "Waiting $TIMEOUT_MINUTES minutes for parallel step $step ${args[*]+"${args[*]}"}"
-    debug "args:"
-    for arg in ${args[@]+"${args[@]}"}; do debug "arg: $arg"; done
+    # info "Waiting $TIMEOUT_MINUTES minutes for parallel step $step ${args[*]+"${args[*]}"}"
+    info "Waiting $TIMEOUT_MINUTES minutes for parallel step $PARALLEL_STEP_ID $*"
+    # for arg in ${args[@]+"${args[@]}"}; do debug "arg: $arg"; done
+    for arg in "$@"; do debug "arg: $arg"; done
 
     # case $step in
     #     build_backend)
@@ -44,11 +46,12 @@ wait_for_parallel_step() {
     #         return 1
     #         ;;
     # esac
-    WAITED=0 wait_for_step ${args[@]+"${args[@]}"}
+    # WAITED=0 wait_for_step "$step" "$@"
+    WAITED=0 wait_for_step "$@"
     debug "WAIT_FOR_STEP_STATUS: $WAIT_FOR_STEP_STATUS"
 
     if [ "$WAIT_FOR_STEP_STATUS" -ne 0 ]; then
-        warn "${args[*]} not completed after $TIMEOUT_MINUTES minutes. Please do it manually."
+        warn "$* not completed after $TIMEOUT_MINUTES minutes. Please do it manually."
         case "$step" in
             start_service)
                 info "Missing docker containers:"

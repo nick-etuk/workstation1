@@ -43,4 +43,4 @@ DONE_DEPENDENCIES=()
 show_ws_config
 create_registries
 get_current_project
-get_project_paths
+# get_project_paths

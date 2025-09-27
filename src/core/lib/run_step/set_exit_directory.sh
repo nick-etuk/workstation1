@@ -14,7 +14,7 @@ set_exit_directory() {
         get_default_project 
         get_first_activity
         get_activity_file
-        get_project_paths
+        # get_project_paths
         config_base
     )
 

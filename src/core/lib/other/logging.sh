@@ -11,10 +11,21 @@ function info {
     # echo "[$(date +'%Y-%m-%d %H:%M:%S')]:[$STAGE] $*" | tee -a $LOG_FILE
     local message
     local modified_message
+    local silent_steps
 
     message="$*"
+    silent_steps=('core_steps' 'Core steps' 'Clone templates' 'Setup terminal')
+    silent_messages=('step started' 'step completed' 'step already done')
+
+    for step in "${silent_steps[@]}"; do
+        for silence in "${silent_messages[@]}"; do
+            if [ "$message" = "$step $silence" ]; then
+                return
+            fi
+        done
+    done
+
     modified_message=$(echo -e "${message/step completed/$TICK_MARK}")
-    modified_message=$(echo -e "${modified_message/stage completed/$TICK_MARK}")
     modified_message=$(echo -e "${modified_message/step already done/$TICK_MARK}")
     modified_message=$(echo -e "${modified_message/step failed/$CROSS_MARK}")
 

@@ -1,20 +1,22 @@
 #!/usr/bin/env bash
 
 wait_for_step() {
-    local step
+    # local my_step
     local pause=10
-    local step
-    local args
-    local step_args
+    # local step
+    # local args
+    # local step_args
 
-    step=$1
-    args=( "$@" )
-    step_args=("${args[@]:1}")
-    debug "=>wait_for_step $step ${step_args[*]+"${step_args[*]}"}"
-    for arg in ${step_args[@]+"${step_args[@]}"}; do debug "arg: $arg"; done
+    # my_step=$1
+    # shift
+    # args=( "$@" )
+    # step_args=("${args[@]:1}")
+    # debug "=>wait_for_step $step ${step_args[*]+"${step_args[*]}"}"
+    debug "=>wait_for_step $PARALLEL_STEP_ID $*"
+    for arg in "$@"; do debug "arg: $arg"; done
 
     sleep $pause
-    if ! assert_step_done "$step" ${step_args[@]+"${step_args[@]}"}; then
+    if ! assert_step_done "$PARALLEL_STEP_ID" "$@"; then
         WAITED=$((WAITED+pause))
         if [ "$WAITED" -gt "$TIMEOUT" ]; then
             echo ''
@@ -23,8 +25,7 @@ wait_for_step() {
             return 1
         fi 
         echo -n "."
-        # wait_for_step "$step" ${args[@]+"${args[@]}"}
-        wait_for_step "$step" "${step_args[@]+"${step_args[@]}"}"
+        wait_for_step "$@"
     fi
     echo ''
 }

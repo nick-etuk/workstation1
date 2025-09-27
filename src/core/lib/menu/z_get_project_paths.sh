@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-get_project_paths() {
+z_get_project_paths() {
+    # no longer needed
     local registry_file
     local project_id
     local project_path

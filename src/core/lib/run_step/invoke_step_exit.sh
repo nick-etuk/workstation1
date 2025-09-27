@@ -1,13 +1,18 @@
 #!/usr/bin/env bash
 
 invoke_step_exit() {
-    local args
+    # local args
     local step
-    # local run_once='false'
     local parallel='false'
     local exit_status
 
-    [ "$#" -eq 1 ] && step="$1"
+    # debug "bp5 =>invoke_step_exit"
+    # if [ "$#" -eq 1 ]; then
+    #     step="$1"
+    #     debug "bp6 step: $step"
+    # else
+    #     debug "multiple args: >$*<"
+    # fi
 
     OPTIND=1 # stops repeated calls to getopts from failing
     # while getopts "o:s:p:" opt; do
@@ -29,10 +34,11 @@ invoke_step_exit() {
         esac
     done
     shift $((OPTIND-1))
-    args=("$@")
+    # args=("$@")
 
     if [ "$parallel" = 'true' ]; then
-        wait_for_parallel_step "$step" ${args[@]+"${args[@]}"}
+        # wait_for_parallel_step "$step" ${args[@]+"${args[@]}"}
+        wait_for_parallel_step "$step" "$@"
         exit_status=$WAIT_FOR_STEP_STATUS
         if [ "$exit_status" -ne 0 ]; then
             # Don't worry about the nested double quotes below.
@@ -43,8 +49,8 @@ invoke_step_exit() {
     fi
 
     [ "$NEW_TAB" = 'true' ] && [[ 'start_service build_backend' == *$step* ]] && return 0
-    
-    assert_step_done "$step" ${args[@]+"${args[@]}"}
+    # assert_step_done "$step" ${args[@]+"${args[@]}"} 
+    assert_step_done "$step" "$@"
     exit_status=$?
     if [ "$exit_status" -ne 0 ]; then
         warn "$(get_step_description "$step") step failed"

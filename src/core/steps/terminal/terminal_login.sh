@@ -18,7 +18,7 @@ libraries=(
     config_dynamic 
     split_string 
     get_first_activity 
-    get_project_paths
+    # get_project_paths
     config_base
 )
 

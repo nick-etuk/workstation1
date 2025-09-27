@@ -76,19 +76,14 @@ cli_command() {
     if [ -f "$step_config_file" ]; then
         debug "Step path: $step_config_file"
         step=$command
-        # args=("$@")
-        # step_args=("${args[@]:1}")
         run_step "$step" ${args[@]+"${args[@]}"}
         exit 0
     fi
 
     activity_registry="$WORKING_DIR/activity_registry.csv"
-    if grep -q "^$command," "$activity_registry"; then
+    if grep -q "^\"$command\"," "$activity_registry"; then
         info "Running activity $command"
-        debug "activity args: ${args[*]+"${args[*]}"}"
         activity_id=$command
-        # args=("$@")
-        # activity_args=("${args[@]:1}")
         CURRENT_PROJECT=$(get_config 'activity_id_project' "$activity_id")
         set_config 'current_project' "$CURRENT_PROJECT"
         set_config 'current_activity' "$activity_id"

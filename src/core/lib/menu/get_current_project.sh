@@ -11,6 +11,8 @@ get_current_project() {
 
     second_line=$(sed -n '2p' "$WORKING_DIR/project_registry.csv")
     second_column=$(echo "$second_line" | cut -d, -f2)
+    # second_column=$(echo "$second_column" | sed 's/^"\(.*\)"$/\1/')
+    second_column=${second_column//\"/}
     CURRENT_PROJECT=$second_column
     debug "Current project from first line in project registry:$CURRENT_PROJECT"
     set_config 'current_project' "$CURRENT_PROJECT"

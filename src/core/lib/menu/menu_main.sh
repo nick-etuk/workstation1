@@ -24,22 +24,20 @@ show_menu_main() {
 
     printf "\nWelcome to workstation1\n\n"
 
-    project_registry="$WORKING_DIR/project_registry.csv"
+    project_registry="$WORKING_DIR/project_registry_display_ordered.csv"
     if [ ! -f "$project_registry" ]; then
         warn "Project registry not found at $project_registry"
         return
     fi
-    sort -t, -k3,3n "$project_registry" -o "$WORKING_DIR/project_registry_sorted.csv"
 
     activity_registry="$WORKING_DIR/activity_registry.csv"
     if [ ! -f "$activity_registry" ]; then
         warn "Activity registry not found at $activity_registry"
         return
     fi
-    sort -t, -k3,3n "$activity_registry" -o "$WORKING_DIR/activity_registry_sorted.csv"
 
     while IFS=, read -r project_id project_sort_order project_display_order project_path project_title; do
-        [ "$project_id" = 'project_id' ] && continue  # Skip header line
+        [ "$project_id" = '"project_id"' ] && continue  # Skip header line
         [ -z "$project_id" ] && continue  # Skip empty lines
 
         if [ -n "$project_title" ]; then
@@ -58,12 +56,13 @@ show_menu_main() {
             if [ "$activity_project_id" != "$project_id" ]; then
                 continue
             fi
-            [ "$activity_id" = 'activity_id' ] && continue  # Skip header line
+            [ "$activity_id" = '"activity_id"' ] && continue  # Skip header line
             [ -z "$activity_id" ] && continue  # Skip empty lines
             activity_title=${activity_title//\"/}
+            activity_id=${activity_id//\"/}
             printf "\t ws %s \t %s \n" "$activity_id" "$activity_title"
-        done < "$WORKING_DIR/activity_registry_sorted.csv"
-    done < "$WORKING_DIR/project_registry_sorted.csv"
+        done < "$WORKING_DIR/activity_registry.csv"
+    done < "$WORKING_DIR/project_registry_display_ordered.csv"
 
     printf "\n"
     show_menu_extras
