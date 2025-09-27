@@ -3,18 +3,20 @@
 function create_registries {
     local registry_file
 
-    registry_file="${WORKING_DIR}/project_registry.csv"
+    registry_file="$WORKING_DIR/project_registry.csv"
     if [ ! -f "$registry_file" ]; then
         warn "Creating project registry"
         touch "$registry_file"
-        echo '"project_id","sort_order","path","title"' > "$registry_file"
-        # shellcheck disable=SC2016
-        echo '"template-web",20,"$REPO_DIR/workstation1-template-web","Web App"' >> "$registry_file"
+        echo '"project_id","sort_order","display_order","path","title"' > "$registry_file"
     fi
 
     if [  ! -d "$REPO_DIR/workstation1-template-web" ]; then
         info "Cloning template projects"
         clone_templates
+    fi
+
+    if ! grep -q "$REPO_DIR/workstation1-template-web" "$registry_file"; then
+        add_project_to_registry 'template-web' "$REPO_DIR/workstation1-template-web" 'Web App'
     fi
 
     registry_file="$WORKING_DIR/activity_registry.csv"

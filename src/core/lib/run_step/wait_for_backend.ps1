@@ -4,7 +4,7 @@ function IsRunning {
         $Container
     )
 
-    if (wsl -u $WSL_USER docker container ls --format '{{.Names}}' | Select-String -Pattern $Container) {
+    if (wsl -u $WS_USER_UNIX docker container ls --format '{{.Names}}' | Select-String -Pattern $Container) {
         return $true
     }
     return $false

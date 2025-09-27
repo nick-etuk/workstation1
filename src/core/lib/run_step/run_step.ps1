@@ -71,7 +71,7 @@ function RunStep {
     # if (Test-Path -PathType Leaf "$StepDir\$StepFileName.sh") {
     #     get-ScriptRootUnix
     #     WriteWarn "Running foreign step $StepID $Arguments in WSL"
-    #     wsl -u $WSL_USER -- "$WS_ROOT_UNIX/core/lib/run_step/run_step.sh" "$StepFileName" "$Arguments"
+    #     wsl -u $WS_USER_UNIX -- "$WS_ROOT_UNIX/core/lib/run_step/run_step.sh" "$StepFileName" "$Arguments"
     #     $AllPassed = Invoke-Step-Exit -Step $StepID -Arguments $Arguments
     #     return
     # }

@@ -2,6 +2,6 @@
   "dependencies": ["install_wsl"],
   "os": ["win"],
   "checks": { 
-    "win": [ "wsl -u root cat /etc/passwd|Select-String -pattern $WSL_USER" ]
+    "win": [ "wsl -u root cat /etc/passwd|Select-String -pattern $WS_USER_UNIX" ]
   }
 }

@@ -8,7 +8,7 @@ setopt autocd extendedglob nomatch notify
 bindkey -e
 # End of lines configured by zsh-newuser-install
 # The following lines were added by compinstall
-zstyle :compinstall filename '/home/$WSL_USER/.zshrc'
+zstyle :compinstall filename '/home/$WS_USER_UNIX/.zshrc'
 
 autoload -Uz compinit
 compinit
@@ -21,6 +21,6 @@ if [ $exit_status -ne 0 ]; then
     echo "Failed to install zsh. Exit status: $exit_status"
     exit $exit_status
 fi
-sudo chsh -s /usr/bin/zsh "$WSL_USER"
+sudo chsh -s /usr/bin/zsh "$WS_USER_UNIX"
 
 # echo "$zshrc_content" > "$HOME"/.zshrc

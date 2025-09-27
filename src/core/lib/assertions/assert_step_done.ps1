@@ -25,7 +25,7 @@ function Assert-Step-Done {
     }
 
     if ($Step -eq "start_docker") {
-        $Checks = @("(wsl -u $WSL_USER docker stats --no-stream) -match 'CONTAINER'")
+        $Checks = @("(wsl -u $WS_USER_UNIX docker stats --no-stream) -match 'CONTAINER'")
     }
 
     if ($Script:Force) {

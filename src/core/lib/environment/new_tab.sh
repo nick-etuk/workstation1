@@ -12,7 +12,7 @@ new_tab() {
     full_command="export NEW_TAB='true'; $command"
 
     debug "=>new tab"
-    debug "user: >$WSL_USER<"
+    debug "user: >$WS_USER_UNIX<"
     debug "command: $full_command"
 
     if [ "$VM" = 'wsl' ]; then

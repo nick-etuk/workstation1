@@ -6,7 +6,7 @@ Function add_step_to_registry($StepID, $ProjectID, $StepPath, $Description) {
     # writedebug "=>add_step_to_registry: $StepID, $ProjectID, $StepPath, $Description"
     $RegistryFile = "$WORKING_DIR/step_registry.csv"
     switch ($ProjectID) {
-        { $CURRENT_PROJECT } {
+        { $Script:CURRENT_PROJECT } {
             $SortOrder = 10
         }
         core {
