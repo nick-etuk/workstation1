@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
-WSL_USER=$(cat /var/tmp/wsl-users.txt)
-if [ -z "$WSL_USER" ]; then
+WS_USER_UNIX=$(cat /var/tmp/wsl-users.txt)
+if [ -z "$WS_USER_UNIX" ]; then
     echo "No WSL user file. Using WSL default user."
-    WSL_USER=$(getent passwd 1000 | cut -d: -f1)
+    WS_USER_UNIX=$(getent passwd 1000 | cut -d: -f1)
 fi
-info "Adding user $WSL_USER to sudoers"
+info "Adding user $WS_USER_UNIX to sudoers"
 
-echo "$WSL_USER ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers.d/90-sudo-nopasswd
+echo "$WS_USER_UNIX ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers.d/90-sudo-nopasswd

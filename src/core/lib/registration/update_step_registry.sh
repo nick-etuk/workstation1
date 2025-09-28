@@ -47,7 +47,7 @@ get_project_steps() {
             step_id=$(basename "$step_file")
             step_id=${step_id%.json}  # Remove .json extension
             description=$(get_step_description "$step_id")
-            echo "$step_id,$project_id,$sort_order,$step_file,\"$description\"" >> "$WORKING_DIR/tmp.csv"
+            echo "\"$step_id\",\"$project_id\",\"$sort_order\",\"$step_file\",\"$description\"" >> "$WORKING_DIR/tmp.csv"
         done
     done
 }
@@ -66,8 +66,13 @@ update_step_registry() {
     [ -f "$project_registry" ] || error "Project registry file $project_registry not found"
 
     while IFS=, read -r project_id project_sort_order project_display_order project_path project_title; do
-        [ "$project_id" = 'project_id' ] && continue  # Skip header line
+        [ "$project_id" = '"project_id"' ] && continue  # Skip header line
         [ -z "$project_id" ] && continue  # Skip empty lines
+        project_id=${project_id//\"/}
+        project_sort_order=${project_sort_order//\"/}
+        project_display_order=${project_display_order//\"/}
+        project_path=${project_path//\"/}
+        project_title=${project_title//\"/}
 
         if [ ! -d "$project_path" ]; then
             info "Directory $project_path does not exist, skipping"
@@ -85,7 +90,7 @@ update_step_registry() {
     step_registry="$WORKING_DIR/step_registry.csv"
     rm -f "$step_registry"
     touch "$step_registry"
-    echo 'step_id,project_id,sort_order,path,description' > "$step_registry"
+    echo '"step_id","project_id","sort_order","path","description"' > "$step_registry"
     cat "$WORKING_DIR/tmp.csv" >> "$step_registry"
     rm -f "$WORKING_DIR/tmp.csv"
 }

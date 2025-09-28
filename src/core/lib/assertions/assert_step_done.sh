@@ -20,11 +20,6 @@ assert_step_done() {
 
     # [[ $step == start* ]] && return 1
 
-    config_file=$(get_step_path "$step")
-    if [ -z "$config_file" ]; then
-        error "No configuration file for $step"
-    fi
-
     if [ -z ${FUNCNAME[0]+empty_string} ]; then
         # Called by a top-level script, not a function
         calling_function=''
@@ -32,6 +27,11 @@ assert_step_done() {
         # Called by a function
         calling_function=${FUNCNAME[1]}
         [ "$SHELL_NAME" = 'zsh' ] && calling_function=${FUNCNAME[2]}
+    fi
+
+    config_file=$(get_step_path "$step")
+    if [ -z "$config_file" ]; then
+        error "No configuration file for $step. Called by $calling_function"
     fi
 
     # debug "checking $step ${args[*]+"${args[*]}"} for $calling_function"

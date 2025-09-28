@@ -2,7 +2,7 @@ function Show-Config {
     WriteInfo "REPO_DIR: $REPO_DIR"
     WriteInfo "WORKING_DIR: $WORKING_DIR"
     WriteInfo "LOG_DIR: $LOG_DIR"
-    WriteInfo "WSL_USER: $WSL_USER"
+    WriteInfo "WS_USER_UNIX: $WS_USER_UNIX"
     WriteInfo "GCM_PATH_WIN: $GCM_PATH_WIN"
     WriteInfo "GCM_PATH_WSL: $GCM_PATH_WSL"
     WriteInfo "WS_ROOT_WIN: $WS_ROOT_WIN"
@@ -12,10 +12,11 @@ $FORCE = $false
 $DEBUG = $true
 if ($DebugPreference -eq 'Continue') { $DEBUG = $true }
 
-$WINDOWS_USER = $env:USERNAME
-$WSL_USER = $WINDOWS_USER.ToLower()
-if ($DEBUG) { $WSL_USER = "account1" }
+$WS_USER_WIN = $env:USERNAME
+$WS_USER_UNIX = $WS_USER_WIN.ToLower()
+if ($DEBUG) { $WS_USER_UNIX = "account1" }
 
+$WS_VERSION = '1.2'  # Update this when making changes that require users to update their profiles
 $BASE_DIR = "$HOME\.workstation1"
 $WORKING_DIR = "$BASE_DIR\working"
 $LOG_BASE="$BASE_DIR\log" #todo: use windows event log, C:\WINDOWS\system32\config

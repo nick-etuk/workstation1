@@ -11,15 +11,12 @@ run_activity() {
     fi
 
     activity_id=$1
-    # args=("$@")
-    # activity_args=("${args[@]:1}")
     shift
     activity_args=("$@")
     debug "Running activity $activity_id ${activity_args[*]+"${activity_args[*]}"}"
 
     get_activity_file "$activity_id"
     [ ! -f "$ACTIVITY_FILE" ] && error "Activity configuration file not found for $activity_id"
-debug "Activity file: $ACTIVITY_FILE"
     raw_steps=$(jq '.steps' "$ACTIVITY_FILE")
     if [ "$raw_steps" = "null" ]; then
         warn "No steps found in $ACTIVITY_FILE"

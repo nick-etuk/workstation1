@@ -5,7 +5,7 @@ function add_to_profile {
     local target
     local lines=()
     lines=(
-        '# workstation1_v1 start'
+        "# workstation1_v$WS_VERSION start"
         "export WS_ROOT_UNIX=\"$WS_ROOT_UNIX\""
         'export GPG_TTY=$(tty)'
         'startup_script=$(find "$WS_ROOT_UNIX/core" -name "ws.sh" -type f)'
@@ -16,14 +16,14 @@ function add_to_profile {
         'login_script=$(find "$WS_ROOT_UNIX/core/steps" -name "terminal_login.sh" -type f)'
         '[ -f "$login_script" ] && . "$login_script"'
         'set +u'
-        '# workstation1_v1 end'
+        "# workstation1_v$WS_VERSION end"
     )
 
     target=$1
 
     [ -f "$target" ] || return 0
 
-    grep -q 'workstation1_v1' "$target" && return 0
+    grep -q "workstation1_v$WS_VERSION" "$target" && return 0
 
 
     if [ "$target" = ~/.zshrc ]; then

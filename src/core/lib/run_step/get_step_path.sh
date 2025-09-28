@@ -10,8 +10,9 @@ get_step_path() {
         warn "Step registry file $step_registry not found"
         update_step_registry
     fi
-    
-    step_id=$1
+
+    step_id="\"$1\""
     step_path=$(awk -F, -v id="$step_id" '$1 == id {print $4}' "$step_registry")
+    step_path=${step_path//\"/}
     echo "$step_path"
 }

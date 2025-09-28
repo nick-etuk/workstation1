@@ -1,26 +1,26 @@
 #!/usr/bin/env bash
 # shellcheck disable=SC1090,SC1091,SC2034
 
-libraries=$(find "$WS_ROOT_UNIX/core/lib" -name 'detect_os.sh' -o -name 'get_shell_version.sh')
+libraries=$(find "$WS_ROOT_UNIX/core/lib" -name 'detect_os.sh' -o -name 'get_shell_version.sh' -o -name 'get_wsl_win_info.sh')
 for lib in $libraries; do
     source "$lib"
 done
 
 get_shell_version
-
-WSL_USER=''
-WINDOWS_USER=''
+WS_USER_UNIX=''
+WS_USER_WIN=''
 WINDOWS_HOME=''
 WORKING_DIR_WIN=''
 VM=''
 
 if [ -f /var/tmp/wsl-users.txt ]; then
-    WSL_USER=$(cat /var/tmp/wsl-users.txt)
+    WS_USER_UNIX=$(cat /var/tmp/wsl-users.txt)
 else
-    WSL_USER=$(whoami)
-    echo "$WSL_USER" > /var/tmp/wsl-users.txt
+    WS_USER_UNIX=$(whoami)
+    echo "$WS_USER_UNIX" > /var/tmp/wsl-users.txt
 fi
 
+WS_VERSION='1.2'  # Update this when making changes that require users to update their profiles
 BASE_DIR="$HOME/.workstation1"
 WORKING_DIR="$BASE_DIR/working"
 LOG_BASE="$BASE_DIR/log"
@@ -50,16 +50,8 @@ NEW_TAB_FLAG="$WORKING_DIR"/new_tab_flag.txt
 
 detect_os
 
-if [ "$VM" = 'wsl' ]; then
-    if [ -s "$WORKING_DIR/wsl_usernames.sh" ]; then
-        source "$WORKING_DIR/wsl_usernames.sh"
-    else
-        echo "No wsl_usernames.sh found, using CMD.exe to capture WINDOWS_USER"
-        WINDOWS_USER=$(cmd.exe /c "echo %USERNAME%" | tr -d '\r')
-        WINDOWS_HOME=$(cmd.exe /c "echo %USERPROFILE%" | tr -d '\r')
-        WORKING_DIR_WIN=$(wslpath "$WINDOWS_HOME\\.workstation1\\working")
-    fi
-fi
+[ "$VM" = 'wsl' ] && get_wsl_win_info
+
 
 case $MY_OS in
 ubuntu)

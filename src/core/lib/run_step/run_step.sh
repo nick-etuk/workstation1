@@ -28,11 +28,19 @@ run_step() {
     fi
 
     step=$1
+
     CURRENT_STEP=$step # used for logging
     shift
     args=("$@")
     arg_count=$#
-    # debug "Running step $step ${args[*]+"${args[*]}"}"
+    if [ $arg_count -gt 0 ]; then
+        debug "step $step with arguments: ${args[*]+"${args[*]}"}"
+    # else
+        # debug "step $step"
+    fi
+    # This script may be called directly, outside ws.sh,
+    # so we need to set WS_ROOT_UNIX and source init.sh if 
+    # these things have not already been done
     if [ -z ${WS_ROOT_UNIX+empty_string} ];then
         SCRIPT_PATH=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
         WS_ROOT_UNIX=$( cd -- "$( dirname -- "${SCRIPT_PATH}/../.." )" &> /dev/null && pwd )
@@ -71,20 +79,12 @@ run_step() {
     fi
 
     invoke_step_entry -s "$step" ${args[@]+"${args[@]}"} || return 0
-    # [ $? -ne 0 ] && return 0
 
     if [ "$NEW_TAB" = 'true' ]; then
         debug "run_step: NEW_TAB is true"
         parallel='false'
     else
         parallel=$(jq -r '.parallel' "$step_config")
-    fi
-
-    if [ "$parallel" = 'true' ]; then
-        info "$step parallel step started"
-        startup_script=$(find "$WS_ROOT_UNIX/core" -name "ws.sh" -type f)
-    else
-        info "$step step started"
     fi
     
     all_passed=0
@@ -139,27 +139,47 @@ run_step() {
         done
     fi
     
-    # prompt=$(jq -r '.prompt' "$step_config")
-    # if [ "$prompt" != 'null' ]; then
-    #     # read -p "$prompt" -n 1 -r
-    #     read -rp "$prompt [y], later [l] or never[n]" answer
-    #     [ ! "$answer" = 'y' ] && return
-    # fi
+    prompt=$(jq -r '.prompt' "$step_config")
+    if [ "$prompt" != 'null' ]; then
+        # read -p "$prompt" -n 1 -r
+        read -rp "$prompt [y], later [l] or never[n]" answer
+        [ ! "$answer" = 'y' ] && return
+    fi
     
-    step_script="$(dirname -- "$step_config").sh"
-    if [ -f "$step_script" ]; then 
-        if [ "$parallel" = 'true' ]; then
-            new_tab "$startup_script $step ${args[*]+"${args[*]}"}"
-        else
-            source "$step_script" ${args[@]+"${args[@]}"}
-        fi
+    step_dir="$(dirname -- "$step_config")"
+    step_script="$step_dir/$step.sh"
+    original_step_id=$step
+    if [ -f "$step_script" ]; then
+        # if [ "$original_step_id" != 'start_service' ]; then 
+            if [ "$parallel" = 'true' ]; then
+                startup_script=$(find "$WS_ROOT_UNIX/core" -name "ws.sh" -type f)
+                info "$original_step_id parallel step started"
+                debug "args: ${args[*]+"${args[*]}"}"
+                debug "startup_script: $startup_script"
+                # new_tab "$startup_script" "$original_step_id" "${args[*]+"${args[*]}"}"
+                new_tab "$startup_script" "$original_step_id" "$@"
+            else
+                info "$original_step_id step started"
+                # source "$step_script" ${args[@]+"${args[@]}"}
+                source "$step_script" "$@"
+            fi
+        # fi
+    # else
+        # warn "No script found for step $original_step_id in $step_dir"
+        # debug "step_script: $step_script"
     fi
 
-    if ! invoke_step_exit -p "$parallel" -s "$step" ${args[@]+"${args[@]}"}; then
+    if [ "$step" != "$original_step_id" ]; then
+        warn "Step id has changed to $step. Should be $original_step_id"
+        step="$original_step_id"
+    fi
+
+    # if ! invoke_step_exit -p "$parallel" -s "$step" ${args[@]+"${args[@]}"}; then
+    if ! invoke_step_exit -p "$parallel" -s "$step" "$@"; then
         all_passed=1
     fi
+    # [ "$step" = 'start_service' ] && exit 0
 
-    # debug "run_step all_passed: $all_passed"
     if [ $all_passed -eq 0 ]; then
         if [ "$NEW_TAB" = 'true' ] && [[ 'start_service build_backend' == *$step* ]]; then
             info "$(get_step_description "$step") step completed in new tab"

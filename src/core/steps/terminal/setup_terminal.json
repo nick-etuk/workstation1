@@ -1,12 +1,12 @@
 {
   "checks": {
     "unix": [
-      "test ! -f ~/.bashrc || grep -q 'workstation1_v1' ~/.bashrc",
-      "test ! -f ~/.zshrc || grep -q 'workstation1_v1' ~/.zshrc",
+      "test ! -f ~/.bashrc || grep -q \"workstation1_v$WS_VERSION\" ~/.bashrc",
+      "test ! -f ~/.zshrc || grep -q \"workstation1_v$WS_VERSION\" ~/.zshrc",
       "echo $PATH | grep -q \"$WS_ROOT_UNIX\""
     ],
     "win": [
-      "(Get-Content -Path $PROFILE.CurrentUserCurrentHost -Raw) -match 'workstation1_v1'"
+      "(Get-Content -Path $PROFILE.CurrentUserCurrentHost -Raw) -match \"workstation1_v$WS_VERSION\""
     ]
   },
   "steps": [

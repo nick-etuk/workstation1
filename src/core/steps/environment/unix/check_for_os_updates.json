@@ -1,7 +1,6 @@
 {
   "dependencies": [],
   "checks": {
-    "unix": [ "false" ],
-    "win": [ "$false" ]
+    "unix": [ "test -f \"$WORKING_DIR/os_last_update.txt\"" ]
   }
 }

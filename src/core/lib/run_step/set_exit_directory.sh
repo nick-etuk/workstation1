@@ -6,36 +6,30 @@ set_exit_directory() {
     # If no activity is set, get the first activity
 
     libraries=(
-        get_shell_version 
-        detect_os
         logging
         config_dynamic 
-        split_string 
-        get_default_project 
-        get_first_activity
         get_activity_file
-        get_project_paths
-        config_base
+        get_current_project 
+        get_current_activity
+        config_base # import this last
     )
 
     for lib in "${libraries[@]}"; do
         script=$(find "$WS_ROOT_UNIX/core/lib" -name "$lib.sh" -type f)
         . "$script"
     done
-    get_shell_version
-    detect_os
-    # get_current_project
-    
-    if [ -z "$CURRENT_PROJECT" ]; then 
+
+    get_current_project
+    if [ -z "${CURRENT_PROJECT+empty_string}" ]; then
         echo "No current project"
         return
     fi
-    
-    if [ -z "$CURRENT_ACTIVITY" ]; then 
+
+    get_current_activity
+    if [ -z "${CURRENT_ACTIVITY+empty_string}" ]; then
         echo "No current activity"
         return
     fi
-
 
     EXIT_DIR=''
     get_activity_file "$CURRENT_ACTIVITY"

@@ -5,15 +5,15 @@
   "checks": { 
     "win": [ 
       "IsDistroInstalled ubuntu",
-      "wsl -u root cat /etc/passwd | Select-String -pattern $WSL_USER",
-      "wsl -u $WSL_USER ls ~/repos | Select-String -pattern 'nhsapp'"
+      "wsl -u root cat /etc/passwd | Select-String -pattern $WS_USER_UNIX",
+      "wsl -u $WS_USER_UNIX ls ~/repos | Select-String -pattern 'nhsapp'"
     ]
   },
   "steps": [
     "install_wsl",
     "check_for_os_updates",
     "install_common_packages",
-    "add_wsl_users",
+    "add_WS_USER_UNIXs",
     "sudo_no_password",
     "get_git_repos"
   ]

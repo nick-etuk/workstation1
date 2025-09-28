@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 invoke_step_entry() {
-    local step
+    local step_id
     local args
     # local run_once=''
 
@@ -9,7 +9,7 @@ invoke_step_entry() {
     while getopts "s:" opt; do
         case ${opt} in
             s)
-                step=$OPTARG
+                step_id=$OPTARG
             ;;
             # o)
             #     run_once=$OPTARG
@@ -21,13 +21,13 @@ invoke_step_entry() {
         esac
     done
     shift $((OPTIND-1))
-    args=( "$@" )
+    args=("$@")
 
-    if ! check_dependencies "$step" ${args[@]+"${args[@]}"}; then
+    if ! check_dependencies "$step_id" ${args[@]+"${args[@]}"}; then
         return 1
     fi
-    if assert_step_done "$step" ${args[@]+"${args[@]}"}; then
-        info "$(get_step_description "$step") step already done"
+    if assert_step_done "$step_id" ${args[@]+"${args[@]}"}; then
+        info "$(get_step_description "$step_id") step already done"
         return 1
     fi
 }

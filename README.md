@@ -13,8 +13,7 @@ The menus contain activities for each of your major development projects.
 # Getting started
 
 Clone this repo to wherever you keep your local repos.
-Switch to `<repo_dir>/workstation1/src/core/cli
-If you are using WSL, Ubuntu or Macos, run `./ws.sh`. On Windows, run `./ws.ps1`.
+Switch to `<repo_dir>/workstation1/src/core/cli and run `./ws.sh` or `./ws.ps1` on Windows.
 This will add the `ws` command to your path and show you the main menu.
 
 # Adding a project to the menu

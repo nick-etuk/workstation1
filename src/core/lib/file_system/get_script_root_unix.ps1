@@ -11,7 +11,7 @@ function Get-ScriptRootUnix {
     }
     
     WriteInfo "Searching for workstation1 in WSL"
-    $Script:WS_ROOT_UNIX = $(wsl -u $WSL_USER find ~ -type d -name 'workstation1')
+    $Script:WS_ROOT_UNIX = $(wsl -u $WS_USER_UNIX find ~ -type d -name 'workstation1')
 
     if ($Script:WS_ROOT_UNIX) {
         Set-Config 'WS_ROOT_UNIX' $Script:WS_ROOT_UNIX

@@ -8,6 +8,8 @@ check_for_os_updates() {
 
     [ "$MY_OS" != "ubuntu" ] && return
 
+    echo '=> check_for_os_updates'
+
     # Only update once per day
     flag="$WORKING_DIR/os_last_update.txt"
     if [ -f "$flag" ]; then
@@ -17,7 +19,7 @@ check_for_os_updates() {
             return
         fi
     fi
-    echo '=> check_for_os_updates'
+    echo 'Updating package lists and upgrading packages...'
     sudo apt-get update
     sudo apt-get -y upgrade
     echo "$(date +%Y-%m-%dT%H:%M:%S)" > "$flag"

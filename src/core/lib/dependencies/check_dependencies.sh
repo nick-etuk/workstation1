@@ -4,25 +4,17 @@ check_dependencies() {
     local step
     local config_file
     local exit_status
-    local args
-    # local arg_len
+    # local args
     local dependencies
 
     step=$1
-    # shift
-    args=( "$@" )
-    # arg_len=$#
+    shift
+    # args=( "$@" )
     
     config_file=$(get_step_path "$step")
 
     [ -f "$config_file" ] || return
-    # debug "=>check_dependencies $step"
-    # for arg in ${args[@]+"${args[@]}"}; do debug "arg: $arg"; done
-    # if [ "$step" = 'start_http_server' ]; then
-    #     echo 'set -x'
-    # fi
-    # query=".dependencies | .[]"
-    # dependencies=$(cat "$config_file" | jq -r "$query" 2>/dev/null)
+
     dependencies=$(jq -r '.dependencies' "$config_file")
     [ "$dependencies" = "null" ] && return
 
@@ -59,10 +51,11 @@ check_dependencies() {
         # else
         #     assert_step_done "$dependency" ${args[@]+"${args[@]}"}
         # fi
-        dependency_args=("${args[@]:1}")
+        # dependency_args=("${args[@]:1}")
         # for arg in ${dependency_args[@]+"${dependency_args[@]}"}; do debug "dep arg: $arg"; done
         
-        assert_step_done "$dependency" ${dependency_args[@]+"${dependency_args[@]}"}
+        # assert_step_done "$dependency" ${dependency_args[@]+"${dependency_args[@]}"}
+        assert_step_done "$dependency" "$@"
 
         exit_status=$?
         if [ "$exit_status" -eq 0 ] ; then
@@ -71,7 +64,9 @@ check_dependencies() {
         fi
 
         if is_parallel_step "$dependency"; then
-            wait_for_parallel_step "$dependency" ${args[@]+"${args[@]}"}
+            # wait_for_parallel_step "$dependency" ${args[@]+"${args[@]}"}
+            # wait_for_parallel_step "$dependency" ${dependency_args[@]+"${dependency_args[@]}"}
+            wait_for_parallel_step "$dependency" "$@"
             exit_status=$WAIT_FOR_STEP_STATUS
 
             if [ "$exit_status" -eq 0 ] ; then

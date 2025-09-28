@@ -1,6 +1,6 @@
 {
   "steps": [
-    "clone_templates",
+    "check_for_os_updates",
     "setup_terminal"
   ]
 }

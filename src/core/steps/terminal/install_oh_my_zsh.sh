@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-sudo chsh -s /usr/bin/zsh "$WSL_USER"
+sudo chsh -s /usr/bin/zsh "$WS_USER_UNIX"
 
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
