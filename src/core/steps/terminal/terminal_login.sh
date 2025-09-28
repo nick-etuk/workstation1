@@ -59,8 +59,8 @@ if [ "$NEW_TAB" = 'true' ]; then
     return
 fi
 
-step=$(find "$WS_ROOT_UNIX/core" -name 'check_for_os_updates.sh')
-[ -f "$step" ] && . "$step"
+# step=$(find "$WS_ROOT_UNIX/core" -name 'check_for_os_updates.sh')
+# [ -f "$step" ] && . "$step"
 
 startup_script=$(find "$WS_ROOT_UNIX/core" -name 'ws.sh')
 [ -f "$startup_script" ]  || return
@@ -68,9 +68,11 @@ startup_script=$(find "$WS_ROOT_UNIX/core" -name 'ws.sh')
 
 exit_script=$(find "$WS_ROOT_UNIX/core" -name 'set_exit_directory.sh')
 . "$exit_script"
-
 set_exit_directory
 set +u
-if [ -n "$EXIT_DIR" ]; then
-    cd "$EXIT_DIR" || return
+if [ ! -d "$EXIT_DIR" ]; then
+    echo "Exit directory $EXIT_DIR does not exist"
+    EXIT_DIR=''
+    return
 fi
+cd "$EXIT_DIR" || exit 1
