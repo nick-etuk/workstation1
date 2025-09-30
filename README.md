@@ -101,14 +101,18 @@ Each step has an expression called a "check". This is used to work out if the st
 The checks look like this:
 
 {
-"dependencies": [],
-"checks": {
-"macos": ["command -v keybase | grep -q keybase"],
-"ubuntu": ["true"]
-}
+  "dependencies": [],
+  "checks": {
+    "macos": ["command -v keybase | grep -q keybase"],
+    "ubuntu": ["true"]
+  }
 }
 
 The checks can be OS specific - macos, ubuntu, win. Unix means macos or ubuntu.
+
+## Other step properties
+
+**runAlways:** Aways run the step without checking entry and exit checks. Dependencies and child steps are still executed.
 
 ## Scope
 

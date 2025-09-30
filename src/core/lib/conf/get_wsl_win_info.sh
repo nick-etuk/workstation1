@@ -7,7 +7,7 @@ get_wsl_win_info() {
         return
     fi
 
-    WS_USER_WIN=$(get_config 'WS_USER_WIN')
+    WS_USER_WIN=$(get_config 'ws_user_win')
     if [ -n "$WS_USER_WIN" ]; then
         WORKING_DIR_WIN=$(get_config 'working_dir_win')
         WINDOWS_HOME=$(get_config 'windows_home')
@@ -18,7 +18,7 @@ get_wsl_win_info() {
     WS_USER_WIN=$(cmd.exe /c "echo %USERNAME%" | tr -d '\r')
     WINDOWS_HOME=$(cmd.exe /c "echo %USERPROFILE%" | tr -d '\r')
     WORKING_DIR_WIN=$(wslpath "$WINDOWS_HOME\\.workstation1\\working")
-    [ -n "$WS_USER_WIN" ] && set_config 'WS_USER_WIN' "$WS_USER_WIN"
+    [ -n "$WS_USER_WIN" ] && set_config 'ws_user_win' "$WS_USER_WIN"
     [ -n "$WORKING_DIR_WIN" ] && set_config 'working_dir_win' "$WORKING_DIR_WIN"
     [ -n "$WINDOWS_HOME" ] && set_config 'windows_home' "$WINDOWS_HOME"
 }

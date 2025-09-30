@@ -8,8 +8,9 @@ save_directories() {
     # REPO_DIR=$(cd "$WS_ROOT_UNIX"/../../; pwd)
     ws1_dir="$(dirname "$WS_ROOT_UNIX")"
     REPO_DIR="$(dirname "$ws1_dir")"
-    set_config repo_dir "$REPO_DIR"
+    set_config repo_dir "$REPO_DIR" # todo: this is never read. Consider removing it.
 }
+
 set_repo_dir() {
     # Checks if WS_ROOT_WIN has changed.
     # todo: Update login profiles if it has.

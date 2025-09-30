@@ -32,8 +32,8 @@ detect_os
 echo "SHELL: $SHELL_NAME version: $SHELL_VERSION"
 echo "MY_OS: $MY_OS"
 
-step=$(find "$WS_ROOT_UNIX/core" -name 'set_environment_variables.sh')
-[ -f "$step" ] && . "$step"
+script=$(find "$WS_ROOT_UNIX/core" -name 'set_environment_variables.sh')
+[ -f "$script" ] && . "$script"
 
 # Exit if running in an IDE terminal
 [ -n "${INTELLIJ_ENVIRONMENT_READER+empty_string}" ] && return
@@ -59,8 +59,8 @@ if [ "$NEW_TAB" = 'true' ]; then
     return
 fi
 
-# step=$(find "$WS_ROOT_UNIX/core" -name 'check_for_os_updates.sh')
-# [ -f "$step" ] && . "$step"
+# script=$(find "$WS_ROOT_UNIX/core" -name 'check_for_os_updates.sh')
+# [ -f "$script" ] && . "$script"
 
 startup_script=$(find "$WS_ROOT_UNIX/core" -name 'ws.sh')
 [ -f "$startup_script" ]  || return

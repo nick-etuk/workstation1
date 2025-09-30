@@ -14,8 +14,6 @@ update_activity_registry() {
     local activity_sort_order
     local activity_files
 
-    # [ -n "$(ls -A "$WORKING_DIR/activity_sort")" ] &&  rm -- "$WORKING_DIR"/activity_sort/*
-    
     activity_registry="$WORKING_DIR/activity_registry.csv"
     [ -f "$activity_registry" ] && rm -- "$activity_registry"
     touch "$activity_registry"
@@ -39,8 +37,6 @@ update_activity_registry() {
             continue
         fi
 
-        # cp "$project_config_file" "$WORKING_DIR/activity_sort/$project_sort_order-$project_id-ws1_project.json"
-
         activity_files=$(find "$project_path" -name "*activity*.json" -type f)
         if [ -z "$activity_files" ]; then
             info "No activity files found for $project_path"
@@ -52,7 +48,6 @@ update_activity_registry() {
             activity_title=$(jq -r '.title' "$activity_file")
             activity_sort_order=$(jq -r '.sortOrder' "$activity_file")
             [ "$activity_sort_order" = 'null' ] && activity_sort_order=999
-            # cp "$activity_file" "$WORKING_DIR/activity_sort/$project_sort_order-$project_id-$activity_sort_order-$activity_id-activity.json"
             echo "\"$activity_id\",\"$project_id\",\"$activity_sort_order\",\"$option_num\",\"$activity_file\",\"$activity_title\"" >> "$activity_registry"
 
         done
