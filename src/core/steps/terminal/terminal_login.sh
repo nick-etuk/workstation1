@@ -5,7 +5,7 @@
 # After setting the environment variables
 # we will switch to bash for greater POSIX compatibility.
 
-echo "=> terminal_login"
+echo "=>terminal_login"
 
 set -u
 empty_string=''
@@ -29,8 +29,7 @@ done
 
 get_shell_version
 detect_os
-echo "SHELL: $SHELL_NAME version: $SHELL_VERSION"
-echo "MY_OS: $MY_OS"
+echo "Terminal Shell is $SHELL_NAME version $SHELL_VERSION on $MY_OS"
 
 script=$(find "$WS_ROOT_UNIX/core" -name 'set_environment_variables.sh')
 [ -f "$script" ] && . "$script"

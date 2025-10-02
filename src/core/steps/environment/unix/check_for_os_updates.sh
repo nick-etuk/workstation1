@@ -15,7 +15,7 @@ check_for_os_updates() {
     if [ -f "$flag" ]; then
         last_update=$(cat "$flag")
         if [ "$(date -d "$last_update" +%s)" -ge "$(date +%s --date '1 day ago')" ]; then
-            echo "OS already updated today at $(date -d "$last_update" +'%H:%M')"
+            echo "OS recently updated on $(date -d "$last_update" +'%A %d %B %Y at %H:%M')"
             return
         fi
     fi
