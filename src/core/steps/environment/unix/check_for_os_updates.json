@@ -1,3 +1,4 @@
 {
+  "os": ["ubuntu"],
   "runAlways": true
 }

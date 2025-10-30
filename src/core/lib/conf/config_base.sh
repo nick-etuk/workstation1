@@ -47,6 +47,7 @@ else
 fi
 
 NEW_TAB_FLAG="$WORKING_DIR"/new_tab_flag.txt
+NEW_TAB_COMMANDS="$WORKING_DIR"/new_tab_commands.txt
 
 detect_os
 

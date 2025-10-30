@@ -8,6 +8,9 @@ function add_to_profile {
         "# workstation1_v$WS_VERSION start"
         "export WS_ROOT_UNIX=\"$WS_ROOT_UNIX\""
         'export GPG_TTY=$(tty)'
+        'export NVM_DIR="$HOME/.nvm"'
+        '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"'
+        '[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"'
         'startup_script=$(find "$WS_ROOT_UNIX/core" -name "ws.sh" -type f)'
         'if [ -f "$startup_script" ] ; then'
         '  ws() { "$startup_script" "$@"; }'

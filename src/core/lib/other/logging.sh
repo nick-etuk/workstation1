@@ -36,13 +36,16 @@ function info {
 function error {
     echo -e "${RED}Error in ${FUNCNAME[1]}:$*${NC}"
     echo "$*" >> "$LOG_DIR/$CURRENT_STEP.log"
+    echo "$*" >> "$LOG_DIR/debug_$CURRENT_STEP.log"
+    echo "$*" >> "$LOG_DIR/debug_all_steps.log"
     exit 1
 }
 
 function warn {
     echo -e "${YELLOW}$*${NC}"
     echo "$*" >> "$LOG_DIR/$CURRENT_STEP.log"
-
+    echo "$*" >> "$LOG_DIR/debug_$CURRENT_STEP.log"
+    echo "$*" >> "$LOG_DIR/debug_all_steps.log"
 }
 
 function debug {

@@ -164,10 +164,10 @@ run_step() {
             if [ "$parallel" = 'true' ]; then
                 startup_script=$(find "$WS_ROOT_UNIX/core" -name "ws.sh" -type f)
                 info "$original_step_id parallel step started"
-                debug "args: ${args[*]+"${args[*]}"}"
-                debug "startup_script: $startup_script"
-                # new_tab "$startup_script" "$original_step_id" "${args[*]+"${args[*]}"}"
-                new_tab "$startup_script" "$original_step_id" "$@"
+                debug "args: $original_step_id ${args[*]+"${args[*]}"}"
+                # new_tab "$startup_script" "$original_step_id" "$@"
+                # new_tab "$startup_script $original_step_id ${args[*]+"${args[*]}"}"
+                new_tab "$original_step_id ${args[*]+"${args[*]}"}"
             else
                 info "$original_step_id step started"
                 # source "$step_script" ${args[@]+"${args[@]}"}

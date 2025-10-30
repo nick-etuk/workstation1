@@ -41,13 +41,13 @@ script=$(find "$WS_ROOT_UNIX/core" -name 'set_environment_variables.sh')
 # [ -n "${INIT_UNIX+empty_string}" ] && return
 
 if [ -z "${NEW_TAB+empty_string}" ] || [ "$NEW_TAB" = 'false' ]; then
-    echo "NEW_TAB is not set. Checking for new_tab_flag.txt"
+    # echo "NEW_TAB is not set. Checking for new_tab_flag.txt"
     if [ -f "$NEW_TAB_FLAG" ]; then
-        echo "Found new_tab_flag.txt, setting NEW_TAB to true"
+        echo "new_tab_flag.txt found"
         NEW_TAB='true'
         rm -rf "$NEW_TAB_FLAG"
     else
-        echo "new_tab_flag.txt not found, NEW_TAB remains false"
+        # echo "new_tab_flag.txt not found, NEW_TAB remains false"
         NEW_TAB='false'
     fi
 fi

@@ -93,11 +93,11 @@ function check_docker_images_v3 {
 
     passed=0
     debug "Expected images: >${EXPECTED_IMAGES[*]}<"
-    debug "Actual images: >${actual_images}<"
+    debug "Actual images: >${actual_images[*]}<"
     for image in "${EXPECTED_IMAGES[@]}"; do
     # for image in $EXPECTED_IMAGES; do
-        debug "image: >$image<"
         if [[ ! " ${actual_images[*]} " =~ [[:space:]]${image}[[:space:]] ]]; then
+            warn "Missing docker image $image"
             passed=1
             [ "$launch_mode" = 0 ] && echo -e "${RED}$image $CROSS_MARK ${NC}"
             MISSING_IMAGES+=("$image")
