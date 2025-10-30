@@ -5,7 +5,6 @@ show_menu_extras() {
     printf "\tA Advanced \n"
     printf "\tH Help \n"
     printf "\tU Uninstall \n"
-    printf "\tQ Quit \n"
 }
 
 show_menu_main() {

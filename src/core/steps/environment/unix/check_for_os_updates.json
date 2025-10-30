@@ -1,6 +1,4 @@
 {
-  "dependencies": [],
-  "checks": {
-    "unix": [ "test -f \"$WORKING_DIR/os_last_update.txt\"" ]
-  }
+  "os": ["ubuntu"],
+  "runAlways": true
 }

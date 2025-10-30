@@ -8,7 +8,13 @@
 
 
 run_step() {
-    local step
+    local parent_step_id
+    local arg_count
+    local fomatted_args
+    local commands_json
+    local status
+    local original_step_id
+    local step_dir
     local step_script
     local step_config
     local parallel='false'
@@ -21,22 +27,23 @@ run_step() {
     local child_args
     local arg
     local run_once
+    local run_always='false'
 
     empty_string=''
     if [ -z ${1+empty_string} ];then
         error "No step argument provided"
     fi
 
-    step=$1
+    parent_step_id=$1
 
-    CURRENT_STEP=$step # used for logging
+    CURRENT_STEP=$parent_step_id # used for logging
     shift
     args=("$@")
     arg_count=$#
     if [ $arg_count -gt 0 ]; then
-        debug "step $step with arguments: ${args[*]+"${args[*]}"}"
+        debug "step $parent_step_id with arguments: ${args[*]+"${args[*]}"}"
     # else
-        # debug "step $step"
+        # debug "step $parent_step_id"
     fi
     # This script may be called directly, outside ws.sh,
     # so we need to set WS_ROOT_UNIX and source init.sh if 
@@ -49,21 +56,21 @@ run_step() {
     fi
     [ -z "${INIT_UNIX+empty_string}" ] && source "$WS_ROOT_UNIX/core/init.sh"
 
-    step_config=$(get_step_path "$step")
+    step_config=$(get_step_path "$parent_step_id")
     if [ ! -f "$step_config" ]; then
-        warn "No configuration file for $step"
+        warn "No configuration file for $parent_step_id"
         return 1
     fi
 
     step_os_json=$(jq -r '.os' "$step_config")
     if ! correct_os "$step_os_json"; then
-        info "Skipping $step: not for $MY_OS"
+        info "Skipping $parent_step_id: not for $MY_OS"
         return 0
     fi
         
     run_once=$(jq -r '.runOnce' "$step_config")
     if [ "$run_once" = 'true' ];then
-        key="step_$step"
+        key="step_$parent_step_id"
 
         if [ "$arg_count" -gt 0 ]; then
             fomatted_args=$(join '_' ${args[@]+"${args[@]}"})
@@ -73,12 +80,15 @@ run_step() {
         status=$(get_config status "$key")
 
         if [ "$status" = 'done' ]; then
-            info "$(get_step_description "$step") step already done"
+            info "$(get_step_description "$parent_step_id") step already done"
             return 0
         fi
     fi
 
-    invoke_step_entry -s "$step" ${args[@]+"${args[@]}"} || return 0
+    run_always=$(jq -r '.runAlways' "$step_config")
+    if [ "$run_always" != 'true' ];then
+        invoke_step_entry -s "$parent_step_id" ${args[@]+"${args[@]}"} || return 0
+    fi
 
     if [ "$NEW_TAB" = 'true' ]; then
         debug "run_step: NEW_TAB is true"
@@ -147,17 +157,17 @@ run_step() {
     fi
     
     step_dir="$(dirname -- "$step_config")"
-    step_script="$step_dir/$step.sh"
-    original_step_id=$step
+    step_script="$step_dir/$parent_step_id.sh"
+    original_step_id=$parent_step_id
     if [ -f "$step_script" ]; then
         # if [ "$original_step_id" != 'start_service' ]; then 
             if [ "$parallel" = 'true' ]; then
                 startup_script=$(find "$WS_ROOT_UNIX/core" -name "ws.sh" -type f)
                 info "$original_step_id parallel step started"
-                debug "args: ${args[*]+"${args[*]}"}"
-                debug "startup_script: $startup_script"
-                # new_tab "$startup_script" "$original_step_id" "${args[*]+"${args[*]}"}"
-                new_tab "$startup_script" "$original_step_id" "$@"
+                debug "args: $original_step_id ${args[*]+"${args[*]}"}"
+                # new_tab "$startup_script" "$original_step_id" "$@"
+                # new_tab "$startup_script $original_step_id ${args[*]+"${args[*]}"}"
+                new_tab "$original_step_id ${args[*]+"${args[*]}"}"
             else
                 info "$original_step_id step started"
                 # source "$step_script" ${args[@]+"${args[@]}"}
@@ -169,22 +179,24 @@ run_step() {
         # debug "step_script: $step_script"
     fi
 
-    if [ "$step" != "$original_step_id" ]; then
-        warn "Step id has changed to $step. Should be $original_step_id"
-        step="$original_step_id"
+    if [ "$parent_step_id" != "$original_step_id" ]; then
+        warn "Step id has changed to $parent_step_id. Should be $original_step_id"
+        parent_step_id="$original_step_id"
     fi
 
-    # if ! invoke_step_exit -p "$parallel" -s "$step" ${args[@]+"${args[@]}"}; then
-    if ! invoke_step_exit -p "$parallel" -s "$step" "$@"; then
-        all_passed=1
+    # if ! invoke_step_exit -p "$parallel" -s "$parent_step_id" ${args[@]+"${args[@]}"}; then
+    if [ "$run_always" != 'true' ];then
+        if ! invoke_step_exit -p "$parallel" -s "$parent_step_id" "$@"; then
+            all_passed=1
+        fi
     fi
-    # [ "$step" = 'start_service' ] && exit 0
+    # [ "$parent_step_id" = 'start_service' ] && exit 0
 
     if [ $all_passed -eq 0 ]; then
-        if [ "$NEW_TAB" = 'true' ] && [[ 'start_service build_backend' == *$step* ]]; then
-            info "$(get_step_description "$step") step completed in new tab"
+        if [ "$NEW_TAB" = 'true' ] && [[ 'start_service build_backend' == *$parent_step_id* ]]; then
+            info "$(get_step_description "$parent_step_id") step completed in new tab"
         else
-            info "$(get_step_description "$step") step completed"
+            info "$(get_step_description "$parent_step_id") step completed"
         fi
         
         [ "$run_once" = 'true' ] && set_config status "$key" 'done'

@@ -14,6 +14,7 @@ get_project_steps() {
     project_path=$2
 
     # sort step registry by priority (current project=10, core=30, other projects=20).
+    get_current_project
     case "$project_id" in
         "$CURRENT_PROJECT")
             sort_order=10

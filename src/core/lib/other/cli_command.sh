@@ -74,7 +74,6 @@ cli_command() {
 
     step_config_file=$(get_step_path "$command")
     if [ -f "$step_config_file" ]; then
-        debug "Step path: $step_config_file"
         step=$command
         run_step "$step" ${args[@]+"${args[@]}"}
         exit 0

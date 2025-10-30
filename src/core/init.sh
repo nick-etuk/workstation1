@@ -34,8 +34,7 @@ echo ''
 get_next_run_id
 LOG_DIR="$LOG_BASE/$RUN_ID"
 mkdir -p "$LOG_DIR"
-mkdir -p "$WORKING_DIR/activity_sort"
-mkdir -p "$WORKING_DIR/test_results"
+# mkdir -p "$WORKING_DIR/test_results"
 
 set_repo_dir
 

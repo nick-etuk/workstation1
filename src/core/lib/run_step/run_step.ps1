@@ -4,6 +4,8 @@ function RunStep {
         $StepID,
         [string[]]$Arguments=@()
     )
+    $RunOnce = 'false'
+    $RunAlways = 'false'
     $ArgCount = $Arguments.Count
     $AllPassed = 0
 
@@ -43,9 +45,15 @@ function RunStep {
         }
     }
 
-    $OkToProceed = Invoke-Step-Entry -Step $StepID -Arguments $Arguments
-    if (!$OkToProceed) { return }
-    
+    if ($StepConfig | Get-Member -Name 'runAlways') {
+        $RunAlways = $StepConfig.runAlways
+    }
+
+    if ($RunAlways -ne 'true' ) {
+        $OkToProceed = Invoke-Step-Entry -Step $StepID -Arguments $Arguments
+        if (!$OkToProceed) { return }
+    }
+
     WriteInfo "$StepID step started"
 
     if ($StepConfig | Get-Member -Name 'commands') {
@@ -76,8 +84,10 @@ function RunStep {
     #     return
     # }
 
-    Invoke-Step-Exit -Step $StepID -Arguments $Arguments
-    if ($? -ne 0 ) { $AllPassed = 1 }
+    if ($RunAlways -ne 'true' ) {
+        Invoke-Step-Exit -Step $StepID -Arguments $Arguments
+        if ($? -ne 0 ) { $AllPassed = 1 }
+    }
 
     if ($AllPassed -eq 0 ) {
         WriteInfo "$StepID step completed"
