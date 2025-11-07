@@ -1,10 +1,12 @@
 #!/usr/bin/env bash
 # shellcheck disable=SC1090,SC1091,SC2034
 
-libraries=$(find "$WS_ROOT_UNIX/core/lib" -name 'detect_os.sh' -o -name 'get_shell_version.sh' -o -name 'get_wsl_win_info.sh')
+libraries=$(find "$WS_ROOT_SCRIPT/lib" -name 'detect_os.sh' -o -name 'get_shell_version.sh' -o -name 'get_wsl_win_info.sh')
 for lib in $libraries; do
     source "$lib"
 done
+
+WS_VERSION='2.0'  # Update this when making changes that require users to update their profiles
 
 get_shell_version
 WS_USER_UNIX=''
@@ -20,17 +22,10 @@ else
     echo "$WS_USER_UNIX" > /var/tmp/wsl-users.txt
 fi
 
-WS_VERSION='1.2'  # Update this when making changes that require users to update their profiles
 BASE_DIR="$HOME/.workstation1"
 WORKING_DIR="$BASE_DIR/working"
 LOG_BASE="$BASE_DIR/log"
 MY_DOWNLOAD_DIR="$BASE_DIR/downloads"
-
-ANDROID_EMULATOR_PORT=5554
-
-LOGINENV=sandpit
-NODE_MAJOR_VERSION=22
-DOTNET_MAJOR_VERSION=8
 
 RED='\033[0;31m'
 YELLOW='\033[1;33m'
@@ -56,11 +51,19 @@ detect_os
 
 case $MY_OS in
 ubuntu)
-    source "$WS_ROOT_UNIX"/core/lib/conf/config_ubuntu.sh
+    source "$WS_ROOT_SCRIPT"/lib/conf/config_ubuntu.sh
     ;;
 macos)
-    source "$WS_ROOT_UNIX"/core/lib/conf/config_macos.sh
+    source "$WS_ROOT_SCRIPT"/lib/conf/config_macos.sh
     ;;
 *)
     echo "config_base: unsupported OS $MY_OS"
 esac
+
+# Todo: Project dependent configuration. Move these out of core.
+ANDROID_EMULATOR_PORT=5554
+LOGINENV=sandpit
+
+NODE_MAJOR_VERSION=22
+DOTNET_MAJOR_VERSION=8
+PYTHON_MAJOR_VERSION=3.10

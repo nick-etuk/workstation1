@@ -4,7 +4,7 @@ function add_to_path {
     echo "=>add_to_path"
     local paths_to_add
 
-    startup_script=$(find "$WS_ROOT_UNIX/core" -name "ws.sh" -type f)
+    startup_script=$(find "$WS_ROOT_UNIX" -name "ws.sh" -not -path '.venv/*')
 
     paths_to_add=(
         "$(dirname "$startup_script")"

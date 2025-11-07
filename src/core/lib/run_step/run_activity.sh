@@ -7,7 +7,7 @@ run_activity() {
     local raw_steps
     
     if [ -z ${1+empty_string} ];then
-        error "No menu id provided"
+        error "No activity id provided"
     fi
 
     activity_id=$1

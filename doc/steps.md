@@ -11,4 +11,4 @@ The checks look like this:
   }
 }
 
-The checks can be OS specific - macos, ubuntu, win. Unix means any flavour of macos.
+The checks can be OS specific - macos, ubuntu, win. Unix means either ubuntu or macos.

@@ -2,5 +2,5 @@
 echo '=> set_environment_variables'
 export EDITOR=/usr/bin/nano
 
-. "$(find "$WS_ROOT_UNIX/core" -name "add_to_path.sh" -type f)"
-. "$(find "$WS_ROOT_UNIX/core" -name "add_aliases.sh" -type f)"
+. "$(find "$WS_ROOT_UNIX" -name 'add_to_path.sh' -not -path '.venv/*')"
+. "$(find "$WS_ROOT_UNIX" -name 'add_aliases.sh' -not -path '.venv/*')"

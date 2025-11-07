@@ -3,22 +3,31 @@
 
 function add_to_profile {
     local target
+    local shell_name
     local lines=()
     lines=(
         "# workstation1_v$WS_VERSION start"
         "export WS_ROOT_UNIX=\"$WS_ROOT_UNIX\""
         'export GPG_TTY=$(tty)'
+        ''
         'export NVM_DIR="$HOME/.nvm"'
         '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"'
         '[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"'
-        'startup_script=$(find "$WS_ROOT_UNIX/core" -name "ws.sh" -type f)'
+        ''
+        'if [ -d "$HOME/.pyenv" ]; then'
+        '   export PYENV_ROOT="$HOME/.pyenv"'
+        '   [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"'
+        "   eval \"\$(pyenv init - $shell_name)\""
+        'fi'
+        ''
+        'startup_script=$(find "$WS_ROOT_UNIX" -name "ws.sh" -not -path ".venv/*")'
         'if [ -f "$startup_script" ] ; then'
         '  ws() { "$startup_script" "$@"; }'
         '  menu() { "$startup_script" "$@"; }'
         'fi'
-        'login_script=$(find "$WS_ROOT_UNIX/core/steps" -name "terminal_login.sh" -type f)'
+        'login_script=$(find "$WS_ROOT_UNIX/core/steps" -name "terminal_login.sh" -not -path ".venv/*")'
         '[ -f "$login_script" ] && . "$login_script"'
-        'set +u'
+        'set +u # stops oh-my-zsh.sh failing due to unset variables'
         "# workstation1_v$WS_VERSION end"
     )
 
@@ -54,7 +63,8 @@ login_script=$(find "$WS_ROOT_UNIX/core/steps" -name "terminal_login.sh" -type f
 [ -f "$login_script" ] || return
 
 # If there are multiple login profiles, add to all of them
+shell_name='zsh'
 add_to_profile ~/.zshrc
 add_to_profile ~/.config/fish/config.fish
+shell_name='bash'
 add_to_profile ~/.bashrc
-

@@ -1,0 +1,6 @@
+asttokens==3.0.0
+colorama==0.4.6
+executing==2.2.1
+icecream==2.1.8
+Pygments==2.19.2
+-e git+https://github.com/nick-etuk/workstation1.git@19d7a10d244514d478791aaa2ebfc440a6d9f932#egg=workstation1
