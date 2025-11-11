@@ -2,7 +2,7 @@ function get_step_path ([parameter(Mandatory=$true)]$StepID) {
     $StepRegistry = "$WORKING_DIR/step_registry.csv"
     if (!(Test-Path -PathType Leaf $StepRegistry)) {
         Write-Warning "Step registry file $StepRegistry not found"
-        update_step_registry
+        # update_step_registry
     }
     $StepID = $StepID.ToLower() -replace '-', '_'
 

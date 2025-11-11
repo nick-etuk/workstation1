@@ -20,12 +20,12 @@ function add_to_profile {
         "   eval \"\$(pyenv init - $shell_name)\""
         'fi'
         ''
-        'startup_script=$(find "$WS_ROOT_UNIX" -name "ws.sh" -not -path ".venv/*")'
+        'startup_script=$(find "$WS_ROOT_UNIX" -name "ws1.sh" -not -path ".venv_ws1/*")'
         'if [ -f "$startup_script" ] ; then'
-        '  ws() { "$startup_script" "$@"; }'
+        '  ws1() { "$startup_script" "$@"; }'
         '  menu() { "$startup_script" "$@"; }'
         'fi'
-        'login_script=$(find "$WS_ROOT_UNIX/core/steps" -name "terminal_login.sh" -not -path ".venv/*")'
+        'login_script=$(find "$WS_ROOT_UNIX/src/core/steps" -name "terminal_login.sh" -not -path ".venv_ws1/*")'
         '[ -f "$login_script" ] && . "$login_script"'
         'set +u # stops oh-my-zsh.sh failing due to unset variables'
         "# workstation1_v$WS_VERSION end"

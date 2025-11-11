@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import patch, MagicMock
-from typing import Any, Dict
+from typing import Any
 
 from icecream import ic
 from workstation1.step_done.check_step_done import check_step_done
@@ -10,7 +10,7 @@ class TestCheckStepDone(unittest.TestCase):
     """Unit tests for the check_step_done function."""
 
     def setUp(self) -> None:
-        self.base_step: Dict[str, Any] = {
+        self.base_step: dict[str, Any] = {
             'step_id': 'example_step',
             'checks': {
                 'ubuntu': ['test -d /tmp'],
@@ -38,7 +38,7 @@ class TestCheckStepDone(unittest.TestCase):
     @patch('workstation1.step_done.check_step_done.error')
     @patch('workstation1.step_done.check_step_done.subprocess.run')
     def test_empty_checks_for_non_exit_and_non_dependencies(self, mock_run: MagicMock, mock_error: MagicMock):
-        step: Dict[str, Any] = {'step_id': 'empty', 'checks': {}}
+        step: dict[str, Any] = {'step_id': 'empty', 'checks': {}}
         mock_run.return_value = MagicMock(returncode=0, stdout='')  # Should not be called
         result = check_step_done(step, [], 'other_function')
         self.assertFalse(result)
@@ -70,7 +70,7 @@ class TestCheckStepDone(unittest.TestCase):
 
     @patch('workstation1.step_done.check_step_done.subprocess.run')
     def test_no_unix_checks_for_win_os_key_absent(self, mock_run: MagicMock):
-        step: Dict[str, Any] = {
+        step: dict[str, Any] = {
             'step_id': 'only_ubuntu',
             'checks': {
                 'ubuntu': ['test -d /tmp'],

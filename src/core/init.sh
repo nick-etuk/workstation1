@@ -38,7 +38,7 @@ mkdir -p "$LOG_DIR"
 set_repo_dir
 
 DONE_DEPENDENCIES=()
-show_ws_config
-create_registries
+# show_ws_config
+# create_registries # now done in Python
 get_current_project
 # get_project_paths

@@ -26,7 +26,6 @@ function Get-Next-Run-ID {
         $RUN_ID = "001"
         return
     }
-    writedebug "bp1 Get-Next-Run-ID"
     $LastRunId = (Get-ChildItem $LOG_BASE -Directory | Sort-Object | Select-Object -Last 1).Name
     $RUN_ID = ([Int]$LastRunId + 1).ToString("000")
     writedebug "Get-Next-Run-ID RUN_ID: $RUN_ID"

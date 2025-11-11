@@ -1,0 +1,56 @@
+import json
+from logging import debug
+from pathlib import Path
+from typing import Any
+
+def sort_order(project_id: str) -> float:
+    if project_id == 'core':
+        return 20.0
+    return 30.0
+
+def get_step_title(step_id: str) -> str:
+    return step_id.replace('_', ' ').capitalize()
+
+def find_steps(project_id: str, project_path: str) -> list[dict[str, Any]] | None:
+    # todo: find steps without config files, prevent duplicate step_ids across all projects
+    step_dir = Path(project_path) / 'ws1' / 'steps'
+    if not step_dir.exists() or not step_dir.is_dir():
+        step_dir = Path(project_path) / 'steps'
+        if not step_dir.exists() or not step_dir.is_dir():
+            print(f"Warning: No steps directory found in {project_path}")
+            return None
+
+    if step_dir == Path('conf/project_template'):
+        debug(f"Skipping project template steps in {step_dir}")
+        return
+    
+    step_registry: list[dict[str, Any]] = []
+    for step_file in step_dir.rglob('*.json'):
+        if '__test' in str(step_file):
+            continue
+        step_id = step_file.stem.lower().replace('-', '_')
+        with open(step_file, 'r') as f:
+            content = f.read()
+        try:
+            step_config = json.loads(content)
+        except json.JSONDecodeError:
+            print(f"Warning: Could not parse JSON in {step_file}")
+            continue
+
+        menu = step_config.get('menu', '')
+        title = step_config.get('title', get_step_title(step_id))
+        short_name = step_config.get('shortName', '')
+        my_sort_order = sort_order(project_id)
+        if 'sortOrder' in step_config:
+            my_sort_order = my_sort_order + step_config['sortOrder'] / 10
+        step_registry.append({ 
+            'step_id': step_id, 
+            'project_id': project_id, 
+            'menu': menu,
+            'title': title,
+            'short_name': short_name,
+            'sort_order': my_sort_order,
+            'path': step_file,
+        })
+    
+    return step_registry

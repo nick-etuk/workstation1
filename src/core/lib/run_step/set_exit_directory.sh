@@ -14,7 +14,7 @@ set_exit_directory() {
         config_base # import this last
     )
 
-    script=$(find "$WS_ROOT_UNIX" -name "init.sh" -type f -not -path '.venv/*')
+    script=$(find "$WS_ROOT_UNIX" -name "init.sh" -type f -not -path '.venv_ws1/*')
     WS_ROOT_SCRIPT=$(dirname "$script")
     for lib in "${libraries[@]}"; do
         script=$(find "$WS_ROOT_SCRIPT" -name "$lib.sh" -type f)

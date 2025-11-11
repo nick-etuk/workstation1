@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # shellcheck disable=SC1091
 
-script=$(find "$WS_ROOT_UNIX" -name 'init.sh' -not -path '.venv/*')
+script=$(find "$WS_ROOT_UNIX" -name 'init.sh' -not -path '.venv_ws1/*')
 . "$script"
 
 run_step start_docker

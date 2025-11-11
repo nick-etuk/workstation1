@@ -1,13 +1,13 @@
-from typing import Any, Dict
+from typing import Any
 from workstation1.lib.logging import warn
 from workstation1.step_done.check_step_done import check_step_done
 
-def step_exit(step: Dict[str, Any], step_args: list[str], new_tab_active: bool = False):
+def step_exit(step: dict[str, Any], step_args: list[str], new_tab_active: bool = False):
     if new_tab_active:
         return True
 
     if not check_step_done(step=step, step_args=step_args, calling_function='step_exit'):
-        warn(f"{step['description']} step failed")
+        warn(f"{step['title']} step failed")
         return False
     
     return True

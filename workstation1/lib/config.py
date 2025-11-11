@@ -1,22 +1,26 @@
 import os
 from pathlib import Path
+from typing import Any
 from workstation1.lib.detect_os import detect_os
 from definitions import python_root
+
+# from icecream import ic
 
 home_dir = Path.home()
 my_os, vm = detect_os()
 
-static_config: dict[str, str] = {
+static_config: dict[str, Any] = {
     'base_dir_name': '.workstation1',
     'working_dir_name': 'working',
     'new_tab_dir_name': 'new_tab_queue',
+    'debug': True,
     }
 
-ws_root_unix = Path(python_root).parent
-computed_config: dict[str, str] = {
-    'ws_root_unix': str(ws_root_unix),
+ws_root = Path(python_root).parent
+computed_config: dict[str, Any] = {
+    'ws_root': str(ws_root),
     'python_root': python_root,
-    'script_root': str(ws_root_unix / 'src' / 'core'),
+    'script_root': str(ws_root / 'src' / 'core'),
     'my_os': my_os,
     'vm': vm,
     'working_dir': str(home_dir / static_config['base_dir_name'] / static_config['working_dir_name']),
@@ -26,7 +30,6 @@ computed_config: dict[str, str] = {
 }
 
 config = {**static_config, **computed_config}
-
 if not os.path.exists(config['new_tab_dir']):
     os.makedirs(config['new_tab_dir'])
 

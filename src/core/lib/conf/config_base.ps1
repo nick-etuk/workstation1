@@ -5,6 +5,7 @@ function Show-Config {
     WriteInfo "WS_USER_UNIX: $WS_USER_UNIX"
     WriteInfo "GCM_PATH_WIN: $GCM_PATH_WIN"
     WriteInfo "GCM_PATH_WSL: $GCM_PATH_WSL"
+    WriteInfo "WS_ROOT_SCRIPT: $WS_ROOT_SCRIPT"
     WriteInfo "WS_ROOT_WIN: $WS_ROOT_WIN"
 }
 

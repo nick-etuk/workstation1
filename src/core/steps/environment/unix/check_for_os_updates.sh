@@ -22,7 +22,7 @@ check_for_os_updates() {
     sudo apt-get -y upgrade
     # echo "$(date +%Y-%m-%dT%H:%M:%S)" > "$flag"
 
-    command -v pyenv && pyenv update
+    # command -v pyenv && pyenv update
 
     date +%Y-%m-%dT%H:%M:%S > "$flag"
 }

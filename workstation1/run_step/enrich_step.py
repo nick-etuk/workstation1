@@ -1,10 +1,14 @@
-from typing import Any, Dict
+from pathlib import Path
+from typing import Any
 
-def enrich_step(config: Dict[str, Any], registry_entry: Dict[str, Any]) -> Dict[str, Any]:
-    enriched_config = config.copy()
+# from icecream import ic
+
+def enrich_step(base_step: dict[str, Any], registry_entry: dict[str, Any]) -> dict[str, Any]:
+    enriched_config = base_step.copy()
     enriched_config['step_id'] = registry_entry['step_id']
-    enriched_config['description'] = registry_entry['description']
+    enriched_config['title'] = registry_entry['title']
     enriched_config['path'] = registry_entry['path']
-    step_dir = registry_entry['path'].rsplit('/', 1)[0]
+    config_file = Path(registry_entry['path'])
+    step_dir = str(config_file.parent)
     enriched_config['dir'] = step_dir
     return enriched_config

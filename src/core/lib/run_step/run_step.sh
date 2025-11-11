@@ -45,7 +45,7 @@ run_step() {
     # else
         # debug "step $parent_step_id"
     fi
-    # This script may be called directly, outside ws.sh,
+    # This script may be called directly, outside ws1.sh,
     # so we need to set WS_ROOT_UNIX and source init.sh if 
     # these things have not already been done
     if [ -z ${WS_ROOT_UNIX+empty_string} ];then
@@ -162,7 +162,7 @@ run_step() {
     if [ -f "$step_script" ]; then
         # if [ "$original_step_id" != 'start_service' ]; then 
             if [ "$parallel" = 'true' ]; then
-                startup_script=$(find "$WS_ROOT_UNIX/core" -name "ws.sh" -type f)
+                startup_script=$(find "$WS_ROOT_UNIX/core" -name "ws1.sh" -type f)
                 info "$original_step_id parallel step started"
                 debug "args: $original_step_id ${args[*]+"${args[*]}"}"
                 # new_tab "$startup_script" "$original_step_id" "$@"

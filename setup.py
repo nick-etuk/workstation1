@@ -15,7 +15,8 @@ setup(
     license="",
     keywords="workstation setup",
     url="http://asterlan.com",
-    packages=find_packages(","),
+    # packages=find_packages(","),
+    packages=['workstation1'],
     long_description=read("README.md"),
     classifiers=[],
 )

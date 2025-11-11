@@ -54,6 +54,7 @@ get_project_steps() {
 }
 
 update_step_registry() {
+    return
     local step_registry
     local project_registry
     local project_id

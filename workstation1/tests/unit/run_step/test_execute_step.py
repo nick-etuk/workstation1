@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import patch, MagicMock, mock_open
 from io import StringIO
-from typing import Any, Dict
+from typing import Any
 
 from workstation1.run_step.execute_step import execute_step
 
@@ -10,9 +10,9 @@ class TestExecuteStep(unittest.TestCase):
     """Unit tests for the execute_step function."""
 
     def setUp(self) -> None:
-        self.registry_entry: Dict[str, Any] = {
+        self.registry_entry: dict[str, Any] = {
             'step_id': 'sample_step',
-            'description': 'Sample Step',
+            'title': 'Sample Step',
             'path': '/tmp/sample_step/config.json'
         }
         self.base_config = {
@@ -26,7 +26,7 @@ class TestExecuteStep(unittest.TestCase):
         config = {'os': 'macos'}
         mock_enrich.return_value = config | {
             'step_id': self.registry_entry['step_id'],
-            'description': self.registry_entry['description'],
+            'title': self.registry_entry['title'],
             'path': self.registry_entry['path'],
             'dir': '/tmp/sample_step'
         }
@@ -44,7 +44,7 @@ class TestExecuteStep(unittest.TestCase):
         config = {}
         mock_enrich.return_value = config | {
             'step_id': 'sample_step',
-            'description': 'Sample Step',
+            'title': 'Sample Step',
             'path': '/tmp/sample_step/config.json',
             'dir': '/tmp/sample_step'
         }
@@ -64,7 +64,7 @@ class TestExecuteStep(unittest.TestCase):
         config = {}
         mock_enrich.return_value = config | {
             'step_id': 'sample_step',
-            'description': 'Sample Step',
+            'title': 'Sample Step',
             'path': '/tmp/sample_step/config.json',
             'dir': '/tmp/sample_step'
         }
@@ -85,7 +85,7 @@ class TestExecuteStep(unittest.TestCase):
         config = {'newTab': True}
         mock_enrich.return_value = config | {
             'step_id': 'sample_step',
-            'description': 'Sample Step',
+            'title': 'Sample Step',
             'path': '/tmp/sample_step/config.json',
             'dir': '/tmp/sample_step'
         }
@@ -115,7 +115,7 @@ class TestExecuteStep(unittest.TestCase):
         config = {'run_once': True}
         mock_enrich.return_value = config | {
             'step_id': 'sample_step',
-            'description': 'Sample Step',
+            'title': 'Sample Step',
             'path': '/tmp/sample_step/config.json',
             'dir': '/tmp/sample_step'
         }
@@ -137,7 +137,7 @@ class TestExecuteStep(unittest.TestCase):
         config = {}
         mock_enrich.return_value = config | {
             'step_id': 'sample_step',
-            'description': 'Sample Step',
+            'title': 'Sample Step',
             'path': '/tmp/sample_step/config.json',
             'dir': '/tmp/sample_step'
         }

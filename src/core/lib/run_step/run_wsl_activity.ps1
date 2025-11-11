@@ -15,7 +15,7 @@ function run_wsl_activity ($ActivityID) {
         WriteError "Cannot find workstation1 directory in WSL to run activity $ActivityID"
         return
     }
-    $FullCommand = "export NEW_TAB='true'; $WS_ROOT_UNIX/core/cli/ws.sh $Command"
+    $FullCommand = "export NEW_TAB='true'; $WS_ROOT_UNIX/core/cli/ws1.sh $Command"
     writedebug "Running ws command in WSL: $FullCommand"
     wt.exe -w 0 nt --colorScheme "Campbell Powershell" --title "workstation1 WSL" -p "Ubuntu" bash -c "$FullCommand"
 }

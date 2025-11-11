@@ -1,14 +1,24 @@
-from typing import Any, Dict
+from typing import Any
 from workstation1.step_done.check_dependencies import check_dependencies
 from workstation1.lib.logging import info
 from workstation1.step_done.check_step_done import check_step_done
+from workstation1.step_done.get_checks import get_checks
 
-def step_entry(step: Dict[str, Any], step_args: list[str]):
+def step_entry(step: dict[str, Any], step_args: list[str]) -> dict[str, Any]:
+    ok_to_proceed: dict[str, Any] = {'status': True, 'reason': ''}
+    
     if not check_dependencies(step, step_args):
-        return False
+        ok_to_proceed['status'] = False
+        ok_to_proceed['reason'] = 'failed_dependencies'
+        return ok_to_proceed
+
+    if not get_checks(step):
+        return ok_to_proceed
 
     if check_step_done(step=step, step_args=step_args, calling_function='step_entry'):
-        info(f"{step['description']} step already done")
-        return False
+        info(f"{step['title']} step already done")
+        ok_to_proceed['status'] = False
+        ok_to_proceed['reason'] = 'done'
+        return ok_to_proceed
     
-    return True
+    return ok_to_proceed

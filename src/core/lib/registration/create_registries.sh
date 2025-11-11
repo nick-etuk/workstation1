@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 function create_registries {
+    return
     local registry_file
 
     registry_file="$WORKING_DIR/project_registry.csv"

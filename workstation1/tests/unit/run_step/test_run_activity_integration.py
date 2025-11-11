@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import patch, MagicMock
 from io import StringIO
-from typing import Any, Dict, List
+from typing import Any, List
 
 from workstation1.lib.config import config
 from workstation1.run_step.run_activity import run_activity
@@ -14,7 +14,7 @@ class TestRunActivityIntegration(unittest.TestCase):
         # Sample activity with two steps (second has an argument)
         self.activity_path = '/tmp/activity.json'
         self.activity_json = '{"steps": ["stepA arg1", "stepB"]}'
-        self.activity: Dict[str, Any] = {'path': self.activity_path,
+        self.activity: dict[str, Any] = {'path': self.activity_path,
                          'steps': ["stepA arg1", "stepB"]}
 
         # Simulated step registry CSV; run_step will open this path
@@ -24,9 +24,9 @@ class TestRunActivityIntegration(unittest.TestCase):
             'stepA,1,Step A,/tmp/steps/stepA/config.json\n'
             'stepB,2,Step B,/tmp/steps/stepB/config.json\n'
         )
-        self.step_registry: List[Dict[str, str]] = [
-            {'step_id': 'stepA', 'sort_order': '1', 'description': 'Step A', 'path': '/tmp/steps/stepA/config.json'},
-            {'step_id': 'stepB', 'sort_order': '2', 'description': 'Step B', 'path': '/tmp/steps/stepB/config.json'},
+        self.step_registry: List[dict[str, Any]] = [
+            {'step_id': 'stepA', 'sort_order': '1', 'title': 'Step A', 'path': '/tmp/steps/stepA/config.json'},
+            {'step_id': 'stepB', 'sort_order': '2', 'title': 'Step B', 'path': '/tmp/steps/stepB/config.json'},
         ]
 
         # Each step's config JSON file (minimal valid JSON)

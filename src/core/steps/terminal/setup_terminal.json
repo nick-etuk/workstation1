@@ -10,7 +10,6 @@
     ]
   },
   "steps": [
-    "set_environment_variables",
     "edit_login_profile",
     "install_ttab",
     "install_zsh",

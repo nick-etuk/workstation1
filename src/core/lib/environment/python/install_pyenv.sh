@@ -28,7 +28,7 @@ install_pyenv(){
     [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
     eval "$(pyenv init - zsh)"
 
-    pyenv install 3.10.12
-    pyenv global 3.10.12
+    pyenv install 3.10
+    pyenv global 3.10
 }
 install_pyenv

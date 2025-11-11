@@ -26,7 +26,7 @@ The controller that orchestrates the scripts is written in Python.
 The next time you run `ws`, you will see your new project on the workstation1 main menu.
 
 In the `ws1` directory, add a `steps` directory.
-In the `steps` directory, add Shell, Powershell or bash scripts that start, build and otherwise manage your app.
+In the `steps` directory, add Shell, Powershell, bash or Python scripts that start, build and otherwise manage your app.
 Each step should have a `<step_name>.json` file. The `step_name` should match the filename (minus the extension) of the script that does the actual task.
 For example, your step is called `start_docker.sh`, then create a configuration file for it named `start_docker.json`
 If the configuration file has a property called "showMenu" that is set to "True", next time you run the `ws` command, the step will appear on the workstation1 main menu.
@@ -36,7 +36,7 @@ When you make changes to project or step configuration files, run `ws scan` to u
 # Getting started
 
 Clone this repo to wherever you keep your local repos.
-Switch to `<repo_dir>/workstation1 and run `./ws.sh` or, on Windows, `./ws.ps1`.
+Switch to `<repo_dir>/workstation1 and run `./ws1.sh` or, on Windows, `./ws.ps1`.
 This will add the `ws` command to your path and show you the main menu.
 
 # Adding a project to the menu

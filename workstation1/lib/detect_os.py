@@ -22,7 +22,7 @@ def detect_os() -> tuple[str, str]:
     elif 'darwin' in os_name:
         os = 'macos'
     elif 'windows' in os_name:
-        os = 'windows'
+        os = 'win'
     else:
         os = 'unknown'
     debug(f"Detected OS: {os}, VM: {vm}")
