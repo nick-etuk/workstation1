@@ -131,3 +131,14 @@ dist
 
 # macos
 *.DS_Store
+
+# Python
+__pycache__/
+dump.rdb
+/.venv*
+venv/
+venv.bak/
+
+# ignore egg-info
+*.egg-info/
+.eggs/
