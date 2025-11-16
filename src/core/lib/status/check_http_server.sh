@@ -3,7 +3,7 @@
 function check_http_server {
 
     local service
-    local conditions
+    local checks
     local passed
     local calling_function
     local arg_count
@@ -21,18 +21,18 @@ function check_http_server {
 
     case "$service" in
         backendworker|backend_and_http|web)
-            conditions=(
+            checks=(
                 'lsof -i -P -n | grep LISTEN | grep -q 3000'
                 "curl -s http://web.local.bitraft.io:3000 | grep -iq 'class=\"nhsuk-logo\"'"
             )
             ;;
         mongodb)
-            conditions=(
+            checks=(
                 "curl -s http://mongodb.bitraft.io:27017 | grep -iq 'MongoDB over HTTP'"
             )
             ;;
         wiremock)
-            conditions=(
+            checks=(
                 "curl -s http://stubs.local.bitraft.io:8080/__admin/mappings | grep -iq '\"mappings\" : [ ]'"
             )
             ;;
@@ -41,9 +41,9 @@ function check_http_server {
             ;;
     esac
 
-    for condition in "${conditions[@]}"; do
-        debug "=>check_http_server condition: $condition"
-        eval "$condition" >/dev/null
+    for check in "${checks[@]}"; do
+        debug "=>check_http_server check: $check"
+        eval "$check" >/dev/null
         passed=$?
 
         if [ $passed -ne 0 ]; then

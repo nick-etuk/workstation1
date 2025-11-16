@@ -1,4 +1,5 @@
 Function create_registries {
+    return
     $RegistryFile = "$WORKING_DIR/project_registry.csv"
 
     if (!(Test-Path -Path $RegistryFile)) {

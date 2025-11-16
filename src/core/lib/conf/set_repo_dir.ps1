@@ -3,7 +3,7 @@ function save_directories {
     # $profileContent = $profileContent -replace "`$global:WS_ROOT_WIN = '$OldRootPath'", "`$global:WS_ROOT_WIN = '$WS_ROOT_WIN'"
     # Set-Content -Path $profile.CurrentUserCurrentHost -Value $profileContent -ErrorAction SilentlyContinue
     Set-Config ws_root_win $WS_ROOT_WIN
-    $Script:REPO_DIR = (get-item $WS_ROOT_WIN).parent.parent
+    $Script:REPO_DIR = (get-item $WS_ROOT_WIN).parent.FullName
     Set-Config repo_dir $REPO_DIR
 }
 

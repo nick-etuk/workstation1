@@ -10,7 +10,7 @@ partial_match_step() {
     # Secondly, search other projects
     # Thirdly, search core steps
     # Never search core/lib
-    step_script=$(find "$WS_ROOT_UNIX/core/steps" -name "*${step_name}*.sh" -type f | head -n 1)
+    step_script=$(find "$WS_ROOT_SCRIPT/steps" -name "*${step_name}*.sh" -type f | head -n 1)
     
     if [ -z "$step_script" ]; then
         echo "No step script found for '$step_name'."

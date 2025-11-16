@@ -2,17 +2,14 @@
 
 save_directories() {
     # Saves the current WS_ROOT_UNIX and REPO_DIR as configuration values.
-    local ws1_dir
 
     set_config ws_root_unix "$WS_ROOT_UNIX"
-    # REPO_DIR=$(cd "$WS_ROOT_UNIX"/../../; pwd)
-    ws1_dir="$(dirname "$WS_ROOT_UNIX")"
-    REPO_DIR="$(dirname "$ws1_dir")"
+    REPO_DIR="$(dirname "$WS_ROOT_UNIX")"
     set_config repo_dir "$REPO_DIR" # todo: this is never read. Consider removing it.
 }
 
 set_repo_dir() {
-    # Checks if WS_ROOT_WIN has changed.
+    # Checks if WS_ROOT_UNIX has changed.
     # todo: Update login profiles if it has.
     
     local old_root_path

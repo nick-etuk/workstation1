@@ -1,4 +1,5 @@
 function update_activity_registry {
+    return # this is now done in python
     $ActivityRegistry = "$WORKING_DIR/activity_registry.csv"
     if ((Test-Path -Path $ActivityRegistry)) { Remove-Item "$ActivityRegistry" -Force }
     New-Item -Path $ActivityRegistry -ItemType File -Force | Out-Null

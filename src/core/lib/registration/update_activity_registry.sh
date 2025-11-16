@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 update_activity_registry() {
+    return
     local project_id
     local project_path
     local project_sort_order

@@ -5,6 +5,7 @@ function Show-Config {
     WriteInfo "WS_USER_UNIX: $WS_USER_UNIX"
     WriteInfo "GCM_PATH_WIN: $GCM_PATH_WIN"
     WriteInfo "GCM_PATH_WSL: $GCM_PATH_WSL"
+    WriteInfo "WS_ROOT_SCRIPT: $WS_ROOT_SCRIPT"
     WriteInfo "WS_ROOT_WIN: $WS_ROOT_WIN"
 }
 
@@ -16,7 +17,7 @@ $WS_USER_WIN = $env:USERNAME
 $WS_USER_UNIX = $WS_USER_WIN.ToLower()
 if ($DEBUG) { $WS_USER_UNIX = "account1" }
 
-$WS_VERSION = '1.2'  # Update this when making changes that require users to update their profiles
+$WS_VERSION = '2.0'  # Update this when making changes that require users to update their profiles
 $BASE_DIR = "$HOME\.workstation1"
 $WORKING_DIR = "$BASE_DIR\working"
 $LOG_BASE="$BASE_DIR\log" #todo: use windows event log, C:\WINDOWS\system32\config
@@ -56,10 +57,7 @@ $GCM_PATH_WIN = Find-GCM-Executable
 $GCM_PATH_WSL = Get-Unix-Path $GCM_PATH_WIN
 
 $WS_ROOT_UNIX = ''  # This will be set later if needed
-
 $MY_DOWNLOAD_DIR = "$BASE_DIR\downloads"
-
-$ANDROID_EMULATOR_PORT = 5554
 
 $GreenCheck = @{
     Object = [Char]8730
@@ -79,10 +77,10 @@ $NoColor = @{
     NoNewLine = $true
 }
 
-# Write-Host "Status check... " -NoNewline
-# Write-Host @GreenCheck
-# # Write-Host @NoColor
-# Write-Host " white text"
-# Write-Host @$RedCross
-# # Write-Host @NoColor
-# Write-Host " white text"
+# Todo: Project dependent configuration. Move these out of core.
+$ANDROID_EMULATOR_PORT = '5554'
+$LOGINENV = 'sandpit'
+
+$NODE_MAJOR_VERSION = '22'
+$DOTNET_MAJOR_VERSION = '8'
+$PYTHON_MAJOR_VERSION = '3.10'

@@ -6,11 +6,15 @@ if (Test-Path variable:INIT_WIN) { return }
 $Script:INIT_WIN = 1
 $Script:CURRENT_STEP = 'general'
 
-if (!(Test-Path variable:WS_ROOT_WIN)) { 
-    $Script:WS_ROOT_WIN = (get-item $PSScriptRoot).parent
- }
+if (!(Test-Path variable:WS_ROOT_SCRIPT)) { 
+    $Script:WS_ROOT_SCRIPT = (get-item $PSScriptRoot)
+}
 
-$Libraries = Get-Childitem -Path "$WS_ROOT_WIN\core\lib" -Include '*.ps1' -Exclude config_base.ps1, z*.ps1 -File -Recurse -ErrorAction SilentlyContinue
+if (!(Test-Path variable:WS_ROOT_WIN)) { 
+    $Script:WS_ROOT_WIN = (get-item $PSScriptRoot).Parent.Parent.FullName
+}
+
+$Libraries = Get-Childitem -Path "$WS_ROOT_SCRIPT\lib" -Include '*.ps1' -Exclude config_base.ps1, z*.ps1 -File -Recurse -ErrorAction SilentlyContinue
 $index=0
 foreach ($Library in $Libraries) {
     Write-Progress -Activity "Loading library" -Status "$index of $($Libraries.Count)" -CurrentOperation "$($Library.Name)" -PercentComplete (($index / $Libraries.Count) * 100)

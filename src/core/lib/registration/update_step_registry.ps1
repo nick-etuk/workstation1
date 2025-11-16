@@ -17,7 +17,7 @@ function find_steps ($ProjectID, $ProjectPath) {
             $StepID = $StepID.ToLower() -replace '-', '_'
             $Content = Get-Content $StepFile -ErrorAction SilentlyContinue | Out-String
             $StepConfig = ConvertFrom-Json -InputObject $Content -ErrorAction SilentlyContinue
-            if ($StepConfig | Get-Member -Name 'description') {
+            if ($StepConfig | Get-Member -Name 'title') {
                 $StepDescription = $StepConfig.description
             } else {
                 $StepDescription = get_step_description $StepID
@@ -29,6 +29,7 @@ function find_steps ($ProjectID, $ProjectPath) {
 }
 
 function update_step_registry {
+    return
     $StepRegistry = "$WORKING_DIR/step_registry.csv"
     if (Test-Path -PathType Leaf $StepRegistry) { Remove-Item $StepRegistry -Force}
     New-Item -Path $StepRegistry -ItemType File -Force | Out-Null
@@ -60,5 +61,5 @@ function update_step_registry {
     # }
     # $SortedStepRegistry = $StepRegistryContent | Sort-Object -Property sort_order, step_id
     # # # $SortedStepRegistry | Export-CSV -Path $StepRegistry -NoTypeInformation -Force
-    # $SortedStepRegistry | Export-CSV -Path $StepRegistry -QuoteFields 'description'
+    # $SortedStepRegistry | Export-CSV -Path $StepRegistry -QuoteFields 'title'
 }

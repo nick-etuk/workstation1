@@ -54,6 +54,7 @@ get_project_steps() {
 }
 
 update_step_registry() {
+    return
     local step_registry
     local project_registry
     local project_id
@@ -81,7 +82,7 @@ update_step_registry() {
         fi
         get_project_steps "$project_id" "$project_path"
     done < "$project_registry"
-    get_project_steps "core" "$WS_ROOT_UNIX/core"
+    get_project_steps "core" "$WS_ROOT_SCRIPT"
 
 
     # cat "$WORKING_DIR/step_registry.csv" | (sed -u 1q; sort)
