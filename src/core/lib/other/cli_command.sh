@@ -83,7 +83,7 @@ cli_command() {
     if grep -q "^\"$command\"," "$activity_registry"; then
         info "Running activity $command"
         activity_id=$command
-        CURRENT_PROJECT=$(get_config 'activity_id_project' "$activity_id")
+        CURRENT_PROJECT=$(get_config 'activity_id_project' "$activity_id") #todo: what is this for? activity ids are unique across all projects.
         set_config 'current_project' "$CURRENT_PROJECT"
         set_config 'current_activity' "$activity_id"
         run_activity "$activity_id" "${args[@]+"${args[@]}"}"

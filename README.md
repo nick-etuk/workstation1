@@ -12,47 +12,22 @@ The menus contain activities for each of your major development projects.
 
 The controller that orchestrates the scripts is written in Python.
 
-# Quick start
-1. Create a project. It can be a react app, or an Android app, Dotnet backend API, or whatever you wish.
-2. Within the project, create directory called `ws1` or anything you like, and add a file there called `ws1_project.json`. Add an id and a title to the json file, like this:
-```
-{
-  "id": "reactApp",
-  "title": "My React App",
-}
-```
-
-3. Run `ws scan`. This will add the current project to the workstation1 registries.
-The next time you run `ws`, you will see your new project on the workstation1 main menu.
-
-In the `ws1` directory, add a `steps` directory.
-In the `steps` directory, add Shell, Powershell, bash or Python scripts that start, build and otherwise manage your app.
-Each step should have a `<step_name>.json` file. The `step_name` should match the filename (minus the extension) of the script that does the actual task.
-For example, your step is called `start_docker.sh`, then create a configuration file for it named `start_docker.json`
-If the configuration file has a property called "showMenu" that is set to "True", next time you run the `ws` command, the step will appear on the workstation1 main menu.
-
-When you make changes to project or step configuration files, run `ws scan` to update the registries.
 
 # Getting started
 
 Clone this repo to wherever you keep your local repos.
-Switch to `<repo_dir>/workstation1 and run `./ws1.sh` or, on Windows, `./ws.ps1`.
-This will add the `ws` command to your path and show you the main menu.
+Switch to `<repo_dir>/ws1 and run `./ws1.sh` or, in Windows,`./ws1.ps1`.
+This will add the `ws1` command to your path and show you the main menu.
 
 # Adding a project to the menu
 
-To add a project to the menu, switch to the root directoy of the project (or any other directory), and then run `ws add`.
-This will prompt you for a description and then create a `workstation1` directory, where you can
-define your activities and steps.
-`ws add` creates a `ws1_project.json` file in the `workstation1` directory.
+To add a project to the menu, switch to the root directoy of the project (or any other directory), and then run `ws1 add`.
+This will prompt you for a description and then create a `ws1` directory, where you can define your steps.
+`ws add` creates a `ws1_project.json` file in the `ws1` directory.
 This file defines the project and its attributes.
-It also adds the path of the `workstation1` directory to ~/.workstation1/project_registry.csv, so that it is included in the main menu.
-
-You can add new activities anywhere within the `workstation1` directory.
-Activities are defined in json files that contain the word `activity` in their filenames.
-For example, `web_development_activity.json`.
-Create new steps for the project inside a `workstation1/steps` directory.
-Only create new steps if one does not already exist that does what you want. To get a full list of existing steps, run `ws list`.
+It also adds the path of the `ws1` directory to ~/.workstation1/project_registry.csv, so that it is included in the main menu.
+Create new steps for the project inside a `ws1/steps` directory.
+Only create new steps if one does not already exist that does what you want. To get a list of existing steps, run `ws1 list`.
 
 # Projects
 
@@ -64,33 +39,43 @@ Each project has a `ws1_project.json` file that defines its attibutes. Here is a
 {
   "id": "webapp",
   "title": "Sample Web App",
+  "projectRoot": "$HOME/repos/nhsapp",
   "sortOrder": 10,
   "os": ["macos", "ubuntu"],
   "contact": {
     "email": "nick_etuk@hotmail.com"
   },
-  "showMenu": true
+  "menu": "main"
 }
 ```
+You only need to set the `porjectRoot` if your `ws1` directory, containing your steps and ws1_project.json file, is not in your project's root directory.
+You might do this if you do not want your workstation configuration steps to be included in your project's git repo.
 
-The project will be shown in the main menu if the `showMenu` property is `true`.
+The project will be shown in the main menu if the `menu` property is set to `main`.
 
-# Activities
+# Steps
 
-Activities define the menu items that are shown for each app. They contain a set of steps that are executed if the activity's menu option is chosen.
-They are json files that contain the word `activity` in their filenames.
-They can be located anywhere within the app's directory.
+Steps are the Shell script or Powershell code files that actually perform the actions.
+Each step has a json configuration file that matches the name of the script file. This specifies the
+dependencies and checks that go with the step. It can also contain child steps.
+If the step is simple, the code for what it does can be entered as a command directly in the step defintion.
+
+## Showing steps in the main menu
+
+You may want to show some steps in the main menu.
+These will be steps that perform major development activities in your project, such as building the backend or deploying to a remote server.
+They may contain child steps that do the actual work.
+To show a step in the main menu, add a property called `menu` to the step's json configuration file, and set it to `main`.
+
 Here is an example:
-`web_development_activity.json`
+`web_development.json`
 
 ```
 {
   "id": "web",
+  "menu": "main",
   "sortOrder": 10,
   "title": "Web development",
-  "repo": "https://github.com/nick-etuk/workstation1-template-web.git",
-  "repoPath": "$HOME/repos/workstation1-template-web",
-  "subMenu": "login-env",
   "steps": [
     "install_node",
     "activate_node",
@@ -98,25 +83,24 @@ Here is an example:
     "install_vscode",
     "install_text_editor",
     "configure_backend",
-    "build_backend backendworker",
-    "build_backend web",
+    "build_backendworker",
+    "build_web",
     "start_docker",
     "docker_login",
-    "start_service backendworker",
+    "start_backendworker",
     "start_http_server",
     "open_vscode"
   ]
 }
 ```
 
-Activity IDs must be unique across all projects.
+Step Ids must be unique across all projects.
 
-# Steps
-
-Steps are the Shell script or Powershell code files that actually perform the actions specified in the activities.
-Each step has a json configuration file that matches the name of the script file. This specifies the
-dependencies and checks that go with the step. It can also contain child steps.
-If the step is simple, the code for what it does can be entered as a command directly in the step defintion.
+If the step has an `exitTo` property, when the step is completed, the OS shell will switch to the specified path.
+By default, the path is relative to the project root directory.
+If the path begins with a `/` or a `<drive letter>:\`, it is treated as an absolute path.
+You can include `..`, `..\\..` and so on in the path to refer to a directory above the project directory.
+You can also include environment variable in the path.
 
 ## Checks
 
@@ -130,6 +114,7 @@ The checks look like this:
     "ubuntu": ["true"]
   }
 }
+
 
 The checks can be OS specific - macos, ubuntu, win. Unix means macos or ubuntu.
 The file name of the step, without the exension, must be unique across all projects.
@@ -152,13 +137,17 @@ The name of the step config file must match the name of the script file.
 For example, if the step script is `install_node.sh`, the step config file must be `install_node.json`.
 Step names must be unique across all projects.
 
+# Uniquenes of Ids
+
+Step Ids must be unique across all projects, since a step defined in one project can be used in all projects.
+Project Ids must be unique.
+
 # CLI commands
 
-- `ws`: Shows the main menu. This contains a list of all projects and activities.
-- `ws <activity>`: Runs the specified activity.
-- `ws <step>`: Runs the specified step.
-- `ws list`: Lists all steps in all projects.
-- `ws add`: Adds a new project to the menu.
-- `ws update`: Updates the step registry with the latest steps from all projects.
-  Run this command after adding new steps or activities.
-- `ws help`: Shows the help menu.
+- `ws1`: Shows the main menu. This contains a list of all projects and menu steps.
+- `ws <step Id>`: Runs the specified step.
+- `ws1 list`: Lists all steps in all projects.
+- `ws1 add`: Adds a new project to the menu.
+- `ws1 scan`: Updates the step registry with the latest steps from all projects.
+  Run this command after adding new steps.
+- `ws1 help`: Shows the help menu.

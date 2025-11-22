@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
 function add_to_path {
-    echo "=>add_to_path"
     local paths_to_add
 
     startup_script="$WS_ROOT_UNIX/ws1.sh"
@@ -18,7 +17,7 @@ function add_to_path {
     for new_path in "${paths_to_add[@]}"; do
         if [[ ! $PATH == *$new_path* ]]; then
             export PATH="$PATH:$new_path"
-            echo "Added $new_path to path"
+            # echo "Added $new_path to path"
         fi
     done
 

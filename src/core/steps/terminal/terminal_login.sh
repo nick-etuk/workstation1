@@ -96,3 +96,9 @@ set +u
 #     return
 # fi
 # cd "$EXIT_DIR" || exit 1
+
+exit_path=$(get_config 'current_exit_path')
+if [ -n "$exit_path" ] && [ -d "$exit_path" ]; then
+    echo "Switching to current exit path $exit_path"
+    cd "$exit_path" || exit 1
+fi

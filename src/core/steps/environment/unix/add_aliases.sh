@@ -13,9 +13,6 @@ function add_aliases {
     alias ..='cd ../'
     alias ...='cd ../../'
     alias .3='cd ../../../'
-    alias .4='cd ../../../../'
-    alias .5='cd ../../../../../'
-    alias .6='cd ../../../../../../'
     alias ~="cd ~"
     alias kill='kill -9'
     alias path='echo -e ${PATH//:/\\n}'       # system: Echo all executable Paths
@@ -32,6 +29,5 @@ function add_aliases {
         and() { "$startup_script" and "$@"; }
         xit() { "$startup_script" xit "$@"; }
     fi
-    echo "Aliases set"
 }
 add_aliases

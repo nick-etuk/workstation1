@@ -5,7 +5,6 @@ from workstation1.run_step.execute_step import execute_step
 
 
 def run_step(step_registry_entry: dict[str, Any], step_args: list[str], new_tab_active: bool = False) -> bool:
-    base_step = {}
     with open(step_registry_entry['path']) as f:
         base_step = json.load(f)
 

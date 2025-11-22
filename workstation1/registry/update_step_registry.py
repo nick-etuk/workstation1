@@ -38,7 +38,7 @@ def update_step_registry(project_registry: list[dict[str, Any]]) -> None:
     combined_step_registry = sorted(combined_step_registry, key=lambda x: (x['sort_order']))
 
     with open(step_registry_file, 'w', newline='') as csvfile:
-        # fieldnames = combined_step_registry[0].keys() if combined_step_registry else ['step_id', 'sort_order', 'project_id', 'title', 'menu', 'short_name', 'step_file']
+        # fieldnames = combined_step_registry[0].keys() if combined_step_registry else ['step_id', 'sort_order', 'project_id', 'title', 'menu', 'step_file']
         fieldnames = combined_step_registry[0].keys()
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 
@@ -50,7 +50,6 @@ def update_step_registry(project_registry: list[dict[str, Any]]) -> None:
                 'project_id': step['project_id'],
                 'menu': step['menu'],
                 'title': step['title'],
-                'short_name': step['short_name'],
                 'path': step['path'],
             })
 

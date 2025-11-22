@@ -15,5 +15,5 @@ def show_menu_main(project_registry: list[dict[str, Any]], step_registry: list[d
             # print(f"\t ws {activity['activity_id']} \t {activity['title']}")
         menu_items = get_project_menu_items(step_registry, project['project_id'])
         for step in menu_items:
-            print(f"\t ws1 {step['short_name']} \t {step['title']}")
+            print(f"\t ws1 {step['step_id']} \t {step['title']}")
         print("\n")
