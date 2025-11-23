@@ -35,7 +35,8 @@ get_shell_version
 detect_os
 echo "Terminal Shell is $SHELL_NAME version $SHELL_VERSION on $MY_OS"
 
-export EDITOR=/usr/bin/nano
+EDITOR="$(command -v nano || command -v vi || command -v vim || echo "/usr/bin/nano")"
+export EDITOR
 . "$WS_ROOT_UNIX/src/core/steps/environment/unix/add_to_path.sh"
 . "$WS_ROOT_UNIX/src/core/steps/environment/unix/add_aliases.sh"
 
@@ -96,3 +97,9 @@ set +u
 #     return
 # fi
 # cd "$EXIT_DIR" || exit 1
+
+exit_path=$(get_config 'current_exit_path')
+if [ -n "$exit_path" ] && [ -d "$exit_path" ]; then
+    echo "Switching to current exit path $exit_path"
+    cd "$exit_path" || exit 1
+fi

@@ -6,7 +6,7 @@ new_tab() {
     local startup_script
     # local full_command
 
-    touch "$NEW_TAB_FLAG"
+    # touch "$NEW_TAB_FLAG"
     args=("$@")
 
     debug "=>new tab"

@@ -41,9 +41,6 @@ else
   CROSS_MARK='[-]'
 fi
 
-NEW_TAB_FLAG="$WORKING_DIR"/new_tab_flag.txt
-NEW_TAB_COMMANDS="$WORKING_DIR"/new_tab_commands.txt
-
 detect_os
 
 [ "$VM" = 'wsl' ] && get_wsl_win_info
@@ -67,3 +64,6 @@ LOGINENV=sandpit
 NODE_MAJOR_VERSION=22
 DOTNET_MAJOR_VERSION=8
 PYTHON_MAJOR_VERSION=3.10
+GNUPG_VERSION=2.4.8
+LIBGPG_ERROR_VERSION=1.56
+LIBKSBA_VERSION=1.6.7

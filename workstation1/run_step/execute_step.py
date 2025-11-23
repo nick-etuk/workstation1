@@ -34,14 +34,14 @@ def run_child_steps(parent_step: dict[str, Any], parent_args: list[str]) -> bool
         child_step = load_step(child_step_id)
         
         if child_step_args and len(child_step_args) > 0:
-            debug(f"Running child step: {child_step['step_id']} with arguments: {child_step_args}")
+            # debug(f"Running child step: {child_step['step_id']} with arguments: {child_step_args}")
+            pass
         else:
-            debug(f"Running child step: {child_step['step_id']}")
+            # debug(f"Running child step: {child_step['step_id']}")
+            pass
 
         status = execute_step(parent_step=child_step, parent_args=child_step_args, new_tab_active=False)
         if not status:
-            # info(f"Child step {child_step['title']} already done, failed dependencies, or failed execution")
-            # debug(f"status: {status}")
             all_passed = False
     return all_passed
 

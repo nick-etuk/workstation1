@@ -74,7 +74,7 @@ run_step() {
 
         if [ "$arg_count" -gt 0 ]; then
             fomatted_args=$(join '_' ${args[@]+"${args[@]}"})
-            key="step_${step}_$fomatted_args"
+            key="step_${parent_step_id}_$fomatted_args"
         fi
 
         status=$(get_config status "$key")

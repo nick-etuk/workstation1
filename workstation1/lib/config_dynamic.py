@@ -5,10 +5,14 @@ from workstation1.lib.config import config
 def get_dynamic(key:str, group: str='general') -> str|None:
     """Get a dynamic configuration value from the filesystem."""
     
-    if not os.path.isdir(f"{config['working_dir']}/{group}"):
+    key = key.strip().lower()
+    group = group.strip().lower()
+
+    config_dir = os.path.join(config['working_dir'], "dynamic_config", group)
+    if not os.path.isdir(config_dir):
         return None
 
-    status_file = f"{config['working_dir']}/{group}/{key}.txt"
+    status_file = os.path.join(config_dir, f"{key}.txt")
     if not os.path.isfile(status_file):
         return None
     with open(status_file) as f:
@@ -16,16 +20,21 @@ def get_dynamic(key:str, group: str='general') -> str|None:
     return value
 
 
-def set_dynamic(key:str, group: str='general', value: str='', ) -> None:
+def set_dynamic(key:str, value: str, group: str='general') -> None:
     """Set a dynamic configuration value on the filesystem."""
     
+    key = key.strip().lower()
+    value = value.strip()
+    group = group.strip().lower()
+
     current_value = get_dynamic(key=key, group=group)
     if current_value == value:
         return
     
-    if not os.path.isdir(f"{config['working_dir']}/{group}"):
-        os.makedirs(f"{config['working_dir']}/{group}")
+    config_dir = os.path.join(config['working_dir'], "dynamic_config", group)
+    if not os.path.isdir(config_dir):
+        os.makedirs(config_dir)
 
-    status_file = f"{config['working_dir']}/{group}/{key}.txt"
+    status_file = os.path.join(config_dir, f"{key}.txt")
     with open(status_file, "w") as f:
         f.write(value)

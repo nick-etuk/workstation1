@@ -28,7 +28,6 @@ def find_steps(project_id: str, project_path: str) -> list[dict[str, Any]] | Non
     for step_file in step_dir.rglob('*.json'):
         if '__test' in str(step_file):
             continue
-        step_id = step_file.stem.lower().replace('-', '_')
         with open(step_file, 'r') as f:
             content = f.read()
         try:
@@ -37,9 +36,9 @@ def find_steps(project_id: str, project_path: str) -> list[dict[str, Any]] | Non
             print(f"Warning: Could not parse JSON in {step_file}")
             continue
 
+        step_id = step_config.get('id', step_file.stem.lower().replace('-', '_'))
         menu = step_config.get('menu', '')
         title = step_config.get('title', get_step_title(step_id))
-        short_name = step_config.get('shortName', '')
         my_sort_order = sort_order(project_id)
         if 'sortOrder' in step_config:
             my_sort_order = my_sort_order + step_config['sortOrder'] / 10
@@ -48,7 +47,6 @@ def find_steps(project_id: str, project_path: str) -> list[dict[str, Any]] | Non
             'project_id': project_id, 
             'menu': menu,
             'title': title,
-            'short_name': short_name,
             'sort_order': my_sort_order,
             'path': step_file,
         })

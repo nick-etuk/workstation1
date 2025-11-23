@@ -13,3 +13,8 @@ $StartupScript = Get-Childitem -Path "$WS_ROOT_WIN" -Include 'ws1.ps1' -File -Re
 # }
 & $StartupScript
 # & $($StartupScript.FullName)
+
+$ExitPath = Get-Config current_exit_path
+if ($ExitPath -and (Test-Path -Path $ExitPath)) {
+    Set-Location -Path $ExitPath
+}

@@ -1,12 +1,12 @@
 function Get-Config {
     switch($args.Length) {
         1 {
-            $Group = 'general'
             $Key = $args[0]
+            $Group = 'general'
         }
         2 {
-            $Group = $args[0]
-            $Key = $args[1]
+            $Key = $args[0]
+            $Group = $args[1]
         }
         default {
             WriteError "Invalid number of arguments for Get-Config: $($args.Length) arguments - $($args -join ', ')"
@@ -14,9 +14,9 @@ function Get-Config {
         }
     }
 
-    $StatusFile = "$WORKING_DIR\$Group\$Key.txt"
+    $StatusFile = "$WORKING_DIR\dynamic_config\$Group\$Key.txt"
 
-    if (!(Test-Path "$WORKING_DIR\$Group" -PathType Container)) {
+    if (!(Test-Path "$WORKING_DIR\dynamic_config\$Group" -PathType Container)) {
         return
     }
 
@@ -31,14 +31,14 @@ function Get-Config {
 function Set-Config {
     switch($args.Length) {
         2 {
-            $Group = 'general'
             $Key = $args[0]
             $Value = $args[1]
+            $Group = 'general'
         }
         3 {
-            $Group = $args[0]
-            $Key = $args[1]
-            $Value = $args[2]
+            $Key = $args[0]
+            $Value = $args[1]
+            $Group = $args[2]
         }
         default {
             Write-Error "Invalid number of arguments for Set-Config: $($args.Length) arguments - $($args -join ', ')"
@@ -51,12 +51,11 @@ function Set-Config {
         return
     }
     
-    if (!(Test-Path -PathType Container "$WORKING_DIR\$Group")) {
-        New-Item -ItemType Directory -Path "$WORKING_DIR\$Group" | Out-Null
+    if (!(Test-Path -PathType Container "$WORKING_DIR\dynamic_config\$Group")) {
+        New-Item -ItemType Directory -Path "$WORKING_DIR\dynamic_config\$Group" | Out-Null
     }
 
-    $StatusFile = "$WORKING_DIR\$Group\$Key.txt"
-
+    $StatusFile = "$WORKING_DIR\dynamic_config\$Group\$Key.txt"
     if (!(Test-Path $StatusFile)) {
         New-Item -ItemType File -Path $StatusFile | Out-Null
     }
