@@ -1,11 +1,21 @@
 # Introduction
 
 This is a set of scripts that setup your workstation for developing applications.
+for example, if you are working on an app that has Android, IOS and web clients, Python or dotnet
+backends with multiple databases and middleware, you will be dealing with several IDEs and development tools.
+Further, if you have colleagues who use a variety of Windows, Ubuntu and Mac workstations, the complexity setting up workstations so you can all work together quickly on the same app will increase.
+
+You can have several apps or projects, and switch between them through one menu.
+
+Workstation1 will help you configure your worksation, and then share that configuration with others.
 It contains scripts that install the IDEs and package managers involved in building
-applications with frontends, backends, docker containers, node modules, dotnet packages and so on.
+applications with frontends, backends, docker images, node modules and dotnet packages.
 It works on Windows, WSL, Ubuntu and MacOS.
-The scripts can be written in Powershell, Shell Script (Bash), Python or Pearl.
+
+Your configuration scripts can be written in Powershell, Shell Script (Bash), Python or Pearl.
 It shows a menu that lets you choose which development activity you want to startup.
+
+Your workstation configuration scripts can be in an existing repo, or their own repo, or both.
 
 The menus contain activities for each of your major development projects.
 ![image info](./doc/troubleshooting/image-menu.png)
@@ -16,13 +26,13 @@ The controller that orchestrates the scripts is written in Python.
 # Getting started
 
 Clone this repo to wherever you keep your local repos.
-Switch to `<repo_dir>/ws1 and run `./ws1.sh` or, in Windows,`./ws1.ps1`.
-This will add the `ws1` command to your path and show you the main menu.
+Switch to `<repo_dir>/ws1`, then run `./ws1.sh` or, in Windows,`./ws1.ps1`.
+This will add the `ws1` command to your path and display the main menu.
 
 # Adding a project to the menu
 
 To add a project to the menu, switch to the root directoy of the project (or any other directory), and then run `ws1 add`.
-This will prompt you for a description and then create a `ws1` directory, where you can define your steps.
+This will prompt you for the title of your project and then create a `ws1` directory, where you can define your steps.
 `ws add` creates a `ws1_project.json` file in the `ws1` directory.
 This file defines the project and its attributes.
 It also adds the path of the `ws1` directory to ~/.workstation1/project_registry.csv, so that it is included in the main menu.

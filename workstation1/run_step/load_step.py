@@ -7,15 +7,12 @@ from workstation1.run_step.enrich_step import enrich_step
 from workstation1.registry.update_step_registry import update_step_registry
 from workstation1.registry.get_registries import project_registry
 
-# from icecream import ic
 
 def load_step(step_id: str) -> dict[str, Any]:
     step_registry_file = f"{config['working_dir']}/step_registry.csv"
     
-    # find matching step in registry
     with open(step_registry_file) as f:
         reader = csv.DictReader(f)
-        # use list comprehension to find the step
         steps = [row for row in reader if row['step_id'] == step_id]
         if not steps:
             warn(f"Step {step_id} not found in registry.")
@@ -27,7 +24,7 @@ def load_step(step_id: str) -> dict[str, Any]:
             if not steps:
                 raise ValueError(f"Step {step_id} not found in registry")
         registry_entry = steps[0]
-    # load step json
+    
     with open(registry_entry['path']) as f:
         base_step = json.load(f)
 
