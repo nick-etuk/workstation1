@@ -47,10 +47,6 @@ def run_child_steps(parent_step: dict[str, Any], parent_args: list[str]) -> bool
 
 def execute_step(parent_step: dict[str, Any], parent_args: list[str], new_tab_active: bool = False) -> bool:
     parent_step_id = parent_step['step_id']
-    if parent_args and len(parent_args) > 0:
-        debug(f"Running step {parent_step_id} with args: {parent_args}")
-    else:
-        debug(f"Running step {parent_step_id}")
 
     if 'os' in parent_step:
         if parent_step['os'] != config['my_os'] and parent_step['os'] != 'unix':
@@ -65,7 +61,7 @@ def execute_step(parent_step: dict[str, Any], parent_args: list[str], new_tab_ac
             fomatted_args = "_".join(parent_args)
             key = f"step_{parent_step_id}_{fomatted_args}"
 
-        status = get_dynamic("status", key)
+        status = get_dynamic(key, 'status')
 
         if status == 'done':
             info(f"{parent_step['title']} (run once) step already done")
@@ -118,7 +114,7 @@ def execute_step(parent_step: dict[str, Any], parent_args: list[str], new_tab_ac
 
     if all_passed:
         if run_once:
-            set_dynamic("status", key, 'done')
+            set_dynamic(key, 'done', 'status')
     else:
         if new_tab_active:
             info(f"{parent_step['title']} step failed in new tab")

@@ -2,6 +2,8 @@ import os
 from pathlib import Path
 import csv
 from typing import Any
+import difflib
+
 from workstation1.lib.config import config
 from workstation1.registry.find_steps import find_steps
 from workstation1.lib.logging import info, warn
@@ -11,8 +13,9 @@ def update_step_registry(project_registry: list[dict[str, Any]]) -> None:
     info("Updating step registry")
     step_registry_file = f"{config['working_dir']}/step_registry.csv"
 
+    backup_file = f"{step_registry_file}.bak"
     if Path(step_registry_file).exists():
-        os.remove(step_registry_file)
+        os.replace(step_registry_file, backup_file)
 
     combined_step_registry: list[dict[str, Any]] = []
     ic(project_registry)
@@ -53,3 +56,22 @@ def update_step_registry(project_registry: list[dict[str, Any]]) -> None:
                 'path': step['path'],
             })
 
+    if Path(step_registry_file).exists() and Path(backup_file).exists():
+        with open(step_registry_file, 'r') as new_file, open(backup_file, 'r') as old_file:
+            new_content = new_file.read()
+            old_content = old_file.read()
+            if new_content == old_content:
+                info("Step registry unchanged.")
+            else:
+                info("Step registry updated.")
+                diff = difflib.unified_diff(
+                    old_content.splitlines(),
+                    new_content.splitlines(),
+                    fromfile='Previous',
+                    tofile='New',
+                    lineterm='')
+                for line in diff:
+                    print(line)
+        os.remove(backup_file)
+    else:
+        info("Step registry created.")

@@ -13,6 +13,8 @@ def set_exit_path(project_registry: list[dict[str, Any]], step_registry_entry: d
     with open(step_registry_entry['path']) as f:
         step = json.load(f)
     
+    if not ('menu' in step and step['menu'] == 'main'): return
+    
     step['step_id'] = step.get('id', step_registry_entry['step_id'])
     # ic(step)
     if 'exitTo' not in step:
