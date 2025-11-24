@@ -36,7 +36,7 @@ function RunStep {
                 $Key="step_$StepID_$FormattedArgs"
             }
 
-            $Status = Get-config status $Key
+            $Status = Get-config $Key status
 
             if ($Status -eq 'done' ) {
                 WriteInfo "$StepID step already done"
@@ -91,7 +91,7 @@ function RunStep {
 
     if ($AllPassed -eq 0 ) {
         WriteInfo "$StepID step completed"
-        if ($RunOnce -eq 'true' ) { Set-Config status $Key 'done' }
+        if ($RunOnce -eq 'true' ) { Set-Config $Key 'done'  status }
     }
     return $AllPassed
 }

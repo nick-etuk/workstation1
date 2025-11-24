@@ -19,7 +19,7 @@ function Find-GCM-Executable {
     foreach ($Path in $ExpectedPaths) {
         if (Test-Path -PathType Leaf $Path) {
             WriteDebug "Found GCM at expected path $Path"
-            Set-Config 'file_paths' 'git-credential-manager.exe' $Path
+            Set-Config 'git-credential-manager.exe' $Path  'file_paths'
             return $Path
         }
     }

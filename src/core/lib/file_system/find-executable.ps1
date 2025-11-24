@@ -63,7 +63,7 @@ function Find-Executable {
         $InDirectory
     )
 
-    $CachedPath = Get-Config 'file_paths' $FileName
+    $CachedPath = Get-Config $FileName 'file_paths'
     if ($CachedPath) {
         WriteDebug "$FileName found in cache"
         return $CachedPath
@@ -74,7 +74,7 @@ function Find-Executable {
         WriteInfo "$FileName is a command"
         $CorrectDirectory = CheckDirectory $FileName $Result $InDirectory 
         if ($CorrectDirectory) { 
-            Set-Config 'file_paths' 'git-credential-manager.exe' $CorrectDirectory
+            Set-Config 'git-credential-manager.exe' $CorrectDirectory 'file_paths'
             return $CorrectDirectory }
     }
 
@@ -82,7 +82,7 @@ function Find-Executable {
     if ($Result) { 
         $CorrectDirectory = CheckDirectory $FileName $Result $InDirectory
         if ($CorrectDirectory) { 
-            Set-Config 'file_paths' $FileName $CorrectDirectory
+            Set-Config $FileName $CorrectDirectory  'file_paths'
             return $CorrectDirectory
         }
     }

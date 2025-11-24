@@ -8,7 +8,7 @@ function create_venv($project_id) {
         return
     }
 
-    $project_root = get_project_root $project_id
+    $project_root = (get_project $project_id).projectRoot
     
     Write-Error "create_venv should not be called for project $project_id"
     return
