@@ -9,7 +9,12 @@ from workstation1.lib.logging import debug
 
 def invoke_step(step: dict[str, Any], args: list[str]) -> None:
     parent_step_id = step['step_id']
-    debug(f"=>invoke_step.py {parent_step_id} {' '.join(args)}")
+    
+    if args and len(args) > 0:
+        debug(f"Running step {parent_step_id} with args: {args}")
+    else:
+        debug(f"Running step {parent_step_id}")
+
     base_name = os.path.join(step['dir'], f"{parent_step_id}")
     python_executable = 'python' if config['my_os'] == 'win' else 'python3'
     if os.path.exists(f"{base_name}.py"):
