@@ -14,17 +14,17 @@ function Get-Config {
         }
     }
 
-    $StatusFile = "$WORKING_DIR\dynamic_config\$Group\$Key.txt"
+    $ConfigFile = "$WORKING_DIR\dynamic_config\$Group\$Key.txt"
 
     if (!(Test-Path "$WORKING_DIR\dynamic_config\$Group" -PathType Container)) {
         return
     }
 
-    if (!(Test-Path $StatusFile)) {
+    if (!(Test-Path $ConfigFile)) {
         return
     }
 
-    $Value = Get-Content $StatusFile
+    $Value = Get-Content $ConfigFile
     return $Value
 }
 
@@ -55,10 +55,10 @@ function Set-Config {
         New-Item -ItemType Directory -Path "$WORKING_DIR\dynamic_config\$Group" | Out-Null
     }
 
-    $StatusFile = "$WORKING_DIR\dynamic_config\$Group\$Key.txt"
-    if (!(Test-Path $StatusFile)) {
-        New-Item -ItemType File -Path $StatusFile | Out-Null
+    $ConfigFile = "$WORKING_DIR\dynamic_config\$Group\$Key.txt"
+    if (!(Test-Path $ConfigFile)) {
+        New-Item -ItemType File -Path $ConfigFile | Out-Null
     }
 
-    Set-Content -Path $StatusFile -Value $Value
+    Set-Content -Path $ConfigFile -Value $Value
 }

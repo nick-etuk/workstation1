@@ -6,19 +6,34 @@ function edit_login_profile {
     }
 
     $StartBanner = "# workstation1_v$WS_VERSION start"
-    $Line1 = "`$global:WS_ROOT_WIN = '$WS_ROOT_WIN'"
-    $Line2 = "`$env:PATH += ';$WS_ROOT_WIN'"
-    $Line3 = "if (`$env:TERM_PROGRAM -and `$env:TERM_PROGRAM -ne 'Windows Terminal') { exit 0 }"
-    $Line4 = "`$WorkstationStartup = Get-Childitem -Path `$WS_ROOT_WIN -Include 'ws1.ps1' -File -Recurse -ErrorAction SilentlyContinue"
-    $Line5 = "& `$(`$WorkstationStartup.FullName)"
+    $Line1 = "`$global:WORKING_DIR = `"$HOME\.workstation1\working`""
+    $Line2 = "`$ConfigFile = `"$WORKING_DIR\dynamic_config\general\ws_root_win.txt`""
+    $Line3 = "if (!(Test-Path `"$WORKING_DIR\dynamic_config\general`" -PathType Container)) {"
+    $Line4 = "    write-output `"Workstation1 dynamic config directory not found at `$WORKING_DIR\dynamic_config\general`""
+    $Line5 = '    exit 0'
+    $Line6 = '}'
+    $Line7 = "if (!(Test-Path `$ConfigFile)) {"
+    $Line8 = "    write-output `"$ConfigFile not found`""
+    $Line9 = "    exit 0"
+    $Line10 = "}"
+    $Line11 = "`$global:WS_ROOT_WIN = (Get-Content `$ConfigFile).Trim()"
+    $Line12 = "write-output `"Workstation1 root set to `$WS_ROOT_WIN`""
+    $Line13 = "`$env:PATH += ';$WS_ROOT_WIN'"
+    $Line14 = "if (`$env:TERM_PROGRAM -and `$env:TERM_PROGRAM -ne 'Windows Terminal') { exit 0 }"
+    $Line15 = "`$WorkstationStartup = Get-Childitem -Path `$WS_ROOT_WIN -Include 'ws1.ps1' -File -Recurse -ErrorAction SilentlyContinue"
+    $Line16 = "if (`$null -eq `$WorkstationStartup) {"
+    $Line17 = "    Write-Output `"Could not find Workstation1 startup script ws1.ps1 in `$WS_ROOT_WIN`""
+    $Line18 = '    exit 0'
+    $Line19 = '}'
+    $Line20 = "& `$(`$WorkstationStartup.FullName)"
     $EndBanner = "# workstation1_v$WS_VERSION end"
-    $AdditionalContent = "$StartBanner`n$Line1`n$Line2`n$Line3`n$Line4`n$Line5`n$EndBanner`n"
+
+    $AdditionalContent = "$StartBanner`n$Line1`n$Line2`n$Line3`n$Line4`n$Line5`n$Line6`n$Line7`n$Line8`n$Line9`n$Line10`n$Line11`n$Line12`n$Line13`n$Line14`n$Line15`n$Line16`n$Line17`n$Line18`n$Line19`n$Line20`n$EndBanner`n"
     WriteDebug "Modifying profile $($profile.CurrentUserCurrentHost)"
     # WriteDebug $AdditionalContent
+
     Add-Content -Path $profile.CurrentUserCurrentHost -Value $AdditionalContent
     Get-Content -Path $profile.CurrentUserCurrentHost
     $env:PATH += ";$WS_ROOT_WIN"
 }
-# Set-PSDebug -Trace 1
 edit_login_profile
-# Set-PSDebug -Trace 0
