@@ -33,12 +33,9 @@ echo ''
 get_next_run_id
 LOG_DIR="$LOG_BASE/$RUN_ID"
 mkdir -p "$LOG_DIR"
-# mkdir -p "$WORKING_DIR/test_results"
 
 set_repo_dir
 
 DONE_DEPENDENCIES=()
-# show_ws_config
-# create_registries # now done in Python
 get_current_project
-# get_project_paths
+show_ws_config

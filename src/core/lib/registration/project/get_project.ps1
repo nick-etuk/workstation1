@@ -4,6 +4,16 @@ function get_project {
         [string]
         $ProjectID
     )
+
+    $DefaultProject = @{
+        project_id = "ws1"
+        projectRoot = "$WS_ROOT_WIN"
+    }
+
+    if ($ProjectID -eq "ws1") {
+        return $DefaultProject
+    }
+
     $ProjectRegistry = "$WORKING_DIR/project_registry.csv"
     if (!(Test-Path -Path $ProjectRegistry)) {
         WriteError "Project registry not found at $ProjectRegistry"
@@ -32,11 +42,12 @@ function get_project {
                 return
             }
             WriteDebug "Project config file found at $($ConfigFile.FullName)"
-            $Content = Get-Content $FilePath -ErrorAction SilentlyContinue | Out-String
+            $Content = Get-Content $ConfigFile.FullName -ErrorAction SilentlyContinue | Out-String
             $ProjectConfig = ConvertFrom-Json -InputObject $Content -ErrorAction SilentlyContinue
 
             if (!($ProjectConfig | Get-Member -Name 'projectRoot')) { 
-                $ProjectConfig.projectRoot = $ProjectWS1Root
+                # $ProjectConfig.projectRoot = $ProjectWS1Root
+                Add-Member -InputObject $ProjectConfig -MemberType NoteProperty -Name 'projectRoot' -Value $ProjectWS1Root
              }
              
             return $ProjectConfig

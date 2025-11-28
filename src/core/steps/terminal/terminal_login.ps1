@@ -4,17 +4,27 @@ if ($env:TERM_PROGRAM -and $env:TERM_PROGRAM -ne 'Windows Terminal') {
     exit 0
 }
 
-$StartupScript = Get-Childitem -Path "$WS_ROOT_WIN" -Include 'ws1.ps1' -File -Recurse -ErrorAction SilentlyContinue
-# . $($StartupScript.FullName)
-# $($StartupScript.Fullname)
-# if (!$($StartupScript.FullName)) {
-#     WriteWarn "Workstation startup script 'ws1.ps1' not found in $WS_ROOT_WIN"
-#     exit 0
-# }
-& $StartupScript
-# & $($StartupScript.FullName)
-
-$ExitPath = Get-Config current_exit_path
-if ($ExitPath -and (Test-Path -Path $ExitPath)) {
-    Set-Location -Path $ExitPath
+$init_script = Get-Childitem -Path "$WS_ROOT_WIN" -Include 'init.ps1' -Recurse
+if (-not $init_script) {
+    Write-Error "init.ps1 not found in $WS_ROOT_WIN. Aborting."
 }
+
+$Script:WS_ROOT_SCRIPT = $init_script.Directory
+
+# $new_tab_queue="$HOME/.workstation1/working/new_tab_queue"
+# if(Test-Path -PathType Container -Path $new_tab_queue) {
+#     $files = Get-ChildItem -Path $new_tab_queue
+#     $file_count = ($files | Measure-Object).Count
+#     if ($file_count -gt 0) {
+#         Write-Output "Tasks found in New Tab queue..."
+#         . $WS_ROOT_SCRIPT/init.ps1
+#         $oldest_file = $files | Sort-Object LastWriteTime | Select-Object -First 1
+#         process_new_tab_file $oldest_file.FullName
+#         return
+#     }
+# }
+
+$StartupScript = "$WS_ROOT_WIN/ws1.ps1"
+. $StartupScript
+# . $($StartupScript.FullName)
+

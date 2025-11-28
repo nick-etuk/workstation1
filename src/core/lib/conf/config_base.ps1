@@ -7,6 +7,8 @@ function Show-Config {
     WriteInfo "GCM_PATH_WSL: $GCM_PATH_WSL"
     WriteInfo "WS_ROOT_SCRIPT: $WS_ROOT_SCRIPT"
     WriteInfo "WS_ROOT_WIN: $WS_ROOT_WIN"
+    WriteInfo "CURRENT_PROJECT_ID: $CURRENT_PROJECT_ID"
+    WriteInfo "CURRENT_PROJECT_ROOT: $CURRENT_PROJECT_ROOT"
 }
 
 $FORCE = $false

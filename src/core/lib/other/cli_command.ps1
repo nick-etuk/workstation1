@@ -45,7 +45,7 @@ function ProcessCLIcommand([string]$Command, [string[]]$Arguments) {
 
     $StepConfig = get_step_config -StepID $Command
     if ($StepConfig) { 
-        RunStep -Step $Command -Arguments @() 
+        RunStep -StepID $Command -Arguments @() 
         return
     }
 }

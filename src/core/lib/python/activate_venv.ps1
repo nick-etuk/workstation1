@@ -1,4 +1,4 @@
-function activate_virtual_env($project_id) {
+function activate_venv($project_id) {
     if ($env:VIRTUAL_ENV) {
         if ($env:VIRTUAL_ENV -like "*$project_id*") {
             WriteInfo "Virtual environment for $project_id is already active."
