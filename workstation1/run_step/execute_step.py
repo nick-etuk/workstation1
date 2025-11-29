@@ -3,6 +3,7 @@ from datetime import datetime
 from typing import Any
 from workstation1.lib.config import config
 from workstation1.lib.config_dynamic import get_dynamic, set_dynamic
+from workstation1.run_step.schedule_step import schedule_step
 from workstation1.run_step.invoke_commands import invoke_commands
 from workstation1.run_step.load_step import load_step
 from workstation1.run_step.invoke_step import invoke_step
@@ -18,7 +19,6 @@ from workstation1.step_done.step_exit import step_exit
 def run_child_steps(parent_step: dict[str, Any], parent_args: list[str]) -> bool:
     if 'steps' not in parent_step:
         return True
-
     all_passed = True
     for child_step_row in parent_step['steps']:
         child_args: list[str] = []
@@ -34,10 +34,10 @@ def run_child_steps(parent_step: dict[str, Any], parent_args: list[str]) -> bool
         child_step = load_step(child_step_id)
         
         if child_step_args and len(child_step_args) > 0:
-            # debug(f"Running child step: {child_step['step_id']} with arguments: {child_step_args}")
+            debug(f"Running child step: {child_step['step_id']} with arguments: {child_step_args}")
             pass
         else:
-            # debug(f"Running child step: {child_step['step_id']}")
+            debug(f"Running child step: {child_step['step_id']}")
             pass
 
         status = execute_step(parent_step=child_step, parent_args=child_step_args, new_tab_active=False)
@@ -82,31 +82,24 @@ def execute_step(parent_step: dict[str, Any], parent_args: list[str], new_tab_ac
                 return True  # step already done
             else:
                 return False  # failed dependencies
-        
+            
+    if not new_tab_active and 'newTab' in parent_step and str(parent_step['newTab']).lower() == 'true':
+        schedule_step(step_id=parent_step_id, args=parent_args)
+        open_new_tab()
+        return True
+            
     all_passed = True
 
     if 'commands' in parent_step:
         invoke_commands(parent_step['commands'])
 
     all_passed = run_child_steps(parent_step=parent_step, parent_args=parent_args) and all_passed
+    debug(f"bp1 executing step after running child steps")
 
-    if not new_tab_active and 'newTab' in parent_step and str(parent_step['newTab']).lower() == 'true':
-        step_script = os.path.join(parent_step['dir'], f"{parent_step_id}.sh")
-        if os.path.exists(step_script):
-            date_str = datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
-            task_file_name = f"{parent_step_id}_{'_'.join(parent_args)}_{date_str}.txt"
-            task_file = os.path.join(config['working_dir'], "new_tab_queue", task_file_name)
-            # content = f"{parent_step_id}~{'~'.join(parent_args)}"
-            content = f"{step_script}~{'~'.join(parent_args)}"
-            with open(task_file, "w") as f:
-                f.write(f"{content}\n")
-            print(f"Added {parent_step_id} to new tab queue.")
-            open_new_tab()
-            # time.sleep(5)
-        return True
+    debug(f"bp2 new_tab_active: {new_tab_active}")
 
-    if not new_tab_active:
-        invoke_step(step=parent_step, args=parent_args)
+    # if not new_tab_active:
+    invoke_step(step=parent_step, args=parent_args)
 
     if not run_always:
         if not step_exit(step=parent_step, step_args=parent_args, new_tab_active=new_tab_active):

@@ -8,6 +8,8 @@ show_config_base() {
     echo "REPO_DIR: $REPO_DIR"
     echo "DEBUG: $DEBUG"
     echo "FORCE: $FORCE"
+    echo "CURRENT_PROJECT_ID: $CURRENT_PROJECT_ID"
+    echo "CURRENT_PROJECT_ROOT: $CURRENT_PROJECT_ROOT"
 }
 
 show_config_unix() {

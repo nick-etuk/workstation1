@@ -15,7 +15,11 @@ def invoke_step(step: dict[str, Any], args: list[str]) -> None:
     else:
         debug(f"Running step {parent_step_id}")
 
-    base_name = os.path.join(step['dir'], f"{parent_step_id}")
+    config_file = step['path']
+    # remove extension
+    base_name = os.path.splitext(config_file)[0]
+    debug(f"invoke_step: base_name={base_name}")
+    # base_name = os.path.join(step['dir'], f"{parent_step_id}")
     python_executable = 'python' if config['my_os'] == 'win' else 'python3'
     if os.path.exists(f"{base_name}.py"):
         step_script = f"{base_name}.py"
@@ -34,6 +38,7 @@ def invoke_step(step: dict[str, Any], args: list[str]) -> None:
     if config['my_os'] == 'win':
         startup_script = os.path.join(config['script_root'], "cli", "ws_run_step.ps1")
         step_script = ( f"{base_name}.ps1")
+        debug(f"running sub process pwsh {startup_script} {step_script} {' '.join(args)}")
         if os.path.exists(step_script):
             process = subprocess.run(['pwsh', '-ExecutionPolicy', 'Bypass', '-File', startup_script, step_script, *args])
             print(f"Step {parent_step_id} exited with code {process.returncode}. Output:")

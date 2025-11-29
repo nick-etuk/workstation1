@@ -1,30 +1,39 @@
+import os
 import sys
 from workstation1.registry.get_registries import get_registries
 from workstation1.menu.menu_main import show_menu_main
 from workstation1.cli.cli_command import cli_command
-# from workstation1.lib.get_new_tab_file import get_new_tab_file
+from workstation1.lib.get_new_tab_file import get_new_tab_file
+from workstation1.run_step.run_step import run_step
 
 # from icecream import ic
 
 def main():
-    # new_tab_file = get_new_tab_file()
-    # if new_tab_file:
-    #     print(f"=>ws.py file found in new_tab queue: {new_tab_file}")
-    #     with open(new_tab_file) as f:
-    #         content = f.readlines()
-    #     os.remove(new_tab_file)
+    project_registry, step_registry = get_registries()         
+
+    new_tab_file = get_new_tab_file()
+    if new_tab_file:
+        print(f"=>ws.py file found in new_tab queue: {new_tab_file}")
+        with open(new_tab_file) as f:
+            content = f.readlines()
+        os.remove(new_tab_file)
         
-    #     for line in content:
-    #         print(f"line: {line}")
-    #         commands = line.split('~')
-    #         run_command(project_registry=project_registry, step_registry=step_registry, args=commands, new_tab_active=True)
-    #     return
+        for line in content:
+            print(f"line: {line}")
+            parts = line.split('~')
+            step_id = parts[0]
+            args = parts[1:]
+
+            for step in step_registry:
+                if step['step_id'] == step_id:
+                    run_step(step_registry_entry=step, step_args=args, new_tab_active=True)
+                    break
+        return
     
     commands = sys.argv[1:]
     if not commands or all(cmd.strip() == '' for cmd in commands):
-            project_registry, step_registry = get_registries()            
-            show_menu_main(project_registry=project_registry, step_registry=step_registry)
-            sys.exit(0)
+        show_menu_main(project_registry=project_registry, step_registry=step_registry)
+        sys.exit(0)
 
     cli_command(args=commands)
 

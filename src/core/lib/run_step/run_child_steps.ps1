@@ -20,7 +20,7 @@ function RunChildSteps {
         
         $CombinedStepArgs = $ChildStepArgs -replace '\$\@', $ParentArgs
         WriteDebug "Child and parent args: $CombinedStepArgs"
-        if (!(RunStep -Step $ChildStepID -Arguments $CombinedStepArgs)) {
+        if (!(RunStep -StepID $ChildStepID -Arguments $CombinedStepArgs)) {
             $AllDone = 1
         }
     }

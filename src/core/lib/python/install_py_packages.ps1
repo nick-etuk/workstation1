@@ -7,9 +7,9 @@ function install_py_packages($project_id) {
     }
     if (-not (pip list | Select-String -Pattern $package_name)) {
         python -m pip install --upgrade pip
-        Write-Host "Installing $package_name packages..."
+        Write-output "Installing $package_name packages..."
         # pip install -r "$project_root/requirements.txt" # todo: fix this
-        Write-Host "Installing $package_name as an editable package at $project_root..."
+        Write-output "Installing $package_name as an editable package at $project_root..."
         pip install -e $project_root
     }
 }

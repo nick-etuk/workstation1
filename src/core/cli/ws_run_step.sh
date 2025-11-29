@@ -7,5 +7,5 @@ if [ -z "${INIT_UNIX+set}" ]; then
     . ./init.sh || exit 1
 fi
 
-simple_run_step "$@"
+run_step_simple "$@"
 exit 0

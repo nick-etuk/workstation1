@@ -45,3 +45,8 @@ fi
 
 startup_script="$WS_ROOT_UNIX/workstation1/ws.py"
 python3 "$startup_script" "$@"
+
+current_project_root=$(get_config 'current_project_root')
+if [ -n "$current_project_root" ] && [ -d "$current_project_root" ]; then
+    cd "$current_project_root" || exit 1
+fi
