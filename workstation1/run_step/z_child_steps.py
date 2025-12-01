@@ -18,7 +18,7 @@ def run_child_steps(parent_step: dict[str, Any], parent_args: list[str]) -> bool
                 child_args.append(arg)
         
         print(f"Running child step: {child_step} with arguments: {child_args}")
-        status = execute_step(parent_step=child_step, parent_args=child_args, new_tab_active=False)
+        status = execute_step(step=child_step, args=child_args, new_tab_active=False)
         if not status:
             info(f"Child step {child_step['title']} step failed")
             all_passed = False

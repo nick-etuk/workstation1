@@ -22,7 +22,6 @@ The menus contain activities for each of your major development projects.
 
 The controller that orchestrates the scripts is written in Python.
 
-
 # Getting started
 
 Clone this repo to wherever you keep your local repos.
@@ -58,6 +57,7 @@ Each project has a `ws1_project.json` file that defines its attibutes. Here is a
   "menu": "main"
 }
 ```
+
 You only need to set the `porjectRoot` if your `ws1` directory, containing your steps and ws1_project.json file, is not in your project's root directory.
 You might do this if you do not want your workstation configuration steps to be included in your project's git repo.
 
@@ -118,13 +118,12 @@ Each step has an expression called a "check". This is used to work out if the st
 The checks look like this:
 
 {
-  "dependencies": [],
-  "checks": {
-    "macos": ["command -v keybase | grep -q keybase"],
-    "ubuntu": ["true"]
-  }
+"dependencies": [],
+"checks": {
+"macos": ["command -v keybase | grep -q keybase"],
+"ubuntu": ["true"]
 }
-
+}
 
 The checks can be OS specific - macos, ubuntu, win. Unix means macos or ubuntu.
 The file name of the step, without the exension, must be unique across all projects.
@@ -134,7 +133,12 @@ Step files can be writen in bash shell script (.sh) or in Windows, in Powershell
 
 ## Other step properties
 
+**runOnce:** If true, the step will only be run if it has not been run before. This is usefull for installation or build process that take a long time and you don't want to run again unless necessary. Controlled through a file in the .workstation1 directory in the user's home directory.
 **runAlways:** Aways run the step without checking entry and exit checks. Dependencies and child steps are still executed.
+**exitTo:** The path to switch to when the step is completed. By default, this is relative to the project root directory.
+**newTab:** If true, the step will be run in a new terminal tab.
+**steps:** A list of child step Ids to run as part of this step.
+**isActive:** If false, the step will be ignored.
 
 ## Scope
 

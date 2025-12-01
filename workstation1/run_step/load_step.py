@@ -1,5 +1,6 @@
 import csv
 import json
+import os
 from typing import Any
 from workstation1.lib.config import config
 from workstation1.lib.logging import warn
@@ -13,7 +14,7 @@ def load_step(step_id: str) -> dict[str, Any]:
     
     with open(step_registry_file) as f:
         reader = csv.DictReader(f)
-        steps = [row for row in reader if row['step_id'] == step_id]
+        steps = [row for row in reader if (row['step_id'] == step_id or row['base_filename'] == step_id)]
         if not steps:
             warn(f"Step {step_id} not found in registry.")
             if input("Rescan step registry? (y/n): ").lower() == 'y':
@@ -25,8 +26,11 @@ def load_step(step_id: str) -> dict[str, Any]:
                 raise ValueError(f"Step {step_id} not found in registry")
         registry_entry = steps[0]
     
-    with open(registry_entry['path']) as f:
-        base_step = json.load(f)
+    base_step: dict[str, Any] = {}
+    config_file = os.path.join(registry_entry['path'], f"{registry_entry['base_filename']}.json")
+    if os.path.isfile(config_file):
+        with open(config_file) as f:
+            base_step = json.load(f)
 
     step = enrich_step(base_step=base_step, registry_entry=registry_entry)
     return step

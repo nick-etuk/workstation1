@@ -3,11 +3,11 @@ from pathlib import Path
 import csv
 from typing import Any
 import difflib
-
 from workstation1.lib.config import config
+from workstation1.registry.find_steps_without_config import find_steps_without_config
 from workstation1.registry.find_steps import find_steps
 from workstation1.lib.logging import info, warn
-from icecream import ic
+# from icecream import ic
 
 def update_step_registry(project_registry: list[dict[str, Any]]) -> None:
     info("Updating step registry")
@@ -18,30 +18,36 @@ def update_step_registry(project_registry: list[dict[str, Any]]) -> None:
         os.replace(step_registry_file, backup_file)
 
     combined_step_registry: list[dict[str, Any]] = []
-    ic(project_registry)
     for project in project_registry:
         info(f"Scanning {project['project_id']} at {project['path']}")
         if not os.path.exists(project['path']):
             warn(f"Project {project['project_id']} - path does not exist: {project['path']}")
             continue
-        # project_dir = Path(project['path']).parent
         project_dir = Path(project['path'])
-        step_registry = find_steps(project['project_id'], str(project_dir))
-        if not step_registry:
+        project_steps = find_steps(project['project_id'], str(project_dir))
+        if not project_steps:
             continue
-        info(f"Found {len(step_registry)} steps in {project['project_id']}")
-        combined_step_registry.extend(step_registry)
-
-    # project_dir = Path(config['script_root'])
-    step_registry = find_steps('core', config['script_root'])
-    if step_registry:
-        info(f"Found {len(step_registry)} steps in core")
-        combined_step_registry.extend(step_registry)
+        info(f"Found {len(project_steps)} steps in {project['project_id']}")
+        combined_step_registry.extend(project_steps)
     
+    core_steps = find_steps('core', config['script_root'])
+    if core_steps:
+        info(f"Found {len(core_steps)} steps in core")
+        combined_step_registry.extend(core_steps)
+
+    for project in project_registry:
+        if not os.path.exists(project['path']):
+            warn(f"Project {project['project_id']} - path does not exist: {project['path']}")
+            continue
+        project_dir = Path(project['path'])
+        steps_without_config = find_steps_without_config(project_id=project['project_id'], project_path=str(project_dir), existing_steps=combined_step_registry)
+        if not steps_without_config:
+            continue
+        combined_step_registry.extend(steps_without_config)
+
     combined_step_registry = sorted(combined_step_registry, key=lambda x: (x['sort_order']))
 
     with open(step_registry_file, 'w', newline='') as csvfile:
-        # fieldnames = combined_step_registry[0].keys() if combined_step_registry else ['step_id', 'sort_order', 'project_id', 'title', 'menu', 'step_file']
         fieldnames = combined_step_registry[0].keys()
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 
@@ -53,7 +59,8 @@ def update_step_registry(project_registry: list[dict[str, Any]]) -> None:
                 'project_id': step['project_id'],
                 'menu': step['menu'],
                 'title': step['title'],
-                'path': step['path'],
+                'base_filename': step['base_filename'],
+                'path': step['path']
             })
 
     if Path(step_registry_file).exists() and Path(backup_file).exists():

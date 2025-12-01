@@ -43,6 +43,9 @@ if ! pip list | grep -q 'workstation1'; then
     pip install -e "$WS_ROOT_UNIX"
 fi
 
+add_to_path
+add_aliases
+
 startup_script="$WS_ROOT_UNIX/workstation1/ws.py"
 python3 "$startup_script" "$@"
 

@@ -26,4 +26,3 @@ function add_to_path {
     # export PATH=$PATH:"$HOME/Library/Android/sdk/emulator"
     # export PATH=$PATH:"$HOME/Library/Android/sdk/platform-tools"
 }
-add_to_path
