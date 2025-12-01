@@ -30,4 +30,3 @@ function add_aliases {
         xit() { "$startup_script" xit "$@"; }
     fi
 }
-add_aliases

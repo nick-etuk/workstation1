@@ -23,15 +23,18 @@ if (-not $init_script) {
 }
 
 $Script:WS_ROOT_SCRIPT = $init_script.Directory
+. $init_script
 
-.  $WS_ROOT_SCRIPT\lib\other\logging.ps1
-.  $WS_ROOT_SCRIPT\lib\conf\config_dynamic.ps1
-.  $WS_ROOT_SCRIPT\lib\registration\project\get_project.ps1
-.  $WS_ROOT_SCRIPT\lib\python\create_venv.ps1
-.  $WS_ROOT_SCRIPT\lib\python\activate_venv.ps1
-.  $WS_ROOT_SCRIPT\lib\python\install_py_packages.ps1
+# .  $WS_ROOT_SCRIPT\lib\other\logging.ps1
+# .  $WS_ROOT_SCRIPT\lib\conf\config_dynamic.ps1
+# .  $WS_ROOT_SCRIPT\lib\registration\project\get_project.ps1
+# .  $WS_ROOT_SCRIPT\lib\python\create_venv.ps1
+# .  $WS_ROOT_SCRIPT\lib\python\activate_venv.ps1
+# .  $WS_ROOT_SCRIPT\lib\python\install_py_packages.ps1
 
-& $WS_ROOT_SCRIPT\vm\dev_box\unschedule_first_login.ps1
+# & $WS_ROOT_SCRIPT\vm\dev_box\unschedule_first_login.ps1
+"$WS_ROOT_SCRIPT\vm\dev_box\unschedule_first_login.ps1"
+add_aliases
 
 # todo: decide how to manage venvs
 # create_venv 'ws1'

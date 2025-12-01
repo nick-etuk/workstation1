@@ -1,5 +1,3 @@
-import os
-from datetime import datetime
 from typing import Any
 from workstation1.lib.config import config
 from workstation1.lib.config_dynamic import get_dynamic, set_dynamic
@@ -16,7 +14,7 @@ from workstation1.step_done.step_exit import step_exit
 # from icecream import ic
 
 
-def run_child_steps(parent_step: dict[str, Any], parent_args: list[str]) -> bool:
+def run_child_steps(parent_step: dict[str, Any], parent_args: list[str], parent_overrides: list[str]) -> bool:
     if 'steps' not in parent_step:
         return True
     all_passed = True
@@ -35,74 +33,78 @@ def run_child_steps(parent_step: dict[str, Any], parent_args: list[str]) -> bool
         
         if child_step_args and len(child_step_args) > 0:
             debug(f"Running child step: {child_step['step_id']} with arguments: {child_step_args}")
-            pass
         else:
             debug(f"Running child step: {child_step['step_id']}")
-            pass
 
-        status = execute_step(parent_step=child_step, parent_args=child_step_args, new_tab_active=False)
+        status = execute_step(step=child_step, args=child_step_args, overrides=parent_overrides, new_tab_active=False)
         if not status:
             all_passed = False
     return all_passed
 
-def execute_step(parent_step: dict[str, Any], parent_args: list[str], new_tab_active: bool = False) -> bool:
-    parent_step_id = parent_step['step_id']
+def execute_step(step: dict[str, Any], args: list[str], overrides: list[str], new_tab_active: bool = False) -> bool:
+    step_id = step['step_id']
 
-    if 'os' in parent_step:
-        if parent_step['os'] != config['my_os'] and parent_step['os'] != 'unix':
-            print(f"Step {parent_step_id} not for {config['my_os']}")
-            return True
+    if 'os' in step and step['os'] != config['my_os'] and step['os'] != 'unix':
+        print(f"Step {step_id} not for {config['my_os']}")
+        return True
     
-    run_once = False
-    key = f"step_{parent_step_id}"
-    if 'runOnce' in parent_step and str(parent_step['runOnce']).lower() == 'true':
-        run_once = True
-        if len(parent_args) > 0:
-            fomatted_args = "_".join(parent_args)
-            key = f"step_{parent_step_id}_{fomatted_args}"
-
-        status = get_dynamic(key, 'status')
-
-        if status == 'done':
-            info(f"{parent_step['title']} (run once) step already done")
-            return True
+    if 'isActive' in step and str(step['isActive']).lower() == 'false':
+        info(f"Step {step_id} is inactive")
+        return True
 
     run_always = False
-    if 'runAlways' in parent_step and str(parent_step['runAlways']).lower() == 'true':
+    if ('runAlways' in step and str(step['runAlways']).lower() == 'true'):
         run_always = True
-        debug(f"runAlways is true for step {parent_step_id}")
-        if not check_dependencies(parent_step, parent_args):
-            debug(f"{parent_step['title']} failed dependencies")
+        debug(f"runAlways is true for step {step_id}")
+        if 'dependencies' not in overrides and not check_dependencies(step, args):
+            debug(f"{step['title']} failed dependencies")
             return False
-    else:
-        # if not step_entry(step=parent_step, step_args=parent_args):
-        ok_to_proceed = step_entry(step=parent_step, step_args=parent_args)
+    
+    if not run_always and 'dependencies' not in overrides:
+        ok_to_proceed = step_entry(step=step, step_args=args)
         if ok_to_proceed['status'] is False:
             if ok_to_proceed['reason'] == 'done':
                 return True  # step already done
             else:
                 return False  # failed dependencies
+    
+    run_once = False
+    key = f"step_{step_id}"
+    if 'runOnce' in step and str(step['runOnce']).lower() == 'true':
+        run_once = True
+        if len(args) > 0:
+            fomatted_args = "_".join(args)
+            key = f"step_{step_id}_{fomatted_args}"
+
+        status = get_dynamic(key, 'status')
+
+        if status == 'done':
+            info(f"{step['title']} (run once) step already done")
+            if 'runonce' in overrides:
+                info(f"Overriding run once for step {step_id}")
+            else:
+                return True
             
-    if not new_tab_active and 'newTab' in parent_step and str(parent_step['newTab']).lower() == 'true':
-        schedule_step(step_id=parent_step_id, args=parent_args)
+    if not new_tab_active and 'newTab' in step and str(step['newTab']).lower() == 'true':
+        schedule_step(step_id=step_id, args=args)
         open_new_tab()
         return True
             
     all_passed = True
 
-    if 'commands' in parent_step:
-        invoke_commands(parent_step['commands'])
+    if 'commands' in step:
+        invoke_commands(step['commands'])
 
-    all_passed = run_child_steps(parent_step=parent_step, parent_args=parent_args) and all_passed
-    debug(f"bp1 executing step after running child steps")
+    all_passed = run_child_steps(parent_step=step, parent_args=args, parent_overrides=overrides) and all_passed
+    debug("bp1 executing step after running child steps")
 
     debug(f"bp2 new_tab_active: {new_tab_active}")
 
     # if not new_tab_active:
-    invoke_step(step=parent_step, args=parent_args)
+    invoke_step(step=step, args=args)
 
     if not run_always:
-        if not step_exit(step=parent_step, step_args=parent_args, new_tab_active=new_tab_active):
+        if not step_exit(step=step, step_args=args, new_tab_active=new_tab_active):
             all_passed = False
 
     if all_passed:
@@ -110,8 +112,8 @@ def execute_step(parent_step: dict[str, Any], parent_args: list[str], new_tab_ac
             set_dynamic(key, 'done', 'status')
     else:
         if new_tab_active:
-            info(f"{parent_step['title']} step failed in new tab")
+            info(f"{step['title']} step failed in new tab")
         else:
-            info(f"{parent_step['title']} step failed")
+            info(f"{step['title']} step failed")
 
     return all_passed

@@ -8,7 +8,7 @@ from workstation1.cli.list_steps import list_steps
 
 # from icecream import ic
 
-def cli_command(args: list[str], new_tab_active: bool = False):
+def cli_command(args: list[str]):
     command = args[0].lower()
     command_args = args[1:]
 
@@ -37,5 +37,5 @@ def cli_command(args: list[str], new_tab_active: bool = False):
     for step in step_registry:
         if step['step_id'] == command:
             set_current_project(project_registry=project_registry, step_registry_entry=step)
-            run_step(step_registry_entry=step, step_args=command_args, new_tab_active=new_tab_active)
+            run_step(step_registry_entry=step, step_args=command_args, overrides=['runonce'], new_tab_active=False)
             return
