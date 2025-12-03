@@ -15,17 +15,21 @@ setopt shwordsplit
 libraries=(
     get_shell_version 
     detect_os
-    logging
-    config_dynamic 
-    split_string 
-    get_first_activity 
+    add_to_path # must be called outside ws1.sh
+    add_aliases # must be called outside ws1.sh
+    # logging
+    # config_dynamic 
+    # split_string 
+    # get_first_activity 
     # get_project_paths
-    config_base
-    simple_run_step
-    process_new_tab_file
+    # config_base
+    # simple_run_step
+    # process_new_tab_file
 )
-script=$(find "$WS_ROOT_UNIX" -name "init.sh" -type f -not -path '.venv_ws1/*')
-WS_ROOT_SCRIPT=$(dirname "$script")
+init_script=$(find "$WS_ROOT_UNIX" -name "init.sh" -type f -not -path '.venv_ws1/*')
+WS_ROOT_SCRIPT=$(dirname "$init_script")
+export WS_ROOT_SCRIPT
+
 for lib in "${libraries[@]}"; do
     script=$(find "$WS_ROOT_SCRIPT" -name "$lib.sh" -type f)
     . "$script"
@@ -34,9 +38,10 @@ done
 get_shell_version
 detect_os
 echo "Terminal Shell is $SHELL_NAME version $SHELL_VERSION on $MY_OS"
-
-EDITOR="$(command -v nano || command -v vi || command -v vim || echo "/usr/bin/nano")"
-export EDITOR
+add_to_path
+add_aliases
+# EDITOR="$(command -v nano || command -v vi || command -v vim || echo "/usr/bin/nano")"
+# export EDITOR
 # . "$WS_ROOT_UNIX/src/core/steps/environment/unix/add_to_path.sh"
 # . "$WS_ROOT_UNIX/src/core/steps/environment/unix/add_aliases.sh"
 

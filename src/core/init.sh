@@ -34,8 +34,8 @@ get_next_run_id
 LOG_DIR="$LOG_BASE/$RUN_ID"
 mkdir -p "$LOG_DIR"
 
-set_repo_dir
+# set_repo_dir todo: delete if unused
 
-DONE_DEPENDENCIES=()
-get_current_project
+# DONE_DEPENDENCIES=()
+get_context
 show_ws_config

@@ -63,9 +63,9 @@ def set_current_project(project_registry: list[dict[str, Any]], step_registry_en
     project_found = False
     for project in project_registry:
         ic(project)
-        ic(step)
-        if project['project_id'] == step['project_id']:
+        ic(step_registry_entry)
+        if project['project_id'] == step_registry_entry['project_id']:
             project_found = True
             set_project_root(project, step)
     if not project_found:
-        warn(f"Project id {step['project_id']} not found in project registry. Could not set current project root.")    
+        warn(f"Project id {step_registry_entry['project_id']} not found in project registry. Could not set current project root.")    

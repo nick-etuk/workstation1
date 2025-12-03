@@ -73,7 +73,7 @@ class TestExecuteStep(unittest.TestCase):
             execute_step(self.registry_entry, ['arg1'])
             self.assertTrue(mock_run.called)
             args_passed = mock_run.call_args[0][0]
-            self.assertIn(f"{config['script_root']}/cli/ws_run_step.sh", args_passed)
+            self.assertIn(f"{config['script_root']}/cli/ws_run_step_script.sh", args_passed)
             self.assertIn('/tmp/sample_step/sample_step.sh', args_passed)
 
     @patch('builtins.open')
