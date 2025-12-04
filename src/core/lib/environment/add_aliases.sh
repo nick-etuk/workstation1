@@ -8,6 +8,8 @@ function add_aliases {
 
     alias gch='git checkout'
     alias gs='git status'
+    # alias gls='git log --show-signature --oneline --graph --decorate --all'
+    alias gls='git log --show-signature'
 
     alias cd..='cd ../'
     alias ..='cd ../'
@@ -29,4 +31,7 @@ function add_aliases {
         and() { "$startup_script" and "$@"; }
         xit() { "$startup_script" xit "$@"; }
     fi
+
+    EDITOR="$(command -v nano || command -v vi || command -v vim || echo "/usr/bin/nano")"
+    export EDITOR
 }

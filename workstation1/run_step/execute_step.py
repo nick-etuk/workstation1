@@ -52,38 +52,42 @@ def execute_step(step: dict[str, Any], args: list[str], overrides: list[str], ne
         info(f"Step {step_id} is inactive")
         return True
 
+    if 'dependencies' not in overrides and not check_dependencies(step, args):
+        debug(f"{step['title']} failed dependencies")
+        return False
+    
     run_always = False
     if ('runAlways' in step and str(step['runAlways']).lower() == 'true'):
         run_always = True
         debug(f"runAlways is true for step {step_id}")
-        if 'dependencies' not in overrides and not check_dependencies(step, args):
-            debug(f"{step['title']} failed dependencies")
-            return False
-    
-    if not run_always and 'dependencies' not in overrides:
-        ok_to_proceed = step_entry(step=step, step_args=args)
-        if ok_to_proceed['status'] is False:
-            if ok_to_proceed['reason'] == 'done':
-                return True  # step already done
-            else:
-                return False  # failed dependencies
-    
+
+    step_key = f"step_{step_id}"
+
+    if len(args) > 0:
+        fomatted_args = "_".join(args)
+        step_key = f"step_{step_id}_{fomatted_args}"
+
     run_once = False
-    key = f"step_{step_id}"
+    status = None
     if 'runOnce' in step and str(step['runOnce']).lower() == 'true':
         run_once = True
-        if len(args) > 0:
-            fomatted_args = "_".join(args)
-            key = f"step_{step_id}_{fomatted_args}"
-
-        status = get_dynamic(key, 'status')
+        status = get_dynamic(step_key, 'status')
 
         if status == 'done':
-            info(f"{step['title']} (run once) step already done")
             if 'runonce' in overrides:
                 info(f"Overriding run once for step {step_id}")
             else:
                 return True
+            
+    if not run_always and 'dependencies' not in overrides:
+        ok_to_proceed = step_entry(step=step, step_args=args)
+        if ok_to_proceed['status'] is False:
+            if ok_to_proceed['reason'] == 'done':
+                if run_once and status != 'done':
+                    set_dynamic(step_key, 'done', 'status')
+                return True  # step already done
+            else:
+                return False  # failed dependencies
             
     if not new_tab_active and 'newTab' in step and str(step['newTab']).lower() == 'true':
         schedule_step(step_id=step_id, args=args)
@@ -109,7 +113,7 @@ def execute_step(step: dict[str, Any], args: list[str], overrides: list[str], ne
 
     if all_passed:
         if run_once:
-            set_dynamic(key, 'done', 'status')
+            set_dynamic(step_key, 'done', 'status')
     else:
         if new_tab_active:
             info(f"{step['title']} step failed in new tab")

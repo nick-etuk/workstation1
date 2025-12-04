@@ -6,8 +6,6 @@ from workstation1.step_done.get_checks import get_checks
 # from icecream import ic
 
 def check_step_done(step: dict[str, Any], step_args: list[str], calling_function: str) -> bool:
-    # todo: check if FORCE mode is enabled
-
     if not check_docker('containers', step, calling_function):
         return False
     

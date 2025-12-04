@@ -40,7 +40,7 @@ if (Test-Path variable:DEBUG) {
     }
 }
 
-get_current_project
+get_context
 Show-Config
 # create_registries
 

@@ -37,5 +37,6 @@ def cli_command(args: list[str]):
     for step in step_registry:
         if step['step_id'] == command:
             set_current_project(project_registry=project_registry, step_registry_entry=step)
-            run_step(step_registry_entry=step, step_args=command_args, overrides=['runonce'], new_tab_active=False)
+            # run_step(step_registry_entry=step, step_args=command_args, overrides=['runonce'], new_tab_active=False)
+            run_step(step_registry_entry=step, step_args=command_args, overrides=[], new_tab_active=False)
             return

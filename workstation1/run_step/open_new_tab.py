@@ -16,7 +16,7 @@ def open_new_tab():
     
     # startup_script = os.path.join(config['ws_root'], 'ws1.sh')
     if config['vm'] == 'wsl':
-        debug(f"WSL detected, opening new Windows Terminal tab with script")
+        debug("WSL detected, opening new Windows Terminal tab with script")
         subprocess.run(['wt.exe', '-w', '0', 'new-tab', '--colorScheme', 'Campbell Powershell', '--title', 'Workstation1', '-p', 'Ubuntu'], env=my_env)
         return
     

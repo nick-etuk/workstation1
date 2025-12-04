@@ -1,15 +1,27 @@
 #!/usr/bin/env bash
 # shellcheck disable=SC1091
 
-script_dir=$(dirname "$(realpath "$0")")
-cd "$script_dir" || exit
+current_dir=$(dirname "$(realpath "$0")")
+cd "$current_dir" || exit
 
 
 if [ -z "${WS_ROOT_UNIX+set}" ]; then
     echo 'Setting WS_ROOT_UNIX manually.'
     echo 'printenv | grep WS_ROOT_UNIX:'
     printenv | grep WS_ROOT_UNIX
-    WS_ROOT_UNIX="$script_dir"
+    WS_ROOT_UNIX="$current_dir"
+fi
+
+if [ -z "${WS_ROOT_SCRIPT+set}" ]; then
+    echo 'ws1.sh setting WS_ROOT_SCRIPT'
+    init_script=$(find "$WS_ROOT_UNIX" -name 'init.sh' -not -path '.venv_ws1/*')
+    WS_ROOT_SCRIPT=$(dirname "$init_script")
+fi
+
+if [ -z "${INIT_UNIX+set}" ]; then
+    echo 'ws1.sh sourcing init.sh'
+    init_script="$WS_ROOT_SCRIPT/init.sh"
+    [ -f "$init_script" ] && source "$init_script"
 fi
 
 # todo: run check_for_os_updates.sh, install_pyenv, install_venv, setup_terminal.sh here
