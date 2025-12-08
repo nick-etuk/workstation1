@@ -17,7 +17,7 @@ function add_to_path {
     for new_path in "${paths_to_add[@]}"; do
         if [[ ! $PATH == *$new_path* ]]; then
             export PATH="$PATH:$new_path"
-            # echo "Added $new_path to path"
+            echo "Added $new_path to path"
         fi
     done
 

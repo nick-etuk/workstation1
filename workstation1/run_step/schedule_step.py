@@ -1,6 +1,7 @@
 import os
 from datetime import datetime
 from workstation1.lib.config import config
+from workstation1.lib.logging import log
 
 def schedule_step(step_id: str, args: list[str]) -> None:
     date_str = datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
@@ -9,5 +10,5 @@ def schedule_step(step_id: str, args: list[str]) -> None:
     content = f"{step_id}~{'~'.join(args)}"
     with open(task_file, "w") as f:
         f.write(f"{content}\n")
-    print(f"Added {step_id} to new tab queue.")
+    log.info(f"Added {step_id} to new tab queue.")
     

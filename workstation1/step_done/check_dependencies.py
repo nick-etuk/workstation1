@@ -35,10 +35,8 @@ def check_dependencies(step: dict[str, Any], args: list[str]) -> bool:
     
     # Check serial dependencies before parallel ones
     if not check_steps(parallel_mode=False, steps=serial_steps, args=args):
-        warn(f"Step {step['step_id']} not attempted")
         return False
     if not check_steps(parallel_mode=True, steps=parallel_steps, args=args):
-        warn(f"Step {step['step_id']} not attempted")
         return False
     
     return True

@@ -1,6 +1,6 @@
 from typing import Any
 from workstation1.step_done.check_dependencies import check_dependencies
-from workstation1.lib.logging import info
+from workstation1.lib.logging import log
 from workstation1.step_done.check_step_done import check_step_done
 from workstation1.step_done.get_checks import get_checks
 
@@ -16,7 +16,7 @@ def step_entry(step: dict[str, Any], step_args: list[str]) -> dict[str, Any]:
         return ok_to_proceed
 
     if check_step_done(step=step, step_args=step_args, calling_function='step_entry'):
-        info(f"{step['title']} step already done")
+        log.info(f"{step['title']} step already done")
         ok_to_proceed['status'] = False
         ok_to_proceed['reason'] = 'done'
         return ok_to_proceed

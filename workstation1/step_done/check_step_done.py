@@ -2,10 +2,14 @@ from typing import Any
 from workstation1.lib.logging import info, warn
 from workstation1.run_step.invoke_commands import invoke_commands
 from workstation1.step_done.check_docker_containers import check_docker
+from workstation1.step_done.check_run_once import check_run_once
 from workstation1.step_done.get_checks import get_checks
 # from icecream import ic
 
 def check_step_done(step: dict[str, Any], step_args: list[str], calling_function: str) -> bool:
+    if check_run_once(step=step, args=step_args, overrides=[]):
+        return True
+    
     if not check_docker('containers', step, calling_function):
         return False
     

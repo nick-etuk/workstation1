@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# shellcheck disable=SC1091
+# shellcheck disable=SC1091,SC1090
 
 current_dir=$(dirname "$(realpath "$0")")
 cd "$current_dir" || exit
@@ -60,8 +60,3 @@ add_aliases
 
 startup_script="$WS_ROOT_UNIX/workstation1/ws.py"
 python3 "$startup_script" "$@"
-
-current_project_root=$(get_config 'current_project_root')
-if [ -n "$current_project_root" ] && [ -d "$current_project_root" ]; then
-    cd "$current_project_root" || exit 1
-fi
