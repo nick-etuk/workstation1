@@ -11,7 +11,7 @@ def sort_order(project_id: str) -> float:
 def make_step_title(step_id: str) -> str:
     return step_id.replace('_', ' ').capitalize()
 
-def find_steps(project_id: str, project_path: str) -> list[dict[str, Any]] | None:
+def find_steps(project_id: str, project_path: str) -> list[dict[str, Any]]:
     # todo: find steps without config files, prevent duplicate step_ids across all projects
     step_dir = Path(project_path) / 'ws1' / 'steps'
     if not step_dir.exists() or not step_dir.is_dir():

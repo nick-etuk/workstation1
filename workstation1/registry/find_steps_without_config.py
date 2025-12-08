@@ -10,7 +10,7 @@ def sort_order(project_id: str) -> float:
 def make_step_title(step_id: str) -> str:
     return step_id.replace('_', ' ').capitalize()
 
-def find_steps_without_config(project_id: str, project_path: str, existing_steps: list[dict[str, Any]]) -> list[dict[str, Any]] | None:
+def find_steps_without_config(project_id: str, project_path: str, existing_steps: list[dict[str, Any]]) -> list[dict[str, Any]]:
     step_dir = Path(project_path) / 'ws1' / 'steps'
     if not step_dir.exists() or not step_dir.is_dir():
         step_dir = Path(project_path) / 'steps'

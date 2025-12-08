@@ -2,7 +2,7 @@ import os
 from workstation1.lib.config import config
 
 
-def get_dynamic(key:str, group: str='general') -> str|None:
+def get_dynamic(key:str, group: str='general') -> str:
     """Get a dynamic configuration value from the filesystem."""
     
     key = key.strip().lower()
@@ -10,11 +10,12 @@ def get_dynamic(key:str, group: str='general') -> str|None:
 
     config_dir = os.path.join(config['working_dir'], "dynamic_config", group)
     if not os.path.isdir(config_dir):
-        return None
+        return ''
 
     status_file = os.path.join(config_dir, f"{key}.txt")
     if not os.path.isfile(status_file):
-        return None
+        return ''
+    
     with open(status_file) as f:
         value = f.read().strip()
     return value

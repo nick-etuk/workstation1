@@ -38,4 +38,5 @@ mkdir -p "$LOG_DIR"
 
 # DONE_DEPENDENCIES=()
 get_context
-show_ws_config
+# show_ws_config
+echo "SHELL:                    $SHELL_NAME version: $SHELL_VERSION"

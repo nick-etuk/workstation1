@@ -1,7 +1,7 @@
 from typing import Any
 import subprocess
 from workstation1.lib.config import config
-from workstation1.lib.logging import debug
+from workstation1.lib.logging import log
 
 
 def invoke_commands(commands: list[str]) -> bool:
@@ -19,9 +19,11 @@ def invoke_commands(commands: list[str]) -> bool:
             text=True)
     
     if process.returncode != 0:
-        debug(f"commands: {','.join(commands)}")
-        debug(f"Result: {process.returncode}")
-        debug(f"output: {process.stdout}")
+        log.debug(f"commands: {','.join(commands)}")
+        log.debug(f"Result: {process.returncode}")
+        log.debug('=> stdout start:')
+        log.debug(process.stdout)
+        log.debug('<= stdout end')
         return False
     
     return True

@@ -1,5 +1,5 @@
 from typing import Any
-from workstation1.lib.logging import warn
+from workstation1.lib.logging import log
 from workstation1.step_done.check_step_done import check_step_done
 
 def step_exit(step: dict[str, Any], step_args: list[str], new_tab_active: bool = False):
@@ -7,7 +7,7 @@ def step_exit(step: dict[str, Any], step_args: list[str], new_tab_active: bool =
         return True
 
     if not check_step_done(step=step, step_args=step_args, calling_function='step_exit'):
-        warn(f"{step['title']} step failed")
+        log.warn(f"{step['title']} step failed")
         return False
     
     return True

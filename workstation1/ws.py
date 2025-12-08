@@ -1,5 +1,6 @@
 import os
 import sys
+from workstation1.lib.show_config import show_config
 from workstation1.registry.get_registries import get_registries
 from workstation1.menu.menu_main import show_menu_main
 from workstation1.cli.cli_command import cli_command
@@ -31,6 +32,7 @@ def main():
     
     commands = sys.argv[1:]
     if not commands or all(cmd.strip() == '' for cmd in commands):
+        show_config()
         show_menu_main(project_registry=project_registry, step_registry=step_registry)
         sys.exit(0)
 

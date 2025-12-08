@@ -14,6 +14,7 @@ static_config: dict[str, Any] = {
     'working_dir_name': 'working',
     'new_tab_dir_name': 'new_tab_queue',
     'debug': True,
+    'indentation': '    ',
     }
 
 ws_root = Path(python_root).parent

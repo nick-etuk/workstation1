@@ -15,16 +15,10 @@ setopt shwordsplit
 libraries=(
     get_shell_version 
     detect_os
+    config_dynamic 
     add_to_path # must be called outside ws1.sh
     add_aliases # must be called outside ws1.sh
-    # logging
-    # config_dynamic 
-    # split_string 
-    # get_first_activity 
-    # get_project_paths
-    # config_base
-    # simple_run_step
-    # process_new_tab_file
+    config_base # source this last as it is a script, not a function
 )
 init_script=$(find "$WS_ROOT_UNIX" -name "init.sh" -type f -not -path '.venv_ws1/*')
 WS_ROOT_SCRIPT=$(dirname "$init_script")
@@ -64,6 +58,11 @@ startup_script="$WS_ROOT_UNIX/ws1.sh"
 [ -f "$startup_script" ]  || return
 
 "$startup_script"
+
+current_project_root=$(get_config 'current_project_root')
+if [ -n "$current_project_root" ] && [ -d "$current_project_root" ]; then
+    cd "$current_project_root" || exit 1
+fi
 
 set +u
 

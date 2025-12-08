@@ -41,6 +41,6 @@ if (Test-Path variable:DEBUG) {
 }
 
 get_context
-Show-Config
+# Show-Config
 # create_registries
 
