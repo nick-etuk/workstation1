@@ -1,5 +1,5 @@
 from typing import Any
-from workstation1.lib.logging import warn
+from workstation1.lib.logging import log
 from workstation1.run_step.load_step import load_step
 from workstation1.step_done.check_step_done import check_step_done
 from workstation1.step_done.wait_for_parallel import wait_for_parallel
@@ -14,7 +14,7 @@ def check_steps(parallel_mode:bool, steps: list[dict[str, Any]], args: list[str]
             if check_step_done(step=step, step_args=args, calling_function='check_dependencies'):
                 continue
 
-        warn(f"Dependency {step['step_id']} is not done")
+        log.warn(f"Dependency {step['step_id']} is not done")
         return False
     
     return True

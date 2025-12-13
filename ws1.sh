@@ -19,7 +19,6 @@ if [ -z "${WS_ROOT_SCRIPT+set}" ]; then
 fi
 
 if [ -z "${INIT_UNIX+set}" ]; then
-    echo 'ws1.sh sourcing init.sh'
     init_script="$WS_ROOT_SCRIPT/init.sh"
     [ -f "$init_script" ] && source "$init_script"
 fi

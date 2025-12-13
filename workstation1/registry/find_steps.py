@@ -1,5 +1,5 @@
 import json
-from logging import debug
+from logging import log
 from pathlib import Path
 from typing import Any
 
@@ -21,7 +21,7 @@ def find_steps(project_id: str, project_path: str) -> list[dict[str, Any]]:
             return None
 
     if step_dir == Path('conf/project_template'):
-        debug(f"Skipping project template steps in {step_dir}")
+        log.debug(f"Skipping project template steps in {step_dir}")
         return
     
     step_registry: list[dict[str, Any]] = []

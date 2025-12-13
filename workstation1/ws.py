@@ -1,5 +1,7 @@
 import os
 import sys
+
+from icecream import ic
 from workstation1.lib.show_config import show_config
 from workstation1.registry.get_registries import get_registries
 from workstation1.menu.menu_main import show_menu_main
@@ -19,10 +21,12 @@ def main():
         os.remove(new_tab_file)
         
         for line in content:
-            print(f"line: {line}")
+            line = line.strip()
+            print(f"line:>{line}<")
             parts = line.split('~')
             step_id = parts[0]
             args = parts[1:]
+            ic(args)
 
             for step in step_registry:
                 if step['step_id'] == step_id:

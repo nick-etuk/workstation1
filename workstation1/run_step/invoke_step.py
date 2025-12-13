@@ -3,7 +3,7 @@ from typing import Any
 import os
 import subprocess
 from workstation1.lib.config import config
-from workstation1.lib.logging import debug
+from workstation1.lib.logging import log
 # from icecream import ic
 
 
@@ -11,9 +11,9 @@ def invoke_step(step: dict[str, Any], args: list[str]) -> None:
     parent_step_id = step['step_id']
     
     if args and len(args) > 0:
-        debug(f"Running step {parent_step_id} with args: {args}")
+        log.debug(f"Running step {parent_step_id} with args: {args}")
     else:
-        debug(f"Running step {parent_step_id}")
+        log.debug(f"Running step {parent_step_id}")
     
     base_filename = os.path.join(step['path'], f"{step['base_filename']}")
     python_executable = 'python' if config['my_os'] == 'win' else 'python3'
@@ -34,19 +34,20 @@ def invoke_step(step: dict[str, Any], args: list[str]) -> None:
     if config['my_os'] == 'win':
         startup_script = os.path.join(config['script_root'], "cli", "ws_run_step_script.ps1")
         step_script = f"{base_filename}.ps1"
-        debug(f"running sub process pwsh {startup_script} {step_script} {' '.join(args)}")
+        log.debug(f"running sub process pwsh {startup_script} {step_script} {' '.join(args)}")
         if os.path.exists(step_script):
             process = subprocess.run(['pwsh', '-ExecutionPolicy', 'Unrestricted', '-File', startup_script, step_script, *args])
-            print(f"Step {parent_step_id} exited with code {process.returncode}. Output:")
-            print(process.stdout)
+            if process.returncode != 0:
+                log.info(f"Step {parent_step_id} exited with code {process.returncode}. Output:")
+                log.info(process.stdout)
         return
     
     startup_script = os.path.join(config['script_root'], "cli", "ws_run_step_script.sh")
     step_script = f"{base_filename}.sh"
     if os.path.exists(step_script):
-        debug(f"invoke_step running script {step_script} {' '.join(args)}")
+        log.debug(f"invoke_step running script {step_script} {' '.join(args)}")
         # process = subprocess.run([startup_script, step_script]+ args, shell=True, executable='/usr/local/bin/zsh')
         process = subprocess.run(['bash', startup_script, step_script]+ args)
         if process.returncode != 0:
-            debug(f"=>invoke_step.py: step {parent_step_id} failed with code {process.returncode}. Output:")
-            debug(process.stdout)
+            log.warn(f"Step {parent_step_id} failed with code {process.returncode}. Output:")
+            log.info(process.stdout)

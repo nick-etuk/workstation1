@@ -37,7 +37,7 @@ failure_symbol = u'\u2718'
 success_messages = ['step completed', 'already done']
 failure_messages = ['step failed', 'not attempted']
 
-
+'''
 def info(message: str, indent: int = 0):
     print(f"{indentation * (indent + 1)}{message}")
 
@@ -50,7 +50,7 @@ def error(message: str, indent: int = 0):
 def debug(message: str, indent: int = 0):
     if config['debug']:
         print(f"{indentation * (indent + 1)}{message}")
-
+'''
 
 class Logger:
     '''
@@ -79,7 +79,8 @@ class Logger:
         if msg['level'] == Level.HEADER:
             print(f"{indentation * (msg['indent'])}{Colours.OKGREEN}{msg['message']}{Colours.ENDC}")
             return
-            
+
+        # print(f"indent level: {msg['indent']}")          
         print(f"{indentation * (msg['indent'])}{msg['message']}")
 
     def begin(self, message: str):
@@ -104,14 +105,20 @@ class Logger:
         self.show(msg)
 
     def info(self, message: str):
-        msg = {'level': Level.INFO, 'message': message, 'indent': self.indent + 1}
+        if not message:
+            return
+        indent_level = self.indent + 1 if self.mode == Mode.BUFFERED else self.indent
+        msg = {'level': Level.INFO, 'message': message, 'indent': indent_level}
         if self.mode == Mode.BUFFERED:
             self.buffer.append(msg)
         else:
             self.show(msg)
 
     def warn(self, message: str):
-        msg = {'level': Level.WANRNING, 'message': message, 'indent': self.indent + 1}
+        if not message:
+            return
+        indent_level = self.indent + 1 if self.mode == Mode.BUFFERED else self.indent
+        msg = {'level': Level.WARNING, 'message': message, 'indent': indent_level}
         if self.mode == Mode.BUFFERED:
             self.buffer.append(msg)
         else:
@@ -121,7 +128,11 @@ class Logger:
         self.warn(message)
 
     def error(self, message: str):
-        msg = {'level': Level.ERROR, 'message': message, 'indent': self.indent + 1}
+        if not message:
+            sys.exit(1)
+
+        indent_level = self.indent + 1 if self.mode == Mode.BUFFERED else self.indent
+        msg = {'level': Level.ERROR, 'message': message, 'indent': indent_level}
         if self.mode == Mode.BUFFERED:
             self.end(message)
         else:
@@ -129,7 +140,11 @@ class Logger:
         sys.exit(1)
 
     def debug(self, message: str):
-        msg = {'level': Level.DEBUG, 'message': message, 'indent': self.indent + 1}
+        if not message:
+            return
+        
+        indent_level = self.indent + 1 if self.mode == Mode.BUFFERED else self.indent
+        msg = {'level': Level.DEBUG, 'message': message, 'indent': indent_level}
         if self.mode == Mode.BUFFERED:
             self.buffer.append(msg)
         else:

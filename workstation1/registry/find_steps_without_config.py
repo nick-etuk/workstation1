@@ -1,4 +1,4 @@
-from workstation1.lib.logging import debug, warn
+from workstation1.lib.logging import log
 from pathlib import Path
 from typing import Any
 
@@ -19,7 +19,7 @@ def find_steps_without_config(project_id: str, project_path: str, existing_steps
             return None
 
     if step_dir == Path('conf/project_template'):
-        debug(f"Skipping project template steps in {step_dir}")
+        log.debug(f"Skipping project template steps in {step_dir}")
         return
     
     new_steps: list[dict[str, Any]] = []
@@ -39,7 +39,7 @@ def find_steps_without_config(project_id: str, project_path: str, existing_steps
 
         step_id = base_filename
         my_sort_order = sort_order(project_id)
-        warn(f"Warning: no config for  {step_file}")
+        log.warn(f"Warning: no config for  {step_file}")
         new_steps.append({ 
             'step_id': step_id, 
             'project_id': project_id, 

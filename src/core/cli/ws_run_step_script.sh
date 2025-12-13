@@ -12,4 +12,4 @@ step_script=$1
 shift
 step_args=("$@")
 
-source "$step_script" "${step_args[@]}"
+source "$step_script" "${step_args[*]+"${step_args[*]}"}"

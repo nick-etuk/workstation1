@@ -1,10 +1,10 @@
 from typing import Any
-from workstation1.lib.logging import info, warn
+from workstation1.lib.logging import log
 from workstation1.run_step.invoke_commands import invoke_commands
 from workstation1.step_done.check_docker_containers import check_docker
 from workstation1.step_done.check_run_once import check_run_once
 from workstation1.step_done.get_checks import get_checks
-# from icecream import ic
+
 
 def check_step_done(step: dict[str, Any], step_args: list[str], calling_function: str) -> bool:
     if check_run_once(step=step, args=step_args, overrides=[]):
@@ -31,8 +31,8 @@ def check_step_done(step: dict[str, Any], step_args: list[str], calling_function
         return True
     else:
         if calling_function == 'step_exit':
-            warn(f"{step['step_id']} {' '.join(step_args)} step failed")
-            info(f"Checks: {','.join(checks)}")
+            log.warn(f"{step['step_id']} {' '.join(step_args)} step failed")
+            log.info(f"Checks: {','.join(checks)}")
             # show_help(step['step_id'])
         return False
     
