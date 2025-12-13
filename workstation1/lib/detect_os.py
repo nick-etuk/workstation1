@@ -1,5 +1,5 @@
-from logging import debug
 import platform
+# from workstation1.lib.logging import log
 
 def detect_wsl() -> bool:
     if platform.system().lower() != 'linux':
@@ -25,5 +25,4 @@ def detect_os() -> tuple[str, str]:
         os = 'win'
     else:
         os = 'unknown'
-    debug(f"Detected OS: {os}, VM: {vm}")
     return os, vm

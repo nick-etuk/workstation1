@@ -1,7 +1,7 @@
 import os
 import subprocess
 from workstation1.lib.config import config
-from workstation1.lib.logging import debug
+from workstation1.lib.logging import log
 
 # from icecream import ic
 
@@ -16,7 +16,7 @@ def open_new_tab():
     
     # startup_script = os.path.join(config['ws_root'], 'ws1.sh')
     if config['vm'] == 'wsl':
-        debug("WSL detected, opening new Windows Terminal tab with script")
+        log.debug("WSL detected, opening new Windows Terminal tab with script")
         subprocess.run(['wt.exe', '-w', '0', 'new-tab', '--colorScheme', 'Campbell Powershell', '--title', 'Workstation1', '-p', 'Ubuntu'], env=my_env)
         return
     

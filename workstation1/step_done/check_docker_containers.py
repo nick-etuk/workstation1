@@ -1,8 +1,7 @@
 
 import subprocess
 from typing import Any
-
-from workstation1.lib.logging import warn
+from workstation1.lib.logging import log
 
 
 def check_docker(type: str, step: dict[str, Any], calling_function: str) -> bool:
@@ -14,7 +13,7 @@ def check_docker(type: str, step: dict[str, Any], calling_function: str) -> bool
         commandline = ['docker', 'image', 'ls', '--format', '{{.Repository}}']
         config_property = 'dockerImages'
     else:
-        warn(f"Unknown docker check type: {type}")
+        log.warn(f"Unknown docker check type: {type}")
         return False
     
     if not ('checks' in step and config_property in step['checks']):
@@ -25,12 +24,12 @@ def check_docker(type: str, step: dict[str, Any], calling_function: str) -> bool
     # docker container ls --format "{{.Names}}"
     process = subprocess.run(commandline, capture_output=True, text=True)
     if process.returncode != 0:
-        warn("Failed to list Docker containers. Is Docker running?")
+        log.warn("Failed to list Docker containers. Is Docker running?")
         return False
     actual_items = process.stdout.strip().lower().split('\n')
     expected_items = [str(item).lower() for item in expected_items]
-    missing_items: list[str] = []
-    unexpected_items: list[str] = []
+    missing_items = []
+    unexpected_items = []
     for expected in expected_items:
         found = False
         for actual in actual_items:
@@ -46,8 +45,8 @@ def check_docker(type: str, step: dict[str, Any], calling_function: str) -> bool
         missing_items.sort()
         if not calling_function == 'wait_for_parallel':
             list = "\n".join(missing_items)
-            warn(f"Missing Docker {type} for {step['step_id']}:")
-            warn(f"{list}")
+            log.warn(f"Missing Docker {type} for {step['step_id']}:")
+            log.warn(f"{list}")
         return False
 
     if len(unexpected_items) > 0:

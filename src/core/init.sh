@@ -5,7 +5,6 @@ set -u
 
 [ -n "${INIT_UNIX+set}" ] && return
 
-echo 'Initialising'
 INIT_UNIX=1
 CURRENT_STEP='general'
 
@@ -22,7 +21,7 @@ if [ -z "${WS_ROOT_SCRIPT+set}" ];then
     cd "$WS_ROOT_SCRIPT" || exit 1
 fi
 
-echo -n 'Loading libraries'
+echo -n 'ws1'
 libraries=$(find "$WS_ROOT_SCRIPT/lib" -name '*.sh' -type f ! -name 'config_ubuntu.sh' ! -name 'config_macos.sh' ! -name 'z*.sh')
 for library in $libraries; do
     source "$library"

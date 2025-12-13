@@ -3,11 +3,10 @@ from pathlib import Path
 import csv
 from typing import Any
 from workstation1.lib.config import config
-from workstation1.lib.logging import info
-from icecream import ic
+from workstation1.lib.logging import log
 
 def write_registry(registry: list[dict[str, Any]], type: str) -> None:
-    info(f"Saving {type} registry")
+    log.info(f"Saving {type} registry")
     registry_file = os.path.join(config['working_dir'], f"{type}_registry.csv")
 
     if Path(registry_file).exists():

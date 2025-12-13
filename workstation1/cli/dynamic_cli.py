@@ -1,6 +1,6 @@
 import os
 from workstation1.lib.config import config
-from workstation1.lib.logging import info
+from workstation1.lib.logging import log
 from workstation1.lib.config_dynamic import get_dynamic, set_dynamic
 
 
@@ -9,7 +9,7 @@ def get_dynamic_cli(args: list[str]) -> None:
         # get all dynamic configurations
         dynamic_dir = os.path.join(config['working_dir'], 'dynamic_config')
         if not os.path.isdir(dynamic_dir):
-            info("No dynamic configuration set.")
+            log.info("No dynamic configuration set.")
             return
         for group in os.listdir(dynamic_dir):
             group_dir = os.path.join(dynamic_dir, group)
@@ -21,20 +21,20 @@ def get_dynamic_cli(args: list[str]) -> None:
                 key = filename[:-4]
                 value = get_dynamic(key=key, group=group)
                 if group == 'general':
-                    info(f"{key} is {value}")
+                    log.info(f"{key} is {value}")
                 else:
-                    info(f"[{group}] {key} is {value}")
+                    log.info(f"[{group}] {key} is {value}")
         return
     key = args[0]
     group = args[1] if len(args) > 1 else 'general'
     value = get_dynamic(key=key, group=group)
     if value is not None:
         if group == 'general':
-            info(f"{key} is {value}")
+            log.info(f"{key} is {value}")
         else:
-            info(f"[{group}] {key} is {value}")
+            log.info(f"[{group}] {key} is {value}")
     else:
-        info(f"{key} is not set")
+        log.info(f"{key} is not set")
     return
 
 def set_dynamic_cli(args: list[str]) -> None:
@@ -43,8 +43,8 @@ def set_dynamic_cli(args: list[str]) -> None:
     group = args[2] if len(args) > 2 else 'general'
     set_dynamic(key=key, value=value, group=group)
     if group == 'general':
-        info(f"{key} set to {value}")
+        log.info(f"{key} set to {value}")
     else:
-        info(f"[{group}] {key} set to {value}")
+        log.info(f"[{group}] {key} set to {value}")
     return
     
