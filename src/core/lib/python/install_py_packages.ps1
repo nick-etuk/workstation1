@@ -1,5 +1,5 @@
 function install_py_packages($project_id) {
-    $project_root = (get_project $project_id).projectRoot
+    $project_root = (get_project $project_id).sourceCodePath
     if ($project_id -eq "ws1") {
         $package_name = "workstation1"
     } else {

@@ -48,7 +48,7 @@ Each project has a `ws1_project.json` file that defines its attibutes. Here is a
 {
   "id": "webapp",
   "title": "Sample Web App",
-  "projectRoot": "$HOME/repos/nhsapp",
+  "sourceCodePath": "$REPO_DIR/nhsapp",
   "sortOrder": 10,
   "os": ["macos", "ubuntu"],
   "contact": {

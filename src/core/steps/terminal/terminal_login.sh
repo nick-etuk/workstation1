@@ -59,9 +59,9 @@ startup_script="$WS_ROOT_UNIX/ws1.sh"
 
 "$startup_script"
 
-current_project_root=$(get_config 'current_project_root')
-if [ -n "$current_project_root" ] && [ -d "$current_project_root" ]; then
-    cd "$current_project_root" || exit 1
+default_step_path=$(get_config 'default_step_path')
+if [ -n "$default_step_path" ] && [ -d "$default_step_path" ]; then
+    cd "$default_step_path" || exit 1
 fi
 
 set +u

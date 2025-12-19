@@ -16,7 +16,7 @@ def get_dynamic_cli(args: list[str]) -> None:
             if not os.path.isdir(group_dir):
                 continue
             for filename in os.listdir(group_dir):
-                if not filename.endswith('.txt'):
+                if filename.startswith('z') or not filename.endswith('.txt'):
                     continue
                 key = filename[:-4]
                 value = get_dynamic(key=key, group=group)

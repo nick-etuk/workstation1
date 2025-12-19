@@ -18,13 +18,13 @@ def expand_path(path: str) -> str:
 
     
 def set_project_root(project: dict[str, Any], step: dict[str, Any]) -> None:  
-    if 'projectRoot' not in project:
+    if 'sourceCodePath' not in project:
         with open(os.path.join(project['path'], 'ws1', 'ws1_project.json')) as f:
             project_config = json.load(f)
-        project['projectRoot'] = project_config.get('projectRoot', project['path'])
+        project['sourceCodePath'] = project_config.get('sourceCodePath', project['path'])
     
-    log.debug(f"Setting current project root to {project['projectRoot']}")
-    set_dynamic('current_project_root', expand_path(project['projectRoot']))
+    log.debug(f"Setting current project root to {project['sourceCodePath']}")
+    set_dynamic('default_step_path', expand_path(project['sourceCodePath']))
 
     if 'exitTo' not in step:
         step['step_id'] = step.get('id', step['base_filename'])
@@ -35,7 +35,7 @@ def set_project_root(project: dict[str, Any], step: dict[str, Any]) -> None:
         log.debug(f"Setting current project path to absolute path {step['exitTo']}")
         set_dynamic('current_project_path', expand_path(step['exitTo']))
     else:
-        exit_to_path = os.path.join(project['projectRoot'], str(step['exitTo']))
+        exit_to_path = os.path.join(project['sourceCodePath'], str(step['exitTo']))
         log.debug(f"Setting current project path to {exit_to_path}")
         set_dynamic('current_project_path', expand_path(exit_to_path))
  

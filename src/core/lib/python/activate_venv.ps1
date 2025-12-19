@@ -14,7 +14,7 @@ function activate_venv($project_id) {
     }
 
     WriteInfo "Activating virtual environment for $project_id..."
-    $project_root = (get_project $project_id).projectRoot
+    $project_root = (get_project $project_id).sourceCodePath
 
     $activate_script = Get-Childitem -Path "$project_root" -include 'Activate.ps1' -Recurse
     if (-not $activate_script) {
