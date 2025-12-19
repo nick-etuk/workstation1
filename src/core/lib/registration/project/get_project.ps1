@@ -7,7 +7,7 @@ function get_project {
 
     $DefaultProject = @{
         project_id = "ws1"
-        projectRoot = "$WS_ROOT_WIN"
+        sourceCodePath = "$WS_ROOT_WIN"
     }
 
     if ($ProjectID -eq "ws1") {
@@ -45,9 +45,9 @@ function get_project {
             $Content = Get-Content $ConfigFile.FullName -ErrorAction SilentlyContinue | Out-String
             $ProjectConfig = ConvertFrom-Json -InputObject $Content -ErrorAction SilentlyContinue
 
-            if (!($ProjectConfig | Get-Member -Name 'projectRoot')) { 
-                # $ProjectConfig.projectRoot = $ProjectWS1Root
-                Add-Member -InputObject $ProjectConfig -MemberType NoteProperty -Name 'projectRoot' -Value $ProjectWS1Root
+            if (!($ProjectConfig | Get-Member -Name 'sourceCodePath')) { 
+                # $ProjectConfig.sourceCodePath = $ProjectWS1Root
+                Add-Member -InputObject $ProjectConfig -MemberType NoteProperty -Name 'sourceCodePath' -Value $ProjectWS1Root
              }
              
             return $ProjectConfig

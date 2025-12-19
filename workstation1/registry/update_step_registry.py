@@ -18,11 +18,11 @@ def update_step_registry(project_registry: list[dict[str, Any]]) -> None:
 
     combined_step_registry: list[dict[str, Any]] = []
     for project in project_registry:
-        log.info(f"Scanning {project['project_id']} at {project['path']}")
-        if not os.path.exists(project['path']):
-            log.warn(f"Project {project['project_id']} - path does not exist: {project['path']}")
+        log.info(f"Scanning {project['project_id']} at {project['ws1_project_path']}")
+        if not os.path.exists(project['ws1_project_path']):
+            log.warn(f"Project {project['project_id']} - path does not exist: {project['ws1_project_path']}")
             continue
-        project_dir = Path(project['path'])
+        project_dir = Path(project['ws1_project_path'])
         project_steps = find_steps(project['project_id'], str(project_dir))
         if not project_steps:
             continue
@@ -35,10 +35,10 @@ def update_step_registry(project_registry: list[dict[str, Any]]) -> None:
         combined_step_registry.extend(core_steps)
 
     for project in project_registry:
-        if not os.path.exists(project['path']):
-            log.warn(f"Project {project['project_id']} - path does not exist: {project['path']}")
+        if not os.path.exists(project['ws1_project_path']):
+            log.warn(f"Project {project['project_id']} - path does not exist: {project['ws1_project_path']}")
             continue
-        project_dir = Path(project['path'])
+        project_dir = Path(project['ws1_project_path'])
         steps_without_config = find_steps_without_config(project_id=project['project_id'], project_path=str(project_dir), existing_steps=combined_step_registry)
         if not steps_without_config:
             continue

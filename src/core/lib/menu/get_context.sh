@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
 get_context() {
-    CURRENT_PROJECT_ID=$(get_config 'current_project_id')
-    CURRENT_PROJECT_ROOT=$(get_config 'current_project_root')
+    DEFAULT_STEP_ID=$(get_config 'default_step_id')
+    DEFAULT_STEP_PATH=$(get_config 'default_step_path')
 }

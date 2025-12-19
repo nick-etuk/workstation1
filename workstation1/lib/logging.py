@@ -91,11 +91,11 @@ class Logger:
         msg = {'level': Level.HEADER, 'message': message, 'indent': self.indent}
         self.mode = Mode.DIRECT
         for text in success_messages:
-            if text in msg['message'].lower():
+            if text in msg['message'].lower() and len(self.buffer) > 0:
                 self.buffer[0]['message'] += f" {success_symbol}"
                 break
         for text in failure_messages:
-            if text in msg['message'].lower():
+            if text in msg['message'].lower() and len(self.buffer) > 0:
                 self.buffer[0]['message'] += f" {failure_symbol}"
                 break
         

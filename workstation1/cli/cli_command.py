@@ -1,5 +1,5 @@
 from workstation1.cli.dynamic_cli import get_dynamic_cli, set_dynamic_cli
-from workstation1.cli.set_current_project import set_current_project
+from workstation1.cli.set_default_step import set_default_step
 from workstation1.registry.get_registries import get_registries
 from workstation1.run_step.run_step import run_step
 from workstation1.registry.update_registries import update_registries
@@ -36,7 +36,6 @@ def cli_command(args: list[str]):
     project_registry, step_registry = get_registries()
     for step in step_registry:
         if step['step_id'] == command:
-            set_current_project(project_registry=project_registry, step_registry_entry=step)
-            # run_step(step_registry_entry=step, step_args=command_args, overrides=['runonce'], new_tab_active=False)
+            set_default_step(project_registry=project_registry, step_registry_entry=step)
             run_step(step_registry_entry=step, step_args=command_args, overrides=[], new_tab_active=False)
             return

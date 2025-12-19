@@ -28,7 +28,7 @@ $StartupScript = "$WS_ROOT_WIN/ws1.ps1"
 . $StartupScript
 # . $($StartupScript.FullName)
 
-$current_project_root=$(Get-Config 'current_project_root')
-if ($current_project_root -and (Test-Path -Path $current_project_root -PathType Container)) {
-    Set-Location -Path $current_project_root
+$default_step_path=$(Get-Config 'default_step_path')
+if ($default_step_path -and (Test-Path -Path $default_step_path -PathType Container)) {
+    Set-Location -Path $default_step_path
 }

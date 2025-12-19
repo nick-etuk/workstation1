@@ -8,7 +8,7 @@ function Show-Config {
     WriteInfo "WS_ROOT_SCRIPT: $WS_ROOT_SCRIPT"
     WriteInfo "WS_ROOT_WIN: $WS_ROOT_WIN"
     WriteInfo "CURRENT_PROJECT_ID: $CURRENT_PROJECT_ID"
-    WriteInfo "CURRENT_PROJECT_ROOT: $CURRENT_PROJECT_ROOT"
+    WriteInfo "DEFAULT_STEP_PATH: $DEFAULT_STEP_PATH"
 }
 
 $FORCE = $false

@@ -19,8 +19,8 @@ def show_config() -> None:
 
 
     dynamic_config = {
-        'current_project_id': get_dynamic('current_project_id'),
-        'current_project_root': get_dynamic('current_project_root')
+        'default_step_id': get_dynamic('default_step_id'),
+        'default_step_path': get_dynamic('default_step_path')
     }
     for key, value in dynamic_config.items():
         print(f"{key}:{' ' * (25 - len(key))}{value}")
