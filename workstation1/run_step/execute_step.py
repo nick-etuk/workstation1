@@ -104,7 +104,7 @@ def execute_step(step: dict[str, Any], args: list[str], overrides: list[str], ne
             return False
         
         # schedule_step(step_id=step_id, args=args)
-        schedule_script(step=step_id, args=args)
+        schedule_script(step=step, args=args)
         open_new_tab()
         log.end(f"{step['title']} running in parallel")
         return True
