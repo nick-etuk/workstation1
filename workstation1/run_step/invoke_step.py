@@ -8,6 +8,9 @@ from workstation1.lib.logging import log
 
 
 def invoke_step(step: dict[str, Any], args: list[str]) -> None:
+    # todo: make get_script_path return executable name also,
+    # then use it.
+
     parent_step_id = step['step_id']
     
     if args and len(args) > 0:
@@ -32,17 +35,17 @@ def invoke_step(step: dict[str, Any], args: list[str]) -> None:
         return
     
     if config['my_os'] == 'win':
-        startup_script = os.path.join(config['script_root'], "cli", "ws_run_step_script.ps1")
+        startup_script = os.path.join(config['script_root'], 'cli', 'ws_run_script.ps1')
         step_script = f"{base_filename}.ps1"
         log.debug(f"running sub process pwsh {startup_script} {step_script} {' '.join(args)}")
         if os.path.exists(step_script):
             process = subprocess.run(['pwsh', '-ExecutionPolicy', 'Unrestricted', '-File', startup_script, step_script, *args])
             if process.returncode != 0:
                 log.info(f"Step {parent_step_id} exited with code {process.returncode}. Output:")
-                log.info(process.stdout)
+                log.info(process.stdout.decode() if process.stdout else "")
         return
     
-    startup_script = os.path.join(config['script_root'], "cli", "ws_run_step_script.sh")
+    startup_script = os.path.join(config['script_root'], 'cli', 'ws_run_script.sh')
     step_script = f"{base_filename}.sh"
     if os.path.exists(step_script):
         log.debug(f"invoke_step running script {step_script} {' '.join(args)}")
@@ -50,4 +53,4 @@ def invoke_step(step: dict[str, Any], args: list[str]) -> None:
         process = subprocess.run(['bash', startup_script, step_script]+ args)
         if process.returncode != 0:
             log.warn(f"Step {parent_step_id} failed with code {process.returncode}. Output:")
-            log.info(process.stdout)
+            log.info(process.stdout.decode() if process.stdout else "")

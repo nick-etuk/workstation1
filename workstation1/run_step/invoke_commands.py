@@ -1,3 +1,4 @@
+import os
 from typing import Any
 import subprocess
 from workstation1.lib.config import config
@@ -6,13 +7,13 @@ from workstation1.lib.logging import log
 
 def invoke_commands(commands: list[str]) -> bool:
     if config['my_os'] == 'win':
-        startup_script = f"{config['script_root']}/cli/ws_run_commands.ps1"
+        startup_script = os.path.join(f"{config['script_root']}", 'cli', 'ws_run_commands.ps1')
         process = subprocess.run(
             ['pwsh', '-ExecutionPolicy', 'Bypass', '-File', startup_script] + commands,
             capture_output=True,
             text=True)
     else:
-        startup_script = f"{config['script_root']}/cli/ws_run_commands.sh"
+        startup_script = os.path.join(f"{config['script_root']}", 'cli', 'ws_run_commands.sh')
         process = subprocess.run(
             ['bash', startup_script] + commands,
             capture_output=True,

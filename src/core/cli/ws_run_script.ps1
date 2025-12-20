@@ -10,5 +10,5 @@ $ErrorActionPreference = "Stop"
 . $PSScriptRoot\..\init.ps1
 
 write-output "ws_run_step_script.ps1 running $script_file with args: $step_args"
-. $script_file
+. $script_file -Arguments $step_args
 

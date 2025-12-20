@@ -11,18 +11,18 @@ if (-not $init_script) {
 
 $Script:WS_ROOT_SCRIPT = $init_script.Directory
 
-# $new_tab_queue="$HOME/.workstation1/working/new_tab_queue"
-# if(Test-Path -PathType Container -Path $new_tab_queue) {
-#     $files = Get-ChildItem -Path $new_tab_queue
-#     $file_count = ($files | Measure-Object).Count
-#     if ($file_count -gt 0) {
-#         Write-Output "Tasks found in New Tab queue..."
-#         . $WS_ROOT_SCRIPT/init.ps1
-#         $oldest_file = $files | Sort-Object LastWriteTime | Select-Object -First 1
-#         process_new_tab_file $oldest_file.FullName
-#         return
-#     }
-# }
+$new_tab_queue="$HOME/.workstation1/working/new_tab_queue"
+if(Test-Path -PathType Container -Path $new_tab_queue) {
+    $files = Get-ChildItem -Path $new_tab_queue
+    $file_count = ($files | Measure-Object).Count
+    if ($file_count -gt 0) {
+        Write-Output "Tasks found in New Tab queue..."
+        . $WS_ROOT_SCRIPT/init.ps1
+        $oldest_file = $files | Sort-Object LastWriteTime | Select-Object -First 1
+        process_new_tab_file $oldest_file.FullName
+        return
+    }
+}
 
 $StartupScript = "$WS_ROOT_WIN/ws1.ps1"
 . $StartupScript
