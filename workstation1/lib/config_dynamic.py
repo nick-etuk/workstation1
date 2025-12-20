@@ -22,7 +22,10 @@ def get_dynamic(key:str, group: str='general') -> str:
 
 
 def set_dynamic(key:str, value: str, group: str='general') -> None:
-    """Set a dynamic configuration value on the filesystem."""
+    """
+    Set a dynamic configuration value on the filesystem.
+    Scopes: global, job, step, instance. Default is job.
+    """
     
     key = key.strip().lower()
     value = value.strip()

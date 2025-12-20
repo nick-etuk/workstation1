@@ -10,9 +10,12 @@ function process_new_tab_file($task_file) {
     Remove-Item -Path $task_file -ErrorAction SilentlyContinue
     
     foreach ($line in $file_content) {
-        $parts = $line -split '~'
+        # $parts = $line -split '~'
+        $parts = $line -split ' '
         $step_id = $parts[0]
         $arguments = $parts[1..($parts.Length - 1)]
-        RunStep -StepID $step_id -Arguments $arguments
+        # RunStep -StepID $step_id -Arguments $arguments
+        # Assume that init.ps1 has been sourced in terminal_login.ps1
+        . "$ScriptFile" -Arguments $Arguments
     }
 }

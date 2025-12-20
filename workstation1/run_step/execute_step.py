@@ -1,7 +1,7 @@
 from typing import Any
 from workstation1.lib.config import config
 from workstation1.lib.config_dynamic import get_dynamic, set_dynamic
-from workstation1.run_step.schedule_step import schedule_step
+from workstation1.run_step.schedule_script import schedule_script
 from workstation1.run_step.invoke_commands import invoke_commands
 from workstation1.run_step.load_step import load_step
 from workstation1.run_step.invoke_step import invoke_step
@@ -95,7 +95,16 @@ def execute_step(step: dict[str, Any], args: list[str], overrides: list[str], ne
                 return False
             
     if not new_tab_active and 'newTab' in step and str(step['newTab']).lower() == 'true':
-        schedule_step(step_id=step_id, args=args)
+        if 'steps' in step:
+            log.end(f"{step['title']} has child steps. It should not be run in a new tab.")
+            return False
+        
+        if 'commands' in step:
+            log.end(f"{step['title']} has inline commands. It should not be run in a new tab.")
+            return False
+        
+        # schedule_step(step_id=step_id, args=args)
+        schedule_script(step=step_id, args=args)
         open_new_tab()
         log.end(f"{step['title']} running in parallel")
         return True
@@ -105,7 +114,8 @@ def execute_step(step: dict[str, Any], args: list[str], overrides: list[str], ne
     if 'commands' in step:
         invoke_commands(step['commands'])
 
-    all_passed = run_child_steps(parent_step=step, parent_args=args, parent_overrides=overrides, depth=depth) and all_passed
+    if 'steps' in step:
+        all_passed = run_child_steps(parent_step=step, parent_args=args, parent_overrides=overrides, depth=depth) and all_passed
 
     invoke_step(step=step, args=args)
 

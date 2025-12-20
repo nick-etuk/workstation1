@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 # shellcheck disable=SC1091
 
-# Run init, get context, then run step script.
+# Called by invoke_step.py
+# Don't put this into lib because it is not a function.
+
 if [ -z "${INIT_UNIX+set}" ]; then
     script_dir=$(dirname "$(realpath "$0")")
     cd "$script_dir/.." || exit
