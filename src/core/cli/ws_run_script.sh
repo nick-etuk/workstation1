@@ -2,7 +2,7 @@
 # shellcheck disable=SC1091
 
 # Called by invoke_step.py
-# Don't put this into lib because it is not a function.
+# Don't put this script into the lib directory because it is not a function.
 
 if [ -z "${INIT_UNIX+set}" ]; then
     script_dir=$(dirname "$(realpath "$0")")
@@ -15,3 +15,10 @@ shift
 step_args=("$@")
 
 source "$step_script" "${step_args[*]+"${step_args[*]}"}"
+
+default_step_path=$(get_config 'default_step_path')
+if [ -n "$default_step_path" ] && [ -d "$default_step_path" ]; then
+    cd "$default_step_path" || exit 1
+fi
+
+set +u
