@@ -1,6 +1,7 @@
 from typing import Any
 from workstation1.lib.config import config
 from workstation1.lib.config_dynamic import get_dynamic, set_dynamic
+from workstation1.run_step.remove_docker_containers import remove_docker_containers
 from workstation1.run_step.schedule_script import schedule_script
 from workstation1.run_step.invoke_commands import invoke_commands
 from workstation1.run_step.load_step import load_step
@@ -93,6 +94,8 @@ def execute_step(step: dict[str, Any], args: list[str], overrides: list[str], ne
             else:
                 log.end(f"{step['title']} not attempted")
                 return False
+
+    remove_docker_containers(step)
             
     if not new_tab_active and 'newTab' in step and str(step['newTab']).lower() == 'true':
         if 'steps' in step:
@@ -110,7 +113,7 @@ def execute_step(step: dict[str, Any], args: list[str], overrides: list[str], ne
         return True
             
     all_passed = True
-
+    
     if 'commands' in step:
         invoke_commands(step['commands'])
 
