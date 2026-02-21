@@ -24,7 +24,7 @@ function add_aliases {
 
     # alias cleanbuild='[ -n "$(docker images -aq)" ] && docker rmi -f "$(docker images -aq)"; docker system prune -f && cd "$REPO_DIR/nhsapp/web" && npm install && cd .. &&  make clean && make login && make build'
 
-    startup_script="$WS_ROOT_UNIX/ws1.sh"
+    # startup_script="$WS_ROOT_UNIX/ws1.sh"
     if [ -f "$startup_script" ] ; then
         web() { "$startup_script" web "$@"; }
         bdd() { "$startup_script" bdd "$@"; }

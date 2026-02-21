@@ -3,7 +3,7 @@
 function add_to_path {
     local paths_to_add
 
-    startup_script="$WS_ROOT_UNIX/ws1.sh"
+    # startup_script="$WS_ROOT_UNIX/ws1.sh"
 
     paths_to_add=(
         "$(dirname "$startup_script")"

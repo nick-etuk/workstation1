@@ -162,7 +162,7 @@ run_step() {
     if [ -f "$step_script" ]; then
         # if [ "$original_step_id" != 'start_service' ]; then 
             if [ "$parallel" = 'true' ]; then
-                startup_script=$(find "$WS_ROOT_UNIX/core" -name "ws1.sh" -type f)
+                # startup_script=$(find "$WS_ROOT_UNIX/core" -name "ws1.sh" -type f)
                 info "$original_step_id parallel step started"
                 debug "args: $original_step_id ${args[*]+"${args[*]}"}"
                 # new_tab "$startup_script" "$original_step_id" "$@"

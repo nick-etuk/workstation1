@@ -20,10 +20,10 @@ function add_to_profile {
         "   eval \"\$(pyenv init - $shell_name)\""
         'fi'
         ''
-        'startup_script=$(find "$WS_ROOT_UNIX" -name "ws1.sh" -not -path ".venv_ws1/*")'
+        'startup_script=$(find "$WS_ROOT_UNIX" -name "ws.py" -not -path ".venv_ws1/*")'
         'if [ -f "$startup_script" ] ; then'
-        '  ws1() { "$startup_script" "$@"; }'
-        '  menu() { "$startup_script" "$@"; }'
+        '  ws1() { python3 "$startup_script" "$@"; }'
+        '  menu() { python3 "$startup_script" "$@"; }'
         'fi'
         'login_script=$(find "$WS_ROOT_UNIX/src/core/steps" -name "terminal_login.sh" -not -path ".venv_ws1/*")'
         '[ -f "$login_script" ] && . "$login_script"'
