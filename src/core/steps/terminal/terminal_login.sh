@@ -54,10 +54,14 @@ if [ -d "$new_tab_queue" ] && [ -n "$(ls "$new_tab_queue")" ]; then
 fi
 
 # startup_script=$(find "$WS_ROOT_UNIX" -name 'ws1.sh' -not -path '.venv_ws1/*')
-startup_script="$WS_ROOT_UNIX/ws1.sh"
+# No need to set startup_script again. Alread set in ~/.zshrc by edit_login_profile.sh
+# startup_script="$WS_ROOT_UNIX/ws1.sh"
+echo "startup_script: $startup_script"
+echo "shell bp1"
 [ -f "$startup_script" ]  || return
 
-"$startup_script"
+python3 "$startup_script"
+echo "shell bp2"
 
 default_step_path=$(get_config 'default_step_path')
 if [ -n "$default_step_path" ] && [ -d "$default_step_path" ]; then

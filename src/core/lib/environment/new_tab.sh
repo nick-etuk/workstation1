@@ -17,11 +17,11 @@ new_tab() {
 
     # full_command="export NEW_TAB='true'; $command"
     # full_command="export NEW_TAB='true'; ls -l"
-    startup_script=$(find "$WS_ROOT_UNIX" -name "ws1.sh" -type f -not -path "*/.venv_ws1/*")
+    # startup_script=$(find "$WS_ROOT_UNIX" -name "ws1.sh" -type f -not -path "*/.venv_ws1/*")
 
     if [ "$VM" = 'wsl' ]; then
         # wt.exe -w 0 nt --colorScheme "Campbell Powershell" --title "Workstation1 Parallel step" -p "Ubuntu" bash -c "$full_command\; exec zsh 2>&1"
-        wt.exe -w 0 nt --colorScheme "Campbell Powershell" --title "Workstation1 Parallel step" -p "Ubuntu" bash -c "$startup_script"
+        wt.exe -w 0 nt --colorScheme "Campbell Powershell" --title "Workstation1 Parallel step" -p "Ubuntu" bash -c "python3 $startup_script"
         # wt.exe -w 0 nt --colorScheme "Campbell Powershell" --title "Workstation1 Parallel step" -p "Ubuntu" /usr/bin/zsh -c "$startup_script"
         return
     fi
@@ -29,7 +29,7 @@ new_tab() {
     case "$MY_OS" in
     macos|ubuntu)
         # ttab "$full_command"
-        ttab "$startup_script"
+        ttab "python3 $startup_script"
         ;;
     *)
         warn "new_tab: unsupported OS $MY_OS"

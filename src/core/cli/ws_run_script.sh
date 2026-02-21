@@ -2,7 +2,7 @@
 # shellcheck disable=SC1091
 
 # Called by invoke_step.py
-# Don't put this script into the lib directory because it is not a function.
+# Don't put this file into the lib directory because it is a script, not a function.
 
 if [ -z "${INIT_UNIX+set}" ]; then
     script_dir=$(dirname "$(realpath "$0")")

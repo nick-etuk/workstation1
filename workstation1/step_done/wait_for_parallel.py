@@ -1,6 +1,5 @@
 from typing import Any
-import time
-
+from time import sleep
 from workstation1.lib.logging import log
 from workstation1.step_done.check_step_done import check_step_done
 
@@ -16,12 +15,12 @@ def wait_for_parallel(step: dict[str, Any], args: list[str]) -> bool:
         step_done = check_step_done(step, args, calling_function='wait_for_parallel')
 
         if step_done:
-            log.debug(f"{step['step_id']} completed in new tab.")
+            log.info(f"{step['step_id']} completed in new tab.")
             return True
         
-        time.sleep(poll_interval)
+        sleep(poll_interval)
         waited_time += poll_interval
         print('.', end='', flush=True)
 
-    log.debug(f"Timeout waiting for {step['step_id']}")
+    log.warn(f"Timed-out waiting for {step['step_id']}")
     return False
