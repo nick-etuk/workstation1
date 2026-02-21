@@ -1,0 +1,29 @@
+function edit_login_profile {
+    writedebug "=> edit_login_profile"
+    if (!(Test-Path -PathType Leaf $profile.CurrentUserCurrentHost)) {
+        Write-Output "Creating `$profile.CurrentUserCurrentHost at $($profile.CurrentUserCurrentHost)"
+        New-Item -Path $profile.CurrentUserCurrentHost -ItemType File | Out-Null
+    }
+
+    $StartBanner = "# workstation1_v$WS_VERSION start"
+    $Line1 = "`$global:WORKING_DIR = `"$HOME\.workstation1\working`""
+    $Line2 = "`$global:WS_ROOT_WIN = '$WS_ROOT_WIN'"
+    $Line3 = "`$env:PATH += ';$WS_ROOT_WIN'"
+    $Line4 = "if (`$env:TERM_PROGRAM -and `$env:TERM_PROGRAM -ne 'Windows Terminal') { exit 0 }"
+    $Line5 = "`$WorkstationStartup = Get-Childitem -Path `$WS_ROOT_WIN -Include 'ws1.ps1' -File -Recurse -ErrorAction SilentlyContinue"
+    $Line6 = "if (`$null -eq `$WorkstationStartup) {"
+    $Line7 = "    Write-Output `"Could not find Workstation1 startup script ws1.ps1 in `$WS_ROOT_WIN`""
+    $Line8 = '    exit 0'
+    $Line9 = '}'
+    $Line10 = "& `$(`$WorkstationStartup.FullName)"
+    $EndBanner = "# workstation1_v$WS_VERSION end"
+
+    $AdditionalContent = "$StartBanner`n$Line1`n$Line2`n$Line3`n$Line4`n$Line5`n$Line6`n$Line7`n$Line8`n$Line9`n$Line10`n$EndBanner`n"
+    WriteDebug "Modifying profile $($profile.CurrentUserCurrentHost)"
+    # WriteDebug $AdditionalContent
+
+    Add-Content -Path $profile.CurrentUserCurrentHost -Value $AdditionalContent
+    Get-Content -Path $profile.CurrentUserCurrentHost
+    $env:PATH += ";$WS_ROOT_WIN"
+}
+edit_login_profile

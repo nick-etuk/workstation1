@@ -10,6 +10,7 @@ class Level(Enum):
     WARNING = 2
     ERROR = 3
     HEADER = 4
+    BOLD = 5
 
 class Mode(Enum):
     DIRECT = 0
@@ -20,11 +21,12 @@ class Colours:
     OKBLUE = '\033[94m'
     OKCYAN = '\033[96m'
     OKGREEN = '\033[92m'
+    GREY = '\033[90m'
     WARNING = '\033[93m'
     FAIL = '\033[91m'
-    ENDC = '\033[0m'
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
+    ENDC = '\033[0m'
 
 
 indentation = config['indentation']
@@ -69,15 +71,25 @@ class Logger:
         self.indent = indent
 
     def show(self, msg: dict[str, Any]):
-        if msg['level'] == Level.DEBUG and not config['debug']:
+        if msg['level'] == Level.DEBUG:
+            if config['debug']:
+                print(f"{indentation * (msg['indent'])}{Colours.GREY}{msg['message']}{Colours.ENDC}")
             return
         
         for text in success_messages:
             if text in msg['message'].lower():
                 return # Do not print success messages. Success symbol is enough to convey meaning.
 
-        if msg['level'] == Level.HEADER:
+        if msg['level'] in [Level.HEADER, Level.BOLD]:
+            print(f"{indentation * (msg['indent'])}{Colours.BOLD}{msg['message']}{Colours.ENDC}")
+            return
+        
+        if msg['level'] == Level.INFO:
             print(f"{indentation * (msg['indent'])}{Colours.OKGREEN}{msg['message']}{Colours.ENDC}")
+            return
+
+        if msg['level'] == Level.ERROR:
+            print(f"{indentation * (msg['indent'])}{Colours.FAIL}{msg['message']}{Colours.ENDC}")
             return
 
         # print(f"indent level: {msg['indent']}")          
@@ -109,6 +121,16 @@ class Logger:
             return
         indent_level = self.indent + 1 if self.mode == Mode.BUFFERED else self.indent
         msg = {'level': Level.INFO, 'message': message, 'indent': indent_level}
+        if self.mode == Mode.BUFFERED:
+            self.buffer.append(msg)
+        else:
+            self.show(msg)
+
+    def bold(self, message: str):
+        if not message:
+            return
+        indent_level = self.indent + 1 if self.mode == Mode.BUFFERED else self.indent
+        msg = {'level': Level.BOLD, 'message': message, 'indent': indent_level}
         if self.mode == Mode.BUFFERED:
             self.buffer.append(msg)
         else:

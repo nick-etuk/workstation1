@@ -2,9 +2,7 @@ import os
 from pathlib import Path
 from typing import Any
 from workstation1.lib.detect_os import detect_os
-from definitions import python_root
-
-# from icecream import ic
+from workstation1.definitions import python_root
 
 home_dir = Path.home()
 my_os, vm = detect_os()
