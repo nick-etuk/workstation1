@@ -2,7 +2,7 @@ from typing import Any
 from workstation1.lib.config import config
 from workstation1.lib.config_dynamic import get_dynamic, set_dynamic
 from workstation1.run_step.remove_docker_containers import remove_docker_containers
-from workstation1.run_step.schedule_script import schedule_script
+from workstation1.run_step.schedule_step import schedule_step
 from workstation1.run_step.invoke_commands import invoke_commands
 from workstation1.run_step.load_step import load_step
 from workstation1.run_step.invoke_step import invoke_step
@@ -11,7 +11,6 @@ from workstation1.lib.logging import log
 from workstation1.step_done.check_dependencies import check_dependencies
 from workstation1.step_done.step_entry import step_entry
 from workstation1.step_done.step_exit import step_exit
-
 # from icecream import ic
 
 
@@ -96,18 +95,9 @@ def execute_step(step: dict[str, Any], args: list[str], overrides: list[str], ne
                 return False
 
     remove_docker_containers(step)
-            
-    if not new_tab_active and 'newTab' in step and str(step['newTab']).lower() == 'true':
-        if 'steps' in step:
-            log.end(f"{step['title']} has child steps. It should not be run in a new tab.")
-            return False
-        
-        if 'commands' in step:
-            log.end(f"{step['title']} has inline commands. It should not be run in a new tab.")
-            return False
-        
-        # schedule_step(step_id=step_id, args=args)
-        schedule_script(step=step, args=args)
+
+    if not new_tab_active and 'newTab' in step and str(step['newTab']).lower() == 'true':       
+        schedule_step(step=step, args=args)
         open_new_tab()
         log.end(f"{step['title']} running in parallel")
         return True

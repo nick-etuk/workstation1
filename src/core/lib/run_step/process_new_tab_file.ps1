@@ -7,15 +7,28 @@ function process_new_tab_file($task_file) {
         WriteWarn "New tab file $task_file is empty or could not be read."
         return
     }
-    Remove-Item -Path $task_file -ErrorAction SilentlyContinue
+
+    # $backup_file = "$task_file.bak"
+    # if (Test-Path -Path $backup_file) {
+    #     Remove-Item -Path  $backup_file -ErrorAction SilentlyContinue
+    # }
+    # Copy-Item -Path $task_file -Destination $backup_file -ErrorAction SilentlyContinue
+    Remove-Item -Path  $task_file -ErrorAction SilentlyContinue
     
     foreach ($line in $file_content) {
         # $parts = $line -split '~'
+        writedebug "Processing line: $line"
         $parts = $line -split ' '
-        $step_id = $parts[0]
-        $arguments = $parts[1..($parts.Length - 1)]
+        $script_file = $parts[0]
+        writedebug "script_file: $script_file"
+        if ($parts.Length -eq 1) {
+            $arguments = @()
+        } else {
+            $arguments = $parts[1..($parts.Length - 1)]
+        }
+        writedebug "Arguments: $arguments"
         # RunStep -StepID $step_id -Arguments $arguments
         # Assume that init.ps1 has been sourced in terminal_login.ps1
-        . "$ScriptFile" -Arguments $Arguments
+        . "$script_file" -Arguments $arguments
     }
 }
